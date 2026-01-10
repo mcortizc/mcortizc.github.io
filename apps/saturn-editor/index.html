@@ -1,0 +1,3657 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_1a037a45e281ea4b5ce29c65cf40ebac {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+<style>
+:root {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #e2e8f0;
+  font-weight: 400;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(147, 197, 253, 0.15), transparent 40%),
+    #020617;
+  color: inherit;
+}
+.leaflet-container {
+  font-family: inherit;
+}
+.saturn-ui {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px;
+  pointer-events: none;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+@media (max-width: 1024px) {
+  .saturn-ui {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+}
+.glass-panel {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(18px);
+}
+.saturn-panel {
+  width: 420px;
+  max-width: 90vw;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  pointer-events: auto;
+}
+@media (max-width: 1024px) {
+  .saturn-panel {
+    width: 100%;
+    max-height: none;
+  }
+}
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.panel-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.6);
+  margin: 0;
+}
+.panel-header h1 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+.panel-header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.75);
+}
+.stat-grid {
+  margin: 14px 0 6px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.stat-card {
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.08), rgba(148, 163, 184, 0.08));
+}
+.stat-card span {
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.65);
+}
+.stat-card strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-top: 2px;
+  color: #f8fafc;
+}
+.panel-scroll {
+  margin-top: 12px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.panel-section {
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.65);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.section-title {
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.7);
+  margin: 0 0 14px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-field label,
+.field-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.7);
+}
+.saturn-panel input,
+.saturn-panel select,
+.saturn-panel button,
+.saturn-panel textarea {
+  font-family: inherit;
+}
+.saturn-panel input,
+.saturn-panel select,
+.saturn-panel textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.8);
+  color: #f8fafc;
+  padding: 7px 10px;
+  font-size: 0.85rem;
+}
+.saturn-panel textarea {
+  resize: vertical;
+}
+.saturn-panel button {
+  border: none;
+  border-radius: 12px;
+  padding: 9px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.saturn-panel button:active {
+  transform: scale(0.98);
+}
+.saturn-primary {
+  background: linear-gradient(135deg, #34d399, #0ea5e9);
+  color: #04121f;
+}
+.saturn-secondary {
+  background: rgba(226, 232, 240, 0.12);
+  color: #f8fafc;
+}
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px dashed rgba(148, 163, 184, 0.5);
+  color: #cbd5f5;
+  padding: 9px 14px;
+  border-radius: 999px;
+}
+.ghost-btn .btn-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.toggle-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.checkbox-label {
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.85);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.mini-stat {
+  font-size: 0.75rem;
+  color: rgba(148, 163, 184, 0.9);
+}
+.card {
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(2, 6, 23, 0.4);
+  padding: 12px;
+  margin-top: 12px;
+}
+.card-title {
+  font-size: 0.85rem;
+  margin: 0 0 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.75);
+}
+.scroll-area {
+  max-height: 150px;
+  overflow-y: auto;
+}
+.arc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+.arc-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.55);
+}
+.arc-item-details {
+  flex: 1 1 auto;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: rgba(226, 232, 240, 0.9);
+}
+.arc-item-details span {
+  display: block;
+  color: rgba(226, 232, 240, 0.7);
+  font-size: 0.75rem;
+}
+.arc-delete {
+  flex: 0 0 auto;
+  padding: 4px 11px;
+  font-size: 0.72rem;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+  color: #fecaca;
+}
+.arc-delete:hover {
+  background: rgba(248, 113, 113, 0.22);
+}
+.arc-edit {
+  flex: 0 0 auto;
+  padding: 4px 11px;
+  font-size: 0.72rem;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.12);
+  color: #bae6fd;
+}
+.arc-edit:hover {
+  background: rgba(56, 189, 248, 0.22);
+}
+.map-overlay {
+  padding: 18px;
+  pointer-events: none;
+}
+.overlay-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.overlay-pill {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 8px 14px;
+  text-align: right;
+  background: rgba(15, 23, 42, 0.8);
+}
+.overlay-pill span {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.6);
+}
+.overlay-pill strong {
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 2px;
+  color: #f8fafc;
+}
+.overlay-tip {
+  font-size: 0.8rem;
+  color: rgba(226, 232, 240, 0.8);
+  text-align: right;
+}
+.saturn-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-end;
+  flex: 1;
+}
+.legend-panel {
+  pointer-events: auto;
+  padding: 18px;
+  min-width: 220px;
+}
+.legend-panel h4 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+}
+.measure-panel {
+  pointer-events: auto;
+  padding: 16px;
+  min-width: 220px;
+}
+.measure-panel h4 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+}
+.measure-panel .measure-status {
+  font-size: 0.78rem;
+  color: rgba(226, 232, 240, 0.75);
+  margin-bottom: 10px;
+}
+.measure-panel .measure-distance {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.measure-panel .measure-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.measure-panel .measure-actions button {
+  flex: 1 1 100px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.9);
+  margin: 6px 0;
+}
+.legend-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.6);
+}
+.leaflet-popup-content { font-size: 13px; }
+.saturn-dot { cursor: pointer; }
+.saturn-tooltip { font-size: 12px; font-weight: 600; }
+.saturn-dot > div {
+  transition: transform 0.08s ease;
+  transform-origin: center center;
+}
+.saturn-dot:hover > div { transform: scale(1.8); }
+.saturn-dot.active {
+  z-index: 1002 !important;
+}
+.saturn-dot.active > div {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.9);
+  background:#2ecc71 !important;
+  border-color:#27ae60 !important;
+}
+.saturn-dot.related {
+  z-index: 1001 !important;
+}
+.saturn-dot.related > div {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.9);
+  border-color:#f39c12 !important;
+}
+.stacked-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.turns-grid {
+  display: grid;
+  gap: 6px;
+}
+.turn-row {
+  display: grid;
+  grid-template-columns: 1fr 70px 70px 70px;
+  gap: 8px;
+}
+.turn-delete {
+  border-radius: 10px;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+  color: #fecaca;
+  font-size: 0.72rem;
+}
+.turn-delete:hover {
+  background: rgba(248, 113, 113, 0.22);
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+.tag {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.15);
+  color: rgba(16, 185, 129, 0.95);
+}
+.t3-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(226, 232, 240, 0.6);
+}
+</style>
+
+<div class="saturn-ui">
+  <aside class="saturn-panel glass-panel">
+    <header class="panel-header">
+      <p class="panel-eyebrow">Saturn - Editor</p>
+      <h1>Gestiona tu red con confianza</h1>
+      <p>Importa tarjetas, organiza nodos y valida conexiones antes de exportar de nuevo.</p>
+    </header>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span>Nodos activos</span>
+        <strong id="statNodes">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Centroides</span>
+        <strong id="statCentroids">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Arcos internos</span>
+        <strong id="statInternalArcs">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Arcos externos</span>
+        <strong id="statExternalArcs">0</strong>
+      </div>
+    </div>
+
+    <div class="panel-scroll">
+      <section class="panel-section">
+        <p class="section-title">Importar y exportar</p>
+        <label class="field-label" for="fileInput">Archivo .dat</label>
+        <input type="file" id="fileInput" accept=".dat,.txt">
+        <div class="button-row">
+          <button id="btnExport" class="saturn-primary">Exportar 55555</button>
+          <button id="btnExport11111" class="saturn-secondary">Exportar 11111</button>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="section-title">Proyeccion UTM</p>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="utmZone">Zona</label>
+            <input id="utmZone" type="number" min="1" max="60">
+          </div>
+          <div class="form-field">
+            <label for="hemisphere">Hemisferio</label>
+            <select id="hemisphere">
+              <option value="south">south</option>
+              <option value="north">north</option>
+            </select>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <label class="checkbox-label"><input type="checkbox" id="t2Show" checked> Ver conexiones zona-nodo (Tarjeta 22222)</label>
+          <span id="t2Stats" class="mini-stat"></span>
+        </div>
+        <div class="card">
+          <p class="card-title">Tarjeta 2 - conexiones zona-nodo</p>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="t2ZoneInput">Zona</label>
+              <input id="t2ZoneInput" type="number" min="0">
+            </div>
+            <div class="form-field">
+              <label for="t2NodeInput">Nodo</label>
+              <input id="t2NodeInput" type="number" min="0">
+            </div>
+          </div>
+          <div class="button-row">
+            <button id="t2AddNode" class="saturn-secondary">Agregar conexion</button>
+            <button id="t2ClearZone" class="saturn-secondary">Limpiar zona</button>
+          </div>
+          <span id="t2ZoneStats" class="mini-stat"></span>
+          <div id="t2NodesList" class="scroll-area arc-list"></div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="section-title">Tarjeta 1 - Red interna</p>
+        <div class="form-field">
+          <label for="nodeBSelect">Nodo B activo</label>
+          <select id="nodeBSelect"></select>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="t1Tipo">Tipo nodo</label>
+            <select id="t1Tipo">
+              <option value="0">0 Externo</option>
+              <option value="1">1 Prioritario</option>
+              <option value="2">2 Rotonda</option>
+              <option value="3">3 Semaforizado</option>
+              <option value="4">4 Dummy</option>
+              <option value="5">5 Rotonda con U</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="t1Desfase">Desfase</label>
+            <input id="t1Desfase" type="number">
+          </div>
+          <div class="form-field">
+            <label for="t1Ciclo">Ciclo</label>
+            <input id="t1Ciclo" type="number">
+          </div>
+          <div class="form-field">
+            <label for="t1Unidades">Unid/Ciclo</label>
+            <input id="t1Unidades" type="number">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="t1RotEtapas">Rotonda t(s)/Etapas</label>
+            <input id="t1RotEtapas" type="number">
+          </div>
+          <div class="form-field">
+            <label for="t1CapRot">Cap. rotonda</label>
+            <input id="t1CapRot" type="number">
+          </div>
+          <div class="form-field">
+            <label for="t1GapPrior">Gap prior (10s)</label>
+            <input id="t1GapPrior" type="number">
+          </div>
+          <div class="form-field">
+            <label for="t1GapAutop">Gap autop (10s)</label>
+            <input id="t1GapAutop" type="number">
+          </div>
+        </div>
+        <div class="toggle-row">
+          <button id="btnAddArc" class="ghost-btn"><span class="btn-icon">+</span>Agregar arco (A -> B)</button>
+          <label class="checkbox-label"><input type="checkbox" id="t1ShowDistances" checked> Ver distancias A-B</label>
+          <span id="t1Stats" class="mini-stat"></span>
+        </div>
+        <div id="addArcRow" class="card" style="display:none">
+          <p class="card-title" id="t1ArcFormTitle">Nuevo arco</p>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="arcNodeA">Nodo aguas arriba</label>
+              <select id="arcNodeA"></select>
+            </div>
+            <div class="form-field">
+              <label for="arcPistas">Pistas</label>
+              <input id="arcPistas" type="number">
+            </div>
+            <div class="form-field">
+              <label for="arcVel">Vel (km/h)</label>
+              <input id="arcVel" type="number">
+            </div>
+            <div class="form-field">
+              <label for="arcLong">Long (m)</label>
+              <input id="arcLong" type="number">
+            </div>
+          </div>
+        </div>
+        <div id="addTurnsRow" class="card" style="display:none">
+          <p class="card-title">Virajes</p>
+          <div id="t1TurnsList" class="turns-grid"></div>
+          <div class="button-row">
+            <button id="t1AddTurn" class="saturn-secondary">Agregar viraje</button>
+            <button id="btnSaveArc" class="saturn-primary">Guardar arco</button>
+            <button id="btnCancelArc" class="saturn-secondary">Cancelar</button>
+          </div>
+        </div>
+        <div class="card">
+          <p class="card-title">Arcos configurados</p>
+          <div id="arcsList" class="scroll-area arc-list"></div>
+        </div>
+      </section>
+
+      <section class="panel-section" id="t3Section" style="display:none">
+        <p class="section-title">Semaforo (tipo 3) - etapas</p>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="t3Dur">Duracion (s)
+            <input id="t3Dur" type="number">
+          </div>
+          <div class="form-field">
+            <label for="t3IG">Entreverde (s)</label>
+            <input id="t3IG" type="number">
+          </div>
+        </div>
+        <div class="t3-flex">
+          <div class="form-field" style="flex:1 1 160px">
+            <label for="t3A">A</label>
+            <input id="t3A" type="number">
+          </div>
+          <div class="form-field" style="flex:1 1 160px">
+            <label for="t3C">C</label>
+            <input id="t3C" type="number">
+          </div>
+          <button id="t3AddPair" class="saturn-secondary" style="flex:0 0 auto">Agregar movimiento</button>
+        </div>
+        <div class="card">
+          <p class="card-title">Movimientos registrados</p>
+          <div id="t3Pairs" class="scroll-area"></div>
+        </div>
+        <div class="button-row">
+          <button id="t3SaveStage" class="saturn-primary">Guardar etapa</button>
+          <button id="t3CancelStage" class="saturn-secondary">Limpiar</button>
+        </div>
+        <div class="card">
+          <p class="card-title">Etapas configuradas</p>
+          <div id="t3StagesList" class="scroll-area"></div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="section-title">Tarjeta 3 - enlaces externos</p>
+        <div class="toggle-row">
+          <span id="t3Stats" class="mini-stat" style="flex:1 1 auto"></span>
+          <label class="checkbox-label"><input type="checkbox" id="t3ShowConnectors" checked> Ver conectores zona</label>
+        </div>
+        <strong id="t3EditIndicator" style="display:block;margin:12px 0 6px;">Nuevo arco externo</strong>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="t3NodeA">Nodo A</label>
+            <input id="t3NodeA" type="number">
+          </div>
+          <div class="form-field">
+            <label class="checkbox-label"><input type="checkbox" id="t3NodeAZone"> Zona A</label>
+          </div>
+          <div class="form-field">
+            <label for="t3NodeB">Nodo B</label>
+            <input id="t3NodeB" type="number">
+          </div>
+          <div class="form-field">
+            <label class="checkbox-label"><input type="checkbox" id="t3NodeBZone"> Zona B</label>
+          </div>
+          <div class="form-field">
+            <label for="t3FreeFlow">Libre</label>
+            <input id="t3FreeFlow" type="number" step="any">
+          </div>
+          <div class="form-field">
+            <label for="t3Capacity">Capacidad</label>
+            <input id="t3Capacity" type="number" step="any">
+          </div>
+          <div class="form-field">
+            <label for="t3CapTime">Tiempo capacidad</label>
+            <input id="t3CapTime" type="number" step="any">
+          </div>
+          <div class="form-field">
+            <label for="t3Direction">Direccion</label>
+            <select id="t3Direction">
+              <option value="">(auto)</option>
+              <option value="1">1 Unidireccional</option>
+              <option value="2">2 Bidireccional</option>
+            </select>
+          </div>
+          <div class="form-field checkbox-label" style="margin-top:18px;">
+            <label><input type="checkbox" id="t3AsSpeed"> Tiempos son velocidad</label>
+          </div>
+          <div class="form-field">
+            <label for="t3Length">Longitud (m)</label>
+            <input id="t3Length" type="number" step="any">
+          </div>
+          <div class="form-field">
+            <label for="t3Power">Potencia n</label>
+            <input id="t3Power" type="number" step="any">
+          </div>
+          <div class="form-field">
+            <label for="t3Index">Indice</label>
+            <input id="t3Index" type="number">
+          </div>
+        </div>
+        <div class="form-field" style="margin-top:12px;">
+          <label for="t3Label">Etiqueta</label>
+          <input id="t3Label" type="text">
+        </div>
+        <div class="button-row">
+          <button id="t3SaveArcBtn" class="saturn-primary">Guardar arco</button>
+          <button id="t3ClearArcBtn" class="saturn-secondary">Limpiar</button>
+        </div>
+        <div class="card">
+          <p class="card-title">Arcos por nodo</p>
+          <div id="t3NodeInfo" class="scroll-area">
+            Selecciona un nodo para ver sus arcos externos.
+          </div>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <div class="saturn-side">
+    <div class="map-overlay glass-panel">
+      <div class="overlay-stack">
+        <div class="overlay-pill">
+          <span>UTM</span>
+          <strong id="hudUtm">-</strong>
+        </div>
+        <div class="overlay-pill">
+          <span>Nodo activo</span>
+          <strong id="hudActiveNode">-</strong>
+        </div>
+        <p class="overlay-tip">Haz clic en el mapa para sumar nodos o arrastra uno para ajustar coordenadas.</p>
+      </div>
+    </div>
+    <div class="legend-panel glass-panel" id="nodeLegend" style="display:none">
+      <h4>Tipos de nodo</h4>
+      <div id="nodeLegendItems"></div>
+    </div>
+    <div class="measure-panel glass-panel" id="measurePanel">
+      <h4>Medicion</h4>
+      <div class="measure-status" id="measureStatus">Desactivado</div>
+      <div class="measure-distance" id="measureDistance">0 m</div>
+      <div class="measure-actions">
+        <button id="measureToggle" class="saturn-secondary">Medir</button>
+        <button id="measureClear" class="saturn-secondary">Limpiar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Proj4 para transformaciones UTM/WGS84 -->
+<script src="/vendor/proj4/proj4.js"></script>
+
+<script>
+  (function(){
+    const MAP_VAR_NAME = "map_1a037a45e281ea4b5ce29c65cf40ebac";
+    const COMMUNES_CATALOG = [];
+    const DEFAULT_CENTER_LAT = -35.4264;
+    const DEFAULT_CENTER_LON = -71.6554;
+    let map; // se resolverA! cuando Folium haya creado el mapa
+    // Estado
+    const state = {
+      utmZone: 19,
+      hemisphere: "south", // 'south' | 'north'
+      markers: [], // {marker, isCentroid, id}
+      t1: new Map(), // nodoBId -> datos Tarjeta 1
+      activeB: null,
+      t2: new Map(), // zona -> Set de nodos conectados
+      t3: { arcs: [], extras: [] }, // datos Tarjeta 3
+      coordMode: 'utm', // 'utm' | 'local'
+      localAnchor: { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON },
+      localRefXY: { x: 0, y: 0 },
+      localTransform: { rotation: 0, scale: 1, flipX: false, flipY: false },
+      localShape: null,
+      localCommune: null
+    };
+    const HISTORY_LIMIT = 50;
+    const undoStack = [];
+    let historyRestoring = false;
+    let historySuspend = false;
+
+    function clonePlain(value) {
+      return value == null ? value : JSON.parse(JSON.stringify(value));
+    }
+    function serializeT1() {
+      const out = [];
+      for (const [key, value] of state.t1.entries()) {
+        out.push([key, clonePlain(value)]);
+      }
+      return out;
+    }
+    function serializeT2() {
+      const out = [];
+      for (const [key, value] of state.t2.entries()) {
+        const list = Array.isArray(value) ? value : Array.from(value || []);
+        out.push([key, list.slice()]);
+      }
+      return out;
+    }
+    function snapshotState() {
+      return {
+        utmZone: state.utmZone,
+        hemisphere: state.hemisphere,
+        coordMode: state.coordMode,
+        localAnchor: state.localAnchor ? { ...state.localAnchor } : null,
+        localRefXY: state.localRefXY ? { ...state.localRefXY } : null,
+        localTransform: state.localTransform ? { ...state.localTransform } : null,
+        localShape: state.localShape ? clonePlain(state.localShape) : null,
+        localCommune: state.localCommune ? clonePlain(state.localCommune) : null,
+        activeB: state.activeB,
+        markers: state.markers.map(entry => {
+          const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+          return {
+            id: entry.id,
+            isCentroid: !!entry.isCentroid,
+            latlng: ll ? { lat: ll.lat, lng: ll.lng } : null,
+            dataXY: entry.dataXY ? { x: entry.dataXY.x, y: entry.dataXY.y } : null
+          };
+        }),
+        t1: serializeT1(),
+        t2: serializeT2(),
+        t3: clonePlain(state.t3),
+        t3TempPairs: clonePlain(t3TempPairs)
+      };
+    }
+    function pushUndo(undoFn) {
+      if (historyRestoring || historySuspend) return;
+      if (typeof undoFn !== 'function') return;
+      undoStack.push(undoFn);
+      if (undoStack.length > HISTORY_LIMIT) undoStack.shift();
+    }
+    function clearAllMarkers() {
+      for (const entry of state.markers) {
+        if (entry && entry.marker) {
+          map.removeLayer(entry.marker);
+        }
+      }
+      state.markers = [];
+    }
+    function applySnapshot(snapshot) {
+      if (!snapshot) return;
+      historyRestoring = true;
+      clearAllMarkers();
+      state.utmZone = snapshot.utmZone;
+      state.hemisphere = snapshot.hemisphere;
+      state.coordMode = snapshot.coordMode || 'utm';
+      state.localAnchor = snapshot.localAnchor || { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+      state.localRefXY = snapshot.localRefXY || { x: 0, y: 0 };
+      state.localTransform = snapshot.localTransform || { rotation: 0, scale: 1, flipX: false, flipY: false };
+      state.localShape = snapshot.localShape || null;
+      state.localCommune = snapshot.localCommune || null;
+      state.activeB = snapshot.activeB == null ? null : snapshot.activeB;
+      state.t1 = new Map();
+      (snapshot.t1 || []).forEach(([key, value]) => {
+        state.t1.set(key, value || { arcs: [], stages: [] });
+      });
+      state.t2 = new Map();
+      (snapshot.t2 || []).forEach(([key, value]) => {
+        state.t2.set(key, new Set(value || []));
+      });
+      state.t3 = snapshot.t3 || { arcs: [], extras: [] };
+      t3TempPairs = Array.isArray(snapshot.t3TempPairs) ? snapshot.t3TempPairs : [];
+      if (Array.isArray(snapshot.markers)) {
+        for (const item of snapshot.markers) {
+          if (!item || !item.latlng) continue;
+          addEntry({ lat: item.latlng.lat, lng: item.latlng.lng }, item.isCentroid, item.id, { dataXY: item.dataXY, skipHistory: true });
+        }
+      }
+      const utmEl = document.getElementById('utmZone');
+      if (utmEl) utmEl.value = state.utmZone;
+      const hemiEl = document.getElementById('hemisphere');
+      if (hemiEl) hemiEl.value = state.hemisphere;
+      refreshNodeBList();
+      if (state.activeB != null) {
+        setActiveB(state.activeB);
+      } else {
+        refreshArcsList();
+        refreshNodeAList();
+        refreshT3Stages();
+        refreshActiveHighlight();
+        refreshT3NodeInfo();
+        refreshSummaryStats();
+        rebuildT1Layer();
+      }
+      rebuildT2Layer();
+      rebuildT3Layers();
+      refreshT3Pairs();
+      refreshT3ArcList();
+      clearT3ArcForm();
+      historyRestoring = false;
+    }
+    function undoLastChange() {
+      if (!undoStack.length) return;
+      const undoFn = undoStack.pop();
+      historyRestoring = true;
+      try { undoFn(); } finally { historyRestoring = false; }
+    }
+    function isFormField(target) {
+      if (!target) return false;
+      const tag = target.tagName ? target.tagName.toLowerCase() : '';
+      return tag === 'input' || tag === 'textarea' || tag === 'select' || target.isContentEditable;
+    }
+    let t1DiffLayer = null;
+    let t1ActiveLayer = null;
+    let t3ArcLayer = null;
+    let t3ConnectorLayer = null;
+    let t2Layer = null;
+    let measureLayer = null;
+    let measureLine = null;
+    let measurePoints = [];
+    let measureEnabled = false;
+    const METERS_PER_DEG_LAT = 111320;
+    const NODE_TYPE_DEFS = [
+      { value: 0, label: '0 Externo', fill: '#1abc9c', stroke: '#16a085' },
+      { value: 1, label: '1 Prioritario', fill: '#3498db', stroke: '#1f78c1' },
+      { value: 2, label: '2 Rotonda', fill: '#e67e22', stroke: '#d35400' },
+      { value: 3, label: '3 Semaforizado', fill: '#9b59b6', stroke: '#8e44ad' },
+      { value: 4, label: '4 Dummy', fill: '#7f8c8d', stroke: '#56636b' },
+      { value: 5, label: '5 Rotonda con U', fill: '#27ae60', stroke: '#1f8a4c' }
+    ];
+    const NODE_TYPE_LOOKUP = NODE_TYPE_DEFS.reduce((acc, def) => {
+      acc[def.value] = { fill: def.fill, stroke: def.stroke };
+      return acc;
+    }, {});
+    const DEFAULT_NODE_STYLE = { fill: '#34495e', stroke: '#2c3e50', label: 'Nodo sin tipo' };
+    const BUFFER_NODE_STYLE = { fill: '#f39c12', stroke: '#c97c0c', label: 'Red buffer (Tarjeta 3)' };
+    const CENTROID_STYLE = { fill: '#e74c3c', stroke: '#c0392b' };
+    const CUSTOM_PROJ_DEFS = {
+      'EPSG:5367': '+proj=utm +zone=18 +south +ellps=GRS80 +units=m +no_defs',
+      'EPSG:5361': '+proj=utm +zone=19 +south +ellps=GRS80 +units=m +no_defs',
+      'EPSG:24878': '+proj=utm +zone=18 +south +ellps=intl +towgs84=-288,175,-376,0,0,0,0 +units=m +no_defs',
+      'EPSG:24879': '+proj=utm +zone=19 +south +ellps=intl +towgs84=-288,175,-376,0,0,0,0 +units=m +no_defs',
+      'EPSG:29188': '+proj=utm +zone=18 +south +ellps=GRS67 +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs',
+      'EPSG:29189': '+proj=utm +zone=19 +south +ellps=GRS67 +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs'
+    };
+
+    // Helpers UTM/WGS84
+    function epsgCode() {
+      const z = String(state.utmZone).padStart(2, '0');
+      const north = state.hemisphere.toLowerCase().startsWith('n');
+      return north ? `EPSG:326${z}` : `EPSG:327${z}`;
+    }
+    const WGS84 = 'EPSG:4326';
+
+    function ensureDefs(code){
+      if (proj4.defs[code]) return;
+      if (CUSTOM_PROJ_DEFS[code]) {
+        proj4.defs(code, CUSTOM_PROJ_DEFS[code]);
+        return;
+      }
+      if (code.startsWith('EPSG:326') || code.startsWith('EPSG:327')) {
+        const z = parseInt(code.slice(-2),10);
+        const south = code.startsWith('EPSG:327');
+        const def = `+proj=utm +zone=${z} ${south?'+south ':''}+datum=WGS84 +units=m +no_defs`;
+        proj4.defs(code, def);
+      }
+    }
+    function wgsToUtm(lng, lat) {
+      const code = epsgCode();
+      ensureDefs(code);
+      return proj4(code).forward([lng, lat]); // returns [x,y]
+    }
+    function utmToWgs(x, y) {
+      const code = epsgCode();
+      ensureDefs(code);
+      return proj4(code).inverse([x, y]); // returns [lng,lat]
+    }
+
+    const UTM_EASTING_MIN = 100000;
+    const UTM_EASTING_MAX = 900000;
+    const UTM_NORTHING_MIN = 0;
+    const UTM_NORTHING_MAX = 10000000;
+
+    const COMMUNES = Array.isArray(COMMUNES_CATALOG) ? COMMUNES_CATALOG : [];
+    function normalizeString(str) {
+      if (!str) return '';
+      return String(str)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+    }
+    function buildCodeTokens(code) {
+      if (code == null) return [];
+      const token = String(code);
+      const trimmed = token.replace(/^0+/, '');
+      const tokens = [token];
+      if (trimmed && trimmed !== token) tokens.push(trimmed);
+      return tokens;
+    }
+    const COMMUNE_INDEX = COMMUNES.map(c => {
+      const record = { ...c };
+      record.orientation = Number.isFinite(record.orientation) ? record.orientation : 0;
+      record.spread_major = Number.isFinite(record.spread_major) ? record.spread_major : null;
+      record.spread_minor = Number.isFinite(record.spread_minor) ? record.spread_minor : null;
+      return {
+        record,
+        nameToken: record.name_ascii || normalizeString(record.name),
+        regionToken: record.region_ascii || normalizeString(record.region),
+        provinceToken: record.province_ascii || normalizeString(record.province),
+        codeTokens: buildCodeTokens(record.code)
+      };
+    });
+
+    function metersPerDegLon(lat) {
+      const rad = (lat || 0) * Math.PI / 180;
+      const cos = Math.cos(rad);
+      const safeCos = Math.abs(cos) < 1e-6 ? (cos >= 0 ? 1e-6 : -1e-6) : cos;
+      return METERS_PER_DEG_LAT * safeCos;
+    }
+
+    function getLocalTransform() {
+      if (!state.localTransform) {
+        state.localTransform = { rotation: 0, scale: 1, flipX: false, flipY: false };
+      }
+      if (typeof state.localTransform.flipY !== 'boolean') {
+        state.localTransform.flipY = false;
+      }
+      if (typeof state.localTransform.flipX !== 'boolean') {
+        state.localTransform.flipX = false;
+      }
+      return state.localTransform;
+    }
+
+    function resetLocalTransform() {
+      const lt = getLocalTransform();
+      lt.rotation = 0;
+      lt.scale = 1;
+      lt.flipX = false;
+      lt.flipY = false;
+    }
+
+
+    function isWithin(val, min, max) {
+      return Number.isFinite(val) && val >= min && val <= max;
+    }
+
+    function detectCoordinateType(records) {
+      const limit = Math.min(records.length || 0, 600);
+      let total = 0;
+      let wgs = 0;
+      let utm = 0;
+      for (let i = 0; i < limit; i++) {
+        const rec = records[i];
+        if (!rec) continue;
+        const x = Number(rec.x);
+        const y = Number(rec.y);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+        total++;
+        if (isLikelyWgsCoord(x, y)) wgs++;
+        if (isWithin(x, UTM_EASTING_MIN, UTM_EASTING_MAX) && isWithin(y, UTM_NORTHING_MIN, UTM_NORTHING_MAX)) utm++;
+      }
+      if (!total) return { type: 'local' };
+      if (wgs / total >= 0.7) return { type: 'wgs84' };
+      if (utm / total >= 0.5) return { type: 'utm' };
+      return { type: 'local' };
+    }
+
+    function isLikelyWgsCoord(lon, lat) {
+      return (
+        Number.isFinite(lon) && Number.isFinite(lat) &&
+        lon >= -180 && lon <= 180 &&
+        lat >= -90 && lat <= 90
+      );
+    }
+
+    function utmToLatLngWithCode(x, y, code) {
+      if (!Number.isFinite(x) || !Number.isFinite(y) || !code) return null;
+      ensureDefs(code);
+      const result = proj4(code).inverse([x, y]);
+      if (!result || !Number.isFinite(result[0]) || !Number.isFinite(result[1])) return null;
+      return { lng: result[0], lat: result[1] };
+    }
+
+    function utmToLatLngWithZone(x, y, zone, hemisphere) {
+      if (!Number.isFinite(zone)) return null;
+      const z = String(Math.round(zone)).padStart(2, '0');
+      const north = (hemisphere || '').toLowerCase().startsWith('n');
+      const code = north ? `EPSG:326${z}` : `EPSG:327${z}`;
+      return utmToLatLngWithCode(x, y, code);
+    }
+
+    function distanceMeters(lat1, lng1, lat2, lng2) {
+      const dLat = (lat1 - lat2) * METERS_PER_DEG_LAT;
+      const avgLatRad = ((lat1 + lat2) / 2) * Math.PI / 180;
+      const metersLon = METERS_PER_DEG_LAT * Math.cos(avgLatRad || 0);
+      const dLon = (lng1 - lng2) * (Number.isFinite(metersLon) ? metersLon : METERS_PER_DEG_LAT);
+      return Math.hypot(dLat, dLon);
+    }
+
+    function findNearestCommune(lat, lng) {
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+      let best = null;
+      for (const entry of COMMUNE_INDEX) {
+        const c = entry.record;
+        if (!Number.isFinite(c.lat) || !Number.isFinite(c.lon)) continue;
+        const dist = distanceMeters(lat, lng, c.lat, c.lon);
+        if (!best || dist < best.distance) {
+          best = { record: c, distance: dist };
+        }
+      }
+      return best;
+    }
+
+    function getDatumCandidates(zone, hemisphere) {
+      const z = String(Math.round(zone)).padStart(2, '0');
+      const candidates = [];
+      const defaultCode = (hemisphere || '').toLowerCase().startsWith('n') ? `EPSG:326${z}` : `EPSG:327${z}`;
+      candidates.push(defaultCode);
+      const extras = CUSTOM_DATUM_CANDIDATES[z] || [];
+      for (const code of extras) {
+        if (!candidates.includes(code)) candidates.push(code);
+      }
+      return candidates;
+    }
+
+    const CUSTOM_DATUM_CANDIDATES = {
+      '18': ['EPSG:32718', 'EPSG:5367', 'EPSG:24878', 'EPSG:29188'],
+      '19': ['EPSG:32719', 'EPSG:5361', 'EPSG:24879', 'EPSG:29189']
+    };
+
+    function chooseBestUtmZone(records, baseZone, anchorRecord, hemisphere) {
+      const defaultZone = Number.isFinite(baseZone) ? Math.round(baseZone) : 19;
+      const candidates = Array.from(new Set(
+        [defaultZone, defaultZone - 1, defaultZone + 1].filter(z => z >= 1 && z <= 60)
+      ));
+      let best = null;
+      for (const zone of candidates) {
+        const result = evaluateZoneCandidate(records, zone, anchorRecord, hemisphere);
+        if (result && (!best || result.score < best.score)) {
+          best = result;
+        }
+      }
+      if (best) {
+        console.info('[UTM] Seleccion zona/datum', {
+          zone: best.zone,
+          code: best.code,
+          score: best.score.toFixed(2),
+          anchor: best.anchor ? {
+            name: best.anchor.name || '(auto)',
+            lat: best.anchor.lat,
+            lon: best.anchor.lon
+          } : null
+        });
+      }
+      return best;
+    }
+
+    function evaluateZoneCandidate(records, zone, anchorRecord, hemisphere) {
+      const codes = getDatumCandidates(zone, hemisphere);
+      let best = null;
+      for (const code of codes) {
+        const evaluation = evaluateDatumCandidate(records, code, anchorRecord);
+        if (evaluation && (!best || evaluation.score < best.score)) {
+          best = { zone, code, score: evaluation.score, anchor: evaluation.anchor };
+        }
+      }
+      return best;
+    }
+
+    function evaluateDatumCandidate(records, code, anchorRecord) {
+      const limit = Math.min(records.length || 0, 400);
+      if (!limit) return null;
+      let sumLat = 0;
+      let sumLng = 0;
+      let count = 0;
+      for (let i = 0; i < limit; i++) {
+        const rec = records[i];
+        if (!rec || !Number.isFinite(rec.x) || !Number.isFinite(rec.y)) continue;
+        const ll = utmToLatLngWithCode(rec.x, rec.y, code);
+        if (!ll) continue;
+        sumLat += ll.lat;
+        sumLng += ll.lng;
+        count++;
+      }
+      if (!count) return null;
+      const centroidLat = sumLat / count;
+      const centroidLng = sumLng / count;
+      let anchor = null;
+      if (anchorRecord && Number.isFinite(anchorRecord.lat) && Number.isFinite(anchorRecord.lon)) {
+        anchor = anchorRecord;
+      } else {
+        const nearest = findNearestCommune(centroidLat, centroidLng);
+        anchor = nearest ? nearest.record : null;
+      }
+      if (!anchor) {
+        return { score: 0, anchor: { lat: centroidLat, lon: centroidLng, name: '(auto)' } };
+      }
+      const score = distanceMeters(centroidLat, centroidLng, anchor.lat, anchor.lon);
+      return { score, anchor };
+    }
+
+    function setLocalAnchor(anchor, reproject=false) {
+      let target = anchor;
+      if (!target || !Number.isFinite(target.lat) || !Number.isFinite(target.lng)) {
+        target = { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+      }
+      state.localAnchor = { lat: target.lat, lng: target.lng };
+      if (reproject && state.coordMode === 'local') {
+        refreshMarkersFromData();
+      }
+    }
+
+    function refreshMarkersFromData() {
+      if (!map) return;
+      let any = false;
+      for (const e of state.markers) {
+        if (!e || !e.dataXY) continue;
+        const latlng = dataXYToLatLng(e.dataXY.x, e.dataXY.y);
+        e.marker.setLatLng(latlng);
+        any = true;
+      }
+      if (any) {
+        const group = L.featureGroup(state.markers.map(m=>m.marker));
+        map.fitBounds(group.getBounds().pad(0.15));
+      }
+    }
+
+    function markerLatLngCenter() {
+      if (!state.markers.length) return null;
+      let sumLat = 0;
+      let sumLng = 0;
+      let count = 0;
+      for (const e of state.markers) {
+        if (!e || !e.marker || !e.marker.getLatLng) continue;
+        const ll = e.marker.getLatLng();
+        if (!ll || !Number.isFinite(ll.lat) || !Number.isFinite(ll.lng)) continue;
+        sumLat += ll.lat;
+        sumLng += ll.lng;
+        count++;
+      }
+      if (!count) return null;
+      return { lat: sumLat / count, lng: sumLng / count };
+    }
+
+    function recenterLocalNetwork(maxIterations=5) {
+      if (state.coordMode !== 'local') return false;
+      let adjusted = false;
+      for (let i = 0; i < maxIterations; i++) {
+        const anchor = state.localAnchor || { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+        const center = markerLatLngCenter();
+        if (!center) break;
+        const metersLon = metersPerDegLon(anchor.lat);
+        const deltaLat = center.lat - anchor.lat;
+        const deltaLon = center.lng - anchor.lng;
+        const shiftMeters = Math.hypot(deltaLat * METERS_PER_DEG_LAT, deltaLon * metersLon);
+        if (shiftMeters < 5) break;
+        const newAnchor = {
+          lat: anchor.lat + deltaLat * 0.6,
+          lng: anchor.lng + deltaLon * 0.6
+        };
+        setLocalAnchor(newAnchor, true);
+        adjusted = true;
+      }
+      return adjusted;
+    }
+
+    function xyLocalToLatLng(x, y, anchorOverride) {
+      const anchor = anchorOverride || state.localAnchor || { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+      const ref = state.localRefXY || { x: 0, y: 0 };
+      const dx = (Number.isFinite(x) ? x : 0) - ref.x;
+      const dy = (Number.isFinite(y) ? y : 0) - ref.y;
+      const lt = getLocalTransform();
+      const flipX = lt.flipX ? -1 : 1;
+      const flipY = lt.flipY ? -1 : 1;
+      const adjDx = dx * flipX;
+      const adjDy = dy * flipY;
+      const rotation = normalizeAngle(lt.rotation || 0);
+      const cosR = Math.cos(rotation);
+      const sinR = Math.sin(rotation);
+      const rotatedX = cosR * adjDx - sinR * adjDy;
+      const rotatedY = sinR * adjDx + cosR * adjDy;
+      const scale = lt.scale || 1;
+      const scaledX = rotatedX * scale;
+      const scaledY = rotatedY * scale;
+      const metersLon = metersPerDegLon(anchor.lat);
+      return {
+        lat: anchor.lat + (scaledY / METERS_PER_DEG_LAT),
+        lng: anchor.lng + (scaledX / metersLon)
+      };
+    }
+
+    function latLngToLocalXY(latlng, anchorOverride) {
+      const anchor = anchorOverride || state.localAnchor || { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+      const ref = state.localRefXY || { x: 0, y: 0 };
+      if (!latlng) return { x: ref.x, y: ref.y };
+      const metersLon = metersPerDegLon(anchor.lat);
+      const dxMeters = (latlng.lng - anchor.lng) * metersLon;
+      const dyMeters = (latlng.lat - anchor.lat) * METERS_PER_DEG_LAT;
+      const lt = getLocalTransform();
+      const invScale = lt.scale ? 1 / lt.scale : 1;
+      const scaledX = dxMeters * invScale;
+      const scaledY = dyMeters * invScale;
+      const rotation = normalizeAngle(lt.rotation || 0);
+      const cosR = Math.cos(rotation);
+      const sinR = Math.sin(rotation);
+      const rotatedX = cosR * scaledX + sinR * scaledY;
+      const rotatedY = -sinR * scaledX + cosR * scaledY;
+      const flipX = lt.flipX ? -1 : 1;
+      const flipY = lt.flipY ? -1 : 1;
+      const adjDx = rotatedX * flipX;
+      const adjDy = rotatedY * flipY;
+      return {
+        x: ref.x + adjDx,
+        y: ref.y + adjDy
+      };
+    }
+
+    function dataXYToLatLng(x, y) {
+      if (state.coordMode === 'local') {
+        return xyLocalToLatLng(x, y);
+      }
+      const lnglat = utmToWgs(x, y);
+      return { lat: lnglat[1], lng: lnglat[0] };
+    }
+
+    function latLngToData(latlng) {
+      if (!latlng) return { x: 0, y: 0 };
+      if (state.coordMode === 'local') {
+        return latLngToLocalXY(latlng);
+      }
+      const xy = wgsToUtm(latlng.lng, latlng.lat);
+      return { x: xy[0], y: xy[1] };
+    }
+
+    function computeXYCentroid(records) {
+      if (!Array.isArray(records) || !records.length) return { x: 0, y: 0 };
+      let sumX = 0;
+      let sumY = 0;
+      let count = 0;
+      for (const rec of records) {
+        if (!rec) continue;
+        if (!Number.isFinite(rec.x) || !Number.isFinite(rec.y)) continue;
+        sumX += rec.x;
+        sumY += rec.y;
+        count++;
+      }
+      if (!count) return { x: 0, y: 0 };
+      return { x: sumX / count, y: sumY / count };
+    }
+
+    function computeLocalShapeStats(records) {
+      if (!Array.isArray(records) || !records.length) return null;
+      let sumX = 0;
+      let sumY = 0;
+      let sumXX = 0;
+      let sumYY = 0;
+      let sumXY = 0;
+      let count = 0;
+      for (const rec of records) {
+        if (!rec) continue;
+        const x = Number(rec.x);
+        const y = Number(rec.y);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+        sumX += x;
+        sumY += y;
+        sumXX += x * x;
+        sumYY += y * y;
+        sumXY += x * y;
+        count++;
+      }
+      if (!count) return null;
+      const meanX = sumX / count;
+      const meanY = sumY / count;
+      const covXX = Math.max(0, sumXX / count - meanX * meanX);
+      const covYY = Math.max(0, sumYY / count - meanY * meanY);
+      const covXY = sumXY / count - meanX * meanY;
+      const trace = covXX + covYY;
+      const det = covXX * covYY - covXY * covXY;
+      const disc = Math.max(0, trace * trace / 4 - det);
+      const sqrtDisc = Math.sqrt(disc);
+      const eigMajor = trace / 2 + sqrtDisc;
+      const eigMinor = trace / 2 - sqrtDisc;
+      const orientation = 0.5 * Math.atan2(2 * covXY, covXX - covYY) || 0;
+      return {
+        meanX,
+        meanY,
+        covXX,
+        covYY,
+        covXY,
+        orientation,
+        spreadMajor: Math.sqrt(Math.max(eigMajor, 0)),
+        spreadMinor: Math.sqrt(Math.max(eigMinor, 0)),
+        count
+      };
+    }
+
+
+    function communeClosestTo(target) {
+      if (!target || !COMMUNE_INDEX.length) return null;
+      const lat = target.lat;
+      const lng = target.lng;
+      let best = null;
+      for (const entry of COMMUNE_INDEX) {
+        const c = entry.record;
+        if (!Number.isFinite(c.lat) || !Number.isFinite(c.lon)) continue;
+        const dLat = c.lat - lat;
+        const avgLat = ((c.lat || 0) + (lat || 0)) / 2;
+        const dLon = (c.lon - lng) * Math.cos(avgLat * Math.PI / 180);
+        const dist2 = dLat * dLat + dLon * dLon;
+        if (!best || dist2 < best.dist2) {
+          best = { entry, dist2 };
+        }
+      }
+      return best ? best.entry.record : null;
+    }
+
+    function detectCommuneFromText(text) {
+      if (!text || !COMMUNE_INDEX.length) return null;
+      const normalized = normalizeString(text);
+      let best = null;
+      function consider(entry, score) {
+        if (!best || score > best.score) best = { entry, score };
+      }
+      for (const entry of COMMUNE_INDEX) {
+        const { nameToken, regionToken, provinceToken, codeTokens } = entry;
+        if (nameToken && normalized.includes(nameToken)) {
+          consider(entry, 200 + nameToken.length);
+        }
+        if (provinceToken && normalized.includes(provinceToken)) {
+          consider(entry, 140 + provinceToken.length);
+        }
+        if (regionToken && normalized.includes(regionToken)) {
+          consider(entry, 100 + regionToken.length);
+        }
+        if (codeTokens && codeTokens.length) {
+          for (const token of codeTokens) {
+            if (token && text.includes(token)) {
+              consider(entry, 160 + token.length);
+              break;
+            }
+          }
+        }
+      }
+      return best ? best.entry.record : null;
+    }
+
+    function selectCommuneAnchor(text) {
+      const detected = detectCommuneFromText(text);
+      if (detected) return detected;
+      const target = (map && map.getCenter) ? map.getCenter() : { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+      return communeClosestTo(target);
+    }
+
+    function normalizeAngle(angle) {
+      let a = angle || 0;
+      while (a > Math.PI) a -= 2 * Math.PI;
+      while (a < -Math.PI) a += 2 * Math.PI;
+      return a;
+    }
+
+    function alignToCommuneOrientation(localStats, commune) {
+      const lt = getLocalTransform();
+      const localOrientation = localStats && Number.isFinite(localStats.orientation) ? localStats.orientation : 0;
+      const communeOrientation = commune && Number.isFinite(commune.orientation) ? commune.orientation : 0;
+      lt.rotation = normalizeAngle(communeOrientation - localOrientation);
+      lt.scale = 1;
+      lt.flipX = false;
+      lt.flipY = false;
+    }
+    function getNodeTypeValue(nodeId){
+      if (nodeId==null) return null;
+      const d = state.t1.get(nodeId);
+      const tipo = d && d.tipo;
+      return Number.isFinite(tipo) ? tipo : null;
+    }
+
+    function getNodeTypeDef(tipo){
+      return NODE_TYPE_LOOKUP[tipo] || null;
+    }
+
+    function nodeInT1(id){
+      if (id==null) return false;
+      if (state.t1 && state.t1.has(id)) return true;
+      for (const data of state.t1.values()){
+        if (!data || !Array.isArray(data.arcs)) continue;
+        for (const arc of data.arcs){
+          if (arc && arc.nodeA === id) return true;
+        }
+      }
+      return false;
+    }
+
+    function bufferNodesSet(){
+      ensureT3State();
+      const set = new Set();
+      for (const arc of state.t3.arcs){
+        if (!arc || arc.zoneA || arc.zoneB) continue;
+        if (!nodeInT1(arc.nodeA)) set.add(arc.nodeA);
+        if (!nodeInT1(arc.nodeB)) set.add(arc.nodeB);
+      }
+      return set;
+    }
+
+    function nodeInBuffer(id){
+      if (id==null) return false;
+      if (nodeInT1(id)) return false;
+      ensureT3State();
+      for (const arc of state.t3.arcs){
+        if (!arc || arc.zoneA || arc.zoneB) continue;
+        if (arc.nodeA === id || arc.nodeB === id) return true;
+      }
+      return false;
+    }
+
+    function relatedNodesForActiveB(){
+      const related = new Set();
+      const B = state.activeB;
+      if (B==null) return related;
+      const data = state.t1.get(B);
+      if (data && Array.isArray(data.arcs)){
+        for (const arc of data.arcs){
+          if (arc && Number.isFinite(arc.nodeA)) related.add(arc.nodeA);
+        }
+      }
+      ensureT3State();
+      for (const arc of state.t3.arcs){
+        if (!arc) continue;
+        if (arc.nodeB === B && !arc.zoneA && Number.isFinite(arc.nodeA)) related.add(arc.nodeA);
+      }
+      return related;
+    }
+
+    function makeIcon(entry){
+      const size = entry && entry.isCentroid ? 10 : 9;
+      let style = entry && entry.isCentroid ? CENTROID_STYLE : DEFAULT_NODE_STYLE;
+      if (entry && !entry.isCentroid){
+        const tipo = getNodeTypeValue(entry.id);
+        const def = getNodeTypeDef(tipo);
+        if (def) style = def;
+        if (nodeInBuffer(entry.id)) style = BUFFER_NODE_STYLE;
+      }
+      const html = `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${style.fill};border:1px solid ${style.stroke};box-sizing:border-box;"></div>`;
+      return L.divIcon({ className: 'saturn-dot', html: html, iconSize: [size, size], iconAnchor: [size/2, size/2] });
+    }
+
+    function refreshNodeColors(){
+      for (const entry of state.markers){
+        if (entry.marker) entry.marker.setIcon(makeIcon(entry));
+      }
+    }
+
+    function collectUsedNodeTypes(){
+      const types = new Set();
+      for (const data of state.t1.values()){
+        if (!data) continue;
+        const tipo = data.tipo;
+        if (Number.isFinite(tipo)) types.add(tipo);
+      }
+      return Array.from(types).sort((a,b)=>a-b);
+    }
+
+    function renderNodeLegend(){
+      ensureT3State();
+      const container = document.getElementById('nodeLegendItems');
+      const panel = document.getElementById('nodeLegend');
+      if (!container || !panel) return;
+      container.innerHTML = '';
+      function appendLegendRow(label, fill, stroke){
+        const row = document.createElement('div');
+        row.className = 'legend-item';
+        const swatch = document.createElement('span');
+        swatch.className = 'legend-swatch';
+        swatch.style.background = fill;
+        swatch.style.borderColor = stroke;
+        const text = document.createElement('span');
+        text.textContent = label;
+        row.appendChild(swatch);
+        row.appendChild(text);
+        container.appendChild(row);
+      }
+      const used = collectUsedNodeTypes();
+      const bufferNodes = bufferNodesSet();
+      const hasBuffer = bufferNodes.size > 0;
+      if (!used.length && !hasBuffer){
+        panel.style.display = 'none';
+        return;
+      }
+      panel.style.display = 'block';
+      used.forEach(typeVal=>{
+        const def = NODE_TYPE_DEFS.find(d=>d.value===typeVal) || {
+          label: `Tipo ${typeVal}`,
+          fill: DEFAULT_NODE_STYLE.fill,
+          stroke: DEFAULT_NODE_STYLE.stroke
+        };
+        appendLegendRow(def.label, def.fill, def.stroke);
+      });
+      if (hasBuffer){
+        appendLegendRow('Red buffer (Tarjeta 3)', '#f39c12', '#c97c0c');
+      }
+    }
+
+    function formatNumber(n) {
+      return n.toFixed(5); // 5 decimales como T05.DAT
+    }
+    function formatLine(isCentroid, id, x, y) {
+      const idStr = String(id);
+      const xStr = formatNumber(x);
+      const yStr = formatNumber(y);
+      // Estilo similar a T05.DAT con columnas separadas por espacios
+      // Centroides: 'C' + id ancho 8, 3 espacios, X ancho 12, 2 espacios, Y ancho 12
+      // Nodos: espacio + id ancho 7, 3 espacios, X, 2 espacios, Y
+      if (isCentroid) {
+        return 'C' + idStr.padStart(8, ' ') + '   ' + xStr.padStart(12, ' ') + '  ' + yStr.padStart(12, ' ');
+      } else {
+        return ' ' + idStr.padStart(7, ' ') + '   ' + xStr.padStart(12, ' ') + '  ' + yStr.padStart(12, ' ');
+      }
+    }
+
+    // ===== Tarjeta 1 helpers =====
+    function pad(numOrStr, w=5){
+      const s = String(numOrStr==null? '': numOrStr);
+      return s.padStart(w, ' ');
+    }
+    function fmtHeaderLine(B){
+      const d = state.t1.get(B) || {};
+      const arcs = (d.arcs||[]).length;
+      const parts = [pad(B), pad(arcs), pad(d.tipo ?? 1)];
+      if (d.rotEtapas!=null) parts.push(pad(d.rotEtapas));
+      if (d.desfase!=null) parts.push(pad(d.desfase));
+      if (d.capRot!=null) parts.push(pad(d.capRot));
+      if (d.ciclo!=null) parts.push(pad(d.ciclo));
+      if (d.unidades!=null) parts.push(pad(d.unidades));
+      if (d.gapPrior!=null) parts.push(pad(d.gapPrior));
+      if (d.gapAutop!=null) parts.push(pad(d.gapAutop));
+      return parts.join('');
+    }
+    function fmtArcLine(B, arc){
+      // LAnea de ancho fijo con posiciones segAon Cap.3_impar (Registro Tipo 2)
+      //  1-5:   Cap. almacenamiento (usualmente en blanco)
+      //  6-10:  Nodo A (cero-relleno a 5 dAgitos)
+      // 12-15:  NAo de pistas que llegan
+      // 16-20:  Velocidad (km/h)
+      // 21-25:  Longitud (m)
+      // Viraje 1: 26-30 flujo, 31 marcador (G/X/F), 33 pista ini, 35 pista fin
+      // Viraje 2: 36-40 flujo, 41 marcador, 43 pista ini, 45 pista fin
+      // Viraje 3: 46-50 flujo, 51 marcador, 53 pista ini, 55 pista fin
+      const v = arc.virajes||[];
+      const slotCount = Math.max(1, v.length);
+      const width = 25 + (slotCount * 10);
+      const arr = Array(width).fill(' ');
+      function put(start, end, val, opts={}){
+        // start/end 1-based inclusive
+        let s = val==null? '': String(val);
+        const w = end - start + 1;
+        if (opts.zeroPad){ s = s.padStart(w, '0'); }
+        else if (opts.right !== false){ s = s.padStart(w, ' '); }
+        if (s.length > w) s = s.slice(-w);
+        for (let i=0;i<s.length;i++) arr[start-1+i] = s[i];
+      }
+      function parseFlujoMark(f){
+        if (f==null) return {flow:'', mark:' '};
+        const s = String(f).trim();
+        const m = s.match(/^(\d+)([GXF])?$/i);
+        if (m){ return {flow:m[1], mark:(m[2]||' ').toUpperCase()}; }
+        // si viene solo letra o formato raro, lo dejamos en flujo y espacio en marca
+        return {flow:s.replace(/[^0-9]/g,''), mark:(s.match(/[GXF]/i)||[' '])[0].toUpperCase()};
+      }
+      // Nodo A en 6-10, alineado a la derecha con espacios (no cero-relleno)
+      put(6,10, arc.nodeA, {});
+      // Pistas 12-15, Vel 16-20, Long 21-25 (alineado derecha)
+      put(12,15, arc.pistas, {});
+      put(16,20, arc.vel, {});
+      put(21,25, arc.long, {});
+      for (let k=0;k<v.length;k++){
+        const vr = v[k]; if (!vr) continue;
+        const pm = parseFlujoMark(vr.flujo);
+        const start = 26 + (k * 10);
+        put(start, start+4, pm.flow, {});
+        put(start+5, start+5, pm.mark, {right:false});
+        if (vr.ini!=null && vr.ini!=='') put(start+7, start+7, vr.ini, {right:false});
+        if (vr.fin!=null && vr.fin!=='') put(start+9, start+9, vr.fin, {right:false});
+      }
+      // recortar espacios finales
+      let s = arr.join('');
+      return s.replace(/\s+$/,'');
+    }
+    function export11111(){
+      const lines = ['11111'];
+      const Bs = Array.from(state.t1.keys()).sort((a,b)=>a-b);
+      for (const B of Bs){
+        lines.push(fmtHeaderLine(B));
+        const arcs = (state.t1.get(B).arcs)||[];
+        for (const arc of arcs){
+          lines.push(fmtArcLine(B, arc));
+        }
+        const d = state.t1.get(B) || {};
+        if (d.tipo===3 && d.stages && d.stages.length){
+          for (const st of d.stages){
+            const stLines = fmtStageLines(B, st);
+            for (const L of stLines) lines.push(L);
+          }
+        }
+      }
+      lines.push('99999');
+      if (state.t2 && state.t2.size) {
+        lines.push('22222');
+        const zones = Array.from(state.t2.keys()).sort((a,b)=>a-b);
+        const maxNodesPerLine = 10;
+        function putCols(arr, start, end, val){
+          let s = val == null ? '' : String(val);
+          const w = end - start + 1;
+          s = s.padStart(w, ' ');
+          if (s.length > w) s = s.slice(-w);
+          for (let k=0;k<s.length;k++) arr[start-1+k] = s[k];
+        }
+        for (const z of zones){
+          const nodeSet = state.t2.get(z);
+          const nodes = Array.isArray(nodeSet) ? nodeSet : Array.from(nodeSet || []);
+          nodes.sort((a,b)=>a-b);
+          if (!nodes.length) continue;
+          for (let i=0;i<nodes.length;i+=maxNodesPerLine){
+            const slice = nodes.slice(i, i+maxNodesPerLine);
+            const width = 5 + maxNodesPerLine * 5;
+            const arr = Array(width).fill(' ');
+            putCols(arr, 1, 5, z);
+            slice.forEach((nodeId, idx) => {
+              const start = 6 + idx * 5;
+              const end = start + 4;
+              putCols(arr, start, end, nodeId);
+            });
+            lines.push(arr.join('').replace(/\s+$/,''));
+          }
+        }
+        lines.push('99999');
+      }
+      const content = lines.join('\n');
+      const blob = new Blob([content], {type:'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'saturn_11111.dat';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function refreshNodeBList(){
+      const sel = document.getElementById('nodeBSelect');
+      if (!sel) return;
+      sel.innerHTML = '';
+      // Preferir nodos reales (no centroides)
+      const nodeIds = state.markers.filter(m=>!m.isCentroid).map(m=>m.id).sort((a,b)=>a-b);
+      // Si hay nodos con datos importados en t1, priorizar esos
+      const t1Ids = Array.from(state.t1.keys()).sort((a,b)=>a-b);
+      const ids = nodeIds.length ? nodeIds : Array.from(new Set([...t1Ids]));
+      for (const id of ids){
+        const opt = document.createElement('option');
+        opt.value = id; opt.textContent = String(id);
+        sel.appendChild(opt);
+      }
+      if (t1Ids.length) {
+        // Si hay Bs importados, fija activeB a uno de ellos si no esta
+        if (state.activeB==null || !t1Ids.includes(state.activeB)) state.activeB = t1Ids[0];
+      } else if (ids.length && state.activeB==null) {
+        state.activeB = ids[0];
+      }
+      if (state.activeB!=null) sel.value = String(state.activeB);
+      loadT1Fields();
+      refreshArcsList();
+      refreshNodeAList();
+      refreshSummaryStats();
+      refreshT2EditorList();
+    }
+    function refreshNodeAList(){
+      const selA = document.getElementById('arcNodeA');
+      if (!selA) return;
+      selA.innerHTML='';
+      const ids = state.markers.map(m=>m.id).filter(id=>id!==state.activeB).sort((a,b)=>a-b);
+      for (const id of ids){
+        const opt = document.createElement('option');
+        opt.value = id; opt.textContent = String(id);
+        selA.appendChild(opt);
+      }
+    }
+
+    function refreshSummaryStats(){
+      const markers = Array.isArray(state.markers) ? state.markers : [];
+      let nodeCount = 0;
+      let centroidCount = 0;
+      for (const entry of markers){
+        if (!entry) continue;
+        if (entry.isCentroid) centroidCount++;
+        else nodeCount++;
+      }
+      let internalArcs = 0;
+      state.t1.forEach(data => {
+        if (data && Array.isArray(data.arcs)) {
+          internalArcs += data.arcs.length;
+        }
+      });
+      const externalArcs = state.t3 && Array.isArray(state.t3.arcs) ? state.t3.arcs.length : 0;
+      const assign = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+      assign('statNodes', nodeCount);
+      assign('statCentroids', centroidCount);
+      assign('statInternalArcs', internalArcs);
+      assign('statExternalArcs', externalArcs);
+      const activeEl = document.getElementById('hudActiveNode');
+      if (activeEl) {
+        activeEl.textContent = state.activeB != null ? `N${state.activeB}` : '-';
+      }
+      const utmEl = document.getElementById('hudUtm');
+      if (utmEl) {
+        const hemiLabel = state.hemisphere && state.hemisphere.toLowerCase().startsWith('n') ? 'H. Norte' : 'H. Sur';
+        const zoneLabel = state.utmZone ? `Zona ${state.utmZone}` : 'Zona ?';
+        utmEl.textContent = `${hemiLabel} - ${zoneLabel}`;
+      }
+    }
+    function loadT1Fields(){
+      if (state.activeB==null) return;
+      const d = state.t1.get(state.activeB) || { tipo:1, arcs:[], stages:[] };
+      document.getElementById('t1Tipo').value = String(d.tipo ?? 1);
+      document.getElementById('t1Desfase').value = d.desfase??'';
+      document.getElementById('t1Ciclo').value = d.ciclo??'';
+      document.getElementById('t1Unidades').value = d.unidades??'';
+      document.getElementById('t1RotEtapas').value = d.rotEtapas??'';
+      document.getElementById('t1CapRot').value = d.capRot??'';
+      document.getElementById('t1GapPrior').value = d.gapPrior??'';
+      document.getElementById('t1GapAutop').value = d.gapAutop??'';
+      const t3sec = document.getElementById('t3Section');
+      if (t3sec) t3sec.style.display = (d.tipo===3? 'block':'none');
+      refreshT3Stages();
+    }
+    function saveT1Fields(){
+      // Toggle visual inmediato segAon select, independientemente del estado
+      const tipoVal = parseInt(document.getElementById('t1Tipo').value,10);
+      const t3sec = document.getElementById('t3Section');
+      if (t3sec) t3sec.style.display = (tipoVal===3? 'block':'none');
+
+      if (state.activeB==null){
+        const sel = document.getElementById('nodeBSelect');
+        if (sel && sel.value) state.activeB = parseInt(sel.value,10);
+      }
+      if (state.activeB==null) return;
+      const prev = clonePlain(state.t1.get(state.activeB) || { arcs:[], stages:[] });
+      const prevB = state.activeB;
+      pushUndo(() => {
+        state.t1.set(prevB, prev);
+        if (state.activeB === prevB) loadT1Fields();
+        refreshArcsList();
+        refreshSummaryStats();
+        rebuildT1Layer();
+      });
+      const d = state.t1.get(state.activeB) || { arcs:[], stages:[] };
+      d.tipo = tipoVal;
+      const valOrNull = id=>{ const v = document.getElementById(id).value; return v===''? null: parseInt(v,10); };
+      d.desfase = valOrNull('t1Desfase');
+      d.ciclo = valOrNull('t1Ciclo');
+      d.unidades = valOrNull('t1Unidades');
+      d.rotEtapas = valOrNull('t1RotEtapas');
+      d.capRot = valOrNull('t1CapRot');
+      d.gapPrior = valOrNull('t1GapPrior');
+      d.gapAutop = valOrNull('t1GapAutop');
+      if (!d.arcs) d.arcs = [];
+      if (!d.stages) d.stages = [];
+      state.t1.set(state.activeB, d);
+      rebuildT1Layer();
+    }
+    function refreshArcsList(){
+      const box = document.getElementById('arcsList');
+      if (!box || state.activeB==null) return;
+      box.innerHTML = '';
+      const d = state.t1.get(state.activeB) || { arcs:[] };
+      d.arcs.forEach((a, idx)=>{
+        const item = document.createElement('div');
+        item.className = 'arc-item';
+        const details = document.createElement('div');
+        details.className = 'arc-item-details';
+        const summary = document.createElement('span');
+        summary.textContent = `A=${a.nodeA} | pistas=${a.pistas} | vel=${a.vel} | long=${a.long}`;
+        details.appendChild(summary);
+        const vfmt = (v)=> v && v.flujo ? `${v.flujo} (${v.ini}-${v.fin})` : null;
+        const virajes = Array.isArray(a.virajes) ? a.virajes : [];
+        const virajesLine = virajes.map(vfmt).filter(Boolean).join(' | ');
+        if (virajesLine){
+          const virajes = document.createElement('span');
+          virajes.textContent = `Virajes: ${virajesLine}`;
+          details.appendChild(virajes);
+        }
+        item.appendChild(details);
+        const btnE = document.createElement('button');
+        btnE.className = 'arc-edit';
+        btnE.type = 'button';
+        btnE.textContent='Editar';
+        btnE.onclick = ()=>{ editT1Arc(idx); };
+        item.appendChild(btnE);
+        const btnD = document.createElement('button');
+        btnD.className = 'arc-delete';
+        btnD.type = 'button';
+        btnD.textContent='Eliminar';
+        btnD.onclick = ()=>{
+          const B = state.activeB;
+          const removed = d.arcs[idx];
+          pushUndo(() => {
+            const data = state.t1.get(B) || { arcs:[], stages:[] };
+            data.arcs = data.arcs || [];
+            data.arcs.splice(idx, 0, removed);
+            state.t1.set(B, data);
+            refreshArcsList();
+            rebuildT1Layer();
+          });
+          d.arcs.splice(idx,1);
+          refreshArcsList();
+          rebuildT1Layer();
+        };
+        item.appendChild(btnD);
+        box.appendChild(item);
+      });
+      refreshSummaryStats();
+    }
+
+    // ===== Tipo 3 (SemA!foro) =====
+    let t1Editing = null;
+    let t3TempPairs = [];
+    let t3EditingStageIndex = null;
+    function refreshT3Pairs(){
+      const area = document.getElementById('t3Pairs');
+      if (!area) return;
+      area.innerHTML = '';
+      t3TempPairs.forEach((p,idx)=>{
+        const div = document.createElement('div');
+        div.textContent = `(${idx+1}) A=${p.A} C=${p.C}`;
+        const b = document.createElement('button'); b.textContent='Eliminar'; b.style.marginLeft='6px';
+        b.onclick = ()=>{
+          const prev = clonePlain(t3TempPairs);
+          pushUndo(() => { t3TempPairs = prev || []; refreshT3Pairs(); });
+          t3TempPairs.splice(idx,1);
+          refreshT3Pairs();
+        };
+        div.appendChild(b);
+        area.appendChild(div);
+      });
+    }
+    function refreshT3Stages(){
+      const box = document.getElementById('t3StagesList');
+      if (!box || state.activeB==null) return;
+      box.innerHTML = '';
+      const d = state.t1.get(state.activeB) || { stages:[] };
+      (d.stages||[]).forEach((st, idx)=>{
+        const div = document.createElement('div');
+        div.textContent = `Etapa ${idx+1}: T=${st.dur}s IG=${st.ig}s | Movs=${st.pairs.length}`;
+        const e = document.createElement('button'); e.textContent='Editar'; e.style.marginLeft='6px';
+        e.onclick = ()=>{
+          t3EditingStageIndex = idx;
+          const dInp = document.getElementById('t3Dur'); if (dInp) dInp.value = st.dur ?? '';
+          const igInp = document.getElementById('t3IG'); if (igInp) igInp.value = st.ig ?? '';
+          t3TempPairs = (st.pairs || []).map(p => ({A:p.A, C:p.C}));
+          refreshT3Pairs();
+        };
+        div.appendChild(e);
+        const b = document.createElement('button'); b.textContent='Eliminar'; b.style.marginLeft='6px';
+        b.onclick = ()=>{
+          const B = state.activeB;
+          const removed = d.stages[idx];
+          pushUndo(() => {
+            const data = state.t1.get(B) || { stages:[], arcs:[] };
+            data.stages = data.stages || [];
+            data.stages.splice(idx, 0, removed);
+            state.t1.set(B, data);
+            refreshT3Stages();
+          });
+          d.stages.splice(idx,1);
+          if (t3EditingStageIndex === idx) {
+            t3EditingStageIndex = null;
+            clearT3Form();
+          } else if (t3EditingStageIndex != null && idx < t3EditingStageIndex) {
+            t3EditingStageIndex--;
+          }
+          refreshT3Stages();
+        };
+        div.appendChild(b);
+        box.appendChild(div);
+      });
+    }
+    function addT3Pair(){
+      const a = parseInt(document.getElementById('t3A').value,10);
+      const c = parseInt(document.getElementById('t3C').value,10);
+      if (isNaN(a) || isNaN(c)) { alert('Ingrese A y C vA!lidos'); return; }
+      const prev = clonePlain(t3TempPairs);
+      pushUndo(() => { t3TempPairs = prev || []; refreshT3Pairs(); });
+      t3TempPairs.push({A:a, C:c});
+      document.getElementById('t3A').value='';
+      document.getElementById('t3C').value='';
+      refreshT3Pairs();
+    }
+    function clearT3Form(){
+      t3TempPairs = [];
+      t3EditingStageIndex = null;
+      refreshT3Pairs();
+      const dInp = document.getElementById('t3Dur'); if (dInp) dInp.value='';
+      const igInp = document.getElementById('t3IG'); if (igInp) igInp.value='';
+    }
+    function saveT3Stage(){
+      const B = state.activeB; if (B==null) return;
+      const prev = clonePlain((state.t1.get(B) || {}).stages || []);
+      pushUndo(() => {
+        const data = state.t1.get(B) || { stages:[], arcs:[] };
+        data.stages = prev || [];
+        state.t1.set(B, data);
+        refreshT3Stages();
+      });
+      const d = state.t1.get(B) || { stages:[] };
+      const dur = parseInt(document.getElementById('t3Dur').value,10);
+      const ig = parseInt(document.getElementById('t3IG').value,10);
+      if (isNaN(dur) || isNaN(ig)) { alert('Ingrese duraciA3n y entreverde'); return; }
+      const pairs = t3TempPairs.slice();
+      d.stages = d.stages || [];
+      if (t3EditingStageIndex!=null && d.stages[t3EditingStageIndex]) {
+        d.stages[t3EditingStageIndex] = {dur, ig, pairs};
+      } else {
+        d.stages.push({dur, ig, pairs});
+      }
+      state.t1.set(B, d);
+      clearT3Form();
+      refreshT3Stages();
+    }
+    function fmtStageLines(B, st){
+      const lines = [];
+      const maxPairsPerRow = 5;
+      for (let i=0;i<st.pairs.length||i===0;i+=maxPairsPerRow){
+        const slice = st.pairs.slice(i, i+maxPairsPerRow);
+        const width = 80;
+        const arr = Array(width).fill(' ');
+        function put(start, end, val){
+          let s = val==null? '': String(val);
+          const w = end - start + 1;
+          s = s.padStart(w, ' ');
+          if (s.length > w) s = s.slice(-w);
+          for (let k=0;k<s.length;k++) arr[start-1+k] = s[k];
+        }
+        // DuraciA3n/entreverde y conteo (nAomeros en la fila) en 11-25
+        put(11,15, st.dur);
+        put(16,20, st.ig);
+        put(21,25, slice.length*2);
+        // Pares A,C
+        slice.forEach((p, idx)=>{
+          const base = 26 + idx*10;
+          put(base, base+4, p.A);
+          put(base+5, base+9, p.C);
+        });
+        lines.push(arr.join('').replace(/\s+$/,''));
+        if (st.pairs.length===0) break;
+      }
+      return lines;
+    }
+    function showAddArc(show){
+      const r1 = document.getElementById('addArcRow');
+      const r2 = document.getElementById('addTurnsRow');
+      if (r1) r1.style.display = show? 'block':'none';
+      if (r2) r2.style.display = show? 'block':'none';
+      if (show){
+        refreshNodeAList();
+        const list = document.getElementById('t1TurnsList');
+        if (list && !list.children.length) resetT1TurnRows(T1_MIN_TURNS);
+      }
+      else { clearT1ArcForm(); }
+    }
+    function setT1ArcFormTitle(text){
+      const el = document.getElementById('t1ArcFormTitle');
+      if (el) el.textContent = text;
+    }
+    const T1_MIN_TURNS = 3;
+    function buildT1TurnRow(values){
+      const row = document.createElement('div');
+      row.className = 'turn-row';
+      const flujo = document.createElement('input');
+      flujo.placeholder = 'Flujo (+G/X/F)';
+      flujo.value = values && values.flujo ? values.flujo : '';
+      const ini = document.createElement('input');
+      ini.type = 'number';
+      ini.placeholder = 'Ini';
+      ini.value = values && values.ini != null ? values.ini : '';
+      const fin = document.createElement('input');
+      fin.type = 'number';
+      fin.placeholder = 'Fin';
+      fin.value = values && values.fin != null ? values.fin : '';
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'turn-delete';
+      del.textContent = 'Quitar';
+      del.onclick = () => {
+        const list = document.getElementById('t1TurnsList');
+        if (!list) return;
+        if (list.children.length > T1_MIN_TURNS) {
+          row.remove();
+        } else {
+          flujo.value = '';
+          ini.value = '';
+          fin.value = '';
+        }
+      };
+      row.appendChild(flujo);
+      row.appendChild(ini);
+      row.appendChild(fin);
+      row.appendChild(del);
+      return row;
+    }
+    function resetT1TurnRows(count){
+      const list = document.getElementById('t1TurnsList');
+      if (!list) return;
+      list.innerHTML = '';
+      const total = Math.max(T1_MIN_TURNS, count || 0);
+      for (let i = 0; i < total; i++) {
+        list.appendChild(buildT1TurnRow());
+      }
+    }
+    function readT1TurnRows(){
+      const list = document.getElementById('t1TurnsList');
+      if (!list) return [];
+      const rows = Array.from(list.querySelectorAll('.turn-row'));
+      const out = [];
+      rows.forEach((row) => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length < 3) return;
+        const flujo = (inputs[0].value || '').trim();
+        const iniRaw = (inputs[1].value || '').trim();
+        const finRaw = (inputs[2].value || '').trim();
+        if (!flujo && !iniRaw && !finRaw) {
+          out.push(null);
+          return;
+        }
+        const ini = iniRaw === '' ? '' : parseInt(iniRaw, 10);
+        const fin = finRaw === '' ? '' : parseInt(finRaw, 10);
+        out.push({ flujo, ini: Number.isFinite(ini) ? ini : '', fin: Number.isFinite(fin) ? fin : '' });
+      });
+      while (out.length && !out[out.length - 1]) out.pop();
+      return out;
+    }
+    function clearT1ArcForm(){
+      t1Editing = null;
+      setT1ArcFormTitle('Nuevo arco');
+      const emptyIds = ['arcPistas','arcVel','arcLong'];
+      emptyIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      resetT1TurnRows(T1_MIN_TURNS);
+      const selA = document.getElementById('arcNodeA');
+      if (selA && selA.options.length) selA.value = selA.options[0].value;
+    }
+    function fillT1ArcForm(arc){
+      if (!arc) return;
+      const selA = document.getElementById('arcNodeA');
+      if (selA) selA.value = arc.nodeA ?? '';
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = (val == null ? '' : val);
+      };
+      setVal('arcPistas', arc.pistas);
+      setVal('arcVel', arc.vel);
+      setVal('arcLong', arc.long);
+      const virajes = Array.isArray(arc.virajes) ? arc.virajes : [];
+      resetT1TurnRows(virajes.length);
+      const list = document.getElementById('t1TurnsList');
+      if (!list) return;
+      const rows = Array.from(list.querySelectorAll('.turn-row'));
+      virajes.forEach((v, idx) => {
+        const row = rows[idx];
+        if (!row) return;
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length < 3) return;
+        if (!v) {
+          inputs[0].value = '';
+          inputs[1].value = '';
+          inputs[2].value = '';
+          return;
+        }
+        inputs[0].value = v.flujo || '';
+        inputs[1].value = v.ini ?? '';
+        inputs[2].value = v.fin ?? '';
+      });
+    }
+    function editT1Arc(idx){
+      const B = state.activeB; if (B==null) return;
+      const d = state.t1.get(B) || { arcs:[] };
+      const arc = d.arcs[idx];
+      if (!arc) return;
+      t1Editing = { B, idx };
+      showAddArc(true);
+      setT1ArcFormTitle('Editar arco');
+      fillT1ArcForm(arc);
+    }
+    function addArcFromForm(){
+      const B = state.activeB; if (B==null) return;
+      const d = state.t1.get(B) || { arcs:[] };
+      const editing = (t1Editing && t1Editing.B === B && t1Editing.idx != null && d.arcs[t1Editing.idx]);
+      const prevArc = editing ? clonePlain(d.arcs[t1Editing.idx]) : null;
+      const prevIdx = editing ? t1Editing.idx : null;
+      pushUndo(() => {
+        const data = state.t1.get(B) || { arcs:[], stages:[] };
+        data.arcs = data.arcs || [];
+        if (editing && prevIdx != null) {
+          data.arcs[prevIdx] = prevArc;
+        } else {
+          data.arcs.pop();
+        }
+        state.t1.set(B, data);
+        refreshArcsList();
+        rebuildT1Layer();
+      });
+      const A = parseInt(document.getElementById('arcNodeA').value,10);
+      const pistas = parseInt(document.getElementById('arcPistas').value,10);
+      const vel = parseInt(document.getElementById('arcVel').value,10);
+      const lon = parseInt(document.getElementById('arcLong').value,10);
+      const vir = readT1TurnRows();
+      if (editing) {
+        d.arcs[t1Editing.idx] = { nodeA:A, pistas, vel, long:lon, virajes:vir };
+      } else {
+        d.arcs.push({ nodeA:A, pistas, vel, long:lon, virajes:vir });
+      }
+      state.t1.set(B, d);
+      showAddArc(false);
+      refreshArcsList();
+      rebuildT1Layer();
+    }
+    function createPopupContent(entry) {
+      const typeText = entry.isCentroid ? 'Centroide' : 'Nodo';
+      return `
+        <div>
+          <div><strong>${typeText}</strong></div>
+          <div>ID: <input type="number" id="editId" value="${entry.id}" style="width:80px" /></div>
+          <div>Tipo: 
+            <select id="editType">
+              <option value="node" ${entry.isCentroid ? '' : 'selected'}>Nodo</option>
+              <option value="centroid" ${entry.isCentroid ? 'selected' : ''}>Centroide</option>
+            </select>
+          </div>
+          <div style="margin-top:6px">
+            <button id="btnSave">Guardar</button>
+            <button id="btnDelete" style="margin-left:6px;color:#b00">Eliminar</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function labelFor(entry){
+      return (entry.isCentroid ? 'C' : 'N') + String(entry.id);
+    }
+    function entrySnapshot(entry){
+      if (!entry) return null;
+      const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+      return {
+        id: entry.id,
+        isCentroid: !!entry.isCentroid,
+        latlng: ll ? { lat: ll.lat, lng: ll.lng } : null,
+        dataXY: entry.dataXY ? { x: entry.dataXY.x, y: entry.dataXY.y } : null
+      };
+    }
+    function updateEntryVisual(entry){
+      if (!entry || !entry.marker) return;
+      entry.marker.setIcon(makeIcon(entry));
+      if (entry.marker.getTooltip && entry.marker.getTooltip()) {
+        entry.marker.getTooltip().setContent(labelFor(entry));
+      } else if (entry.marker.bindTooltip) {
+        entry.marker.bindTooltip(labelFor(entry), {direction:'top', className:'saturn-tooltip', offset:[0,-4]});
+      }
+    }
+    function setEntryTooltipPermanent(entry, permanent){
+      if (!entry || !entry.marker || !entry.marker.bindTooltip) return;
+      const tooltip = entry.marker.getTooltip ? entry.marker.getTooltip() : null;
+      const content = labelFor(entry);
+      const options = {direction:'top', className:'saturn-tooltip', offset:[0,-4], permanent: !!permanent};
+      if (!tooltip) {
+        entry.marker.bindTooltip(content, options);
+        return;
+      }
+      const currentPermanent = !!(tooltip.options && tooltip.options.permanent);
+      tooltip.setContent(content);
+      if (currentPermanent !== !!permanent) {
+        entry.marker.unbindTooltip();
+        entry.marker.bindTooltip(content, options);
+      }
+    }
+    function removeEntry(entry){
+      if (!entry || !entry.marker) return;
+      map.removeLayer(entry.marker);
+      const idx = state.markers.indexOf(entry);
+      if (idx >= 0) state.markers.splice(idx,1);
+      refreshNodeBList();
+      rebuildT2Layer();
+      rebuildT1Layer();
+    }
+
+    function attachPopup(entry) {
+      entry.marker.bindPopup(createPopupContent(entry));
+      entry.marker.on('popupopen', function(e){
+        const container = e.popup.getElement();
+        container.querySelector('#btnSave').addEventListener('click', function(){
+          const prev = { id: entry.id, isCentroid: entry.isCentroid };
+          pushUndo(() => {
+            entry.id = prev.id;
+            entry.isCentroid = prev.isCentroid;
+            updateEntryVisual(entry);
+            rebuildT2Layer();
+            rebuildT1Layer();
+          });
+          const newId = parseInt(container.querySelector('#editId').value, 10);
+          const newType = container.querySelector('#editType').value;
+          if (isNaN(newId)) { alert('ID invA!lido'); return; }
+          entry.id = newId;
+          entry.isCentroid = (newType === 'centroid');
+          // actualizar icono segAon tipo
+          updateEntryVisual(entry);
+          entry.marker.closePopup();
+          rebuildT2Layer();
+          rebuildT1Layer();
+        });
+        container.querySelector('#btnDelete').addEventListener('click', function(){
+          const snap = entrySnapshot(entry);
+          pushUndo(() => {
+            if (!snap || !snap.latlng) return;
+            addEntry({ lat: snap.latlng.lat, lng: snap.latlng.lng }, snap.isCentroid, snap.id, { dataXY: snap.dataXY, skipHistory: true });
+          });
+          removeEntry(entry);
+        });
+      });
+    }
+
+    function addEntry(latlng, isCentroid, id, options) {
+      const opts = options || {};
+      const entry = { marker: null, isCentroid: !!isCentroid, id: id, dataXY: null };
+      const m = L.marker(latlng, { draggable: true, icon: makeIcon(entry) });
+      entry.marker = m;
+      attachPopup(entry);
+      m.addTo(map);
+      if (m.bindTooltip) {
+        m.bindTooltip(labelFor(entry), {direction:'top', className:'saturn-tooltip', offset:[0,-4]});
+      }
+      const latLngObj = m.getLatLng ? m.getLatLng() : latlng;
+      if (opts.dataXY && Number.isFinite(opts.dataXY.x) && Number.isFinite(opts.dataXY.y)) {
+        entry.dataXY = { x: opts.dataXY.x, y: opts.dataXY.y };
+      } else if (latLngObj) {
+        entry.dataXY = latLngToData(latLngObj);
+      }
+      m.on('dragstart', function(){
+        entry._dragStart = {
+          latlng: m.getLatLng(),
+          dataXY: entry.dataXY ? { x: entry.dataXY.x, y: entry.dataXY.y } : null
+        };
+      });
+      m.on('dragend', function(){
+        const ll = m.getLatLng();
+        const start = entry._dragStart;
+        entry._dragStart = null;
+        if (start && start.latlng) {
+          const moved = !ll || start.latlng.lat !== ll.lat || start.latlng.lng !== ll.lng;
+          if (moved) {
+            pushUndo(() => {
+              entry.marker.setLatLng(start.latlng);
+              entry.dataXY = start.dataXY ? { x: start.dataXY.x, y: start.dataXY.y } : null;
+              rebuildT2Layer();
+              rebuildT1Layer();
+            });
+          }
+        }
+        entry.dataXY = latLngToData(ll);
+        rebuildT1Layer();
+      });
+      // Click en el marcador: activar B
+      m.on('click', function(){ setActiveB(entry.id); });
+      state.markers.push(entry);
+      if (!opts.skipHistory) {
+        pushUndo(() => { removeEntry(entry); });
+      }
+      refreshNodeBList();
+      rebuildT2Layer();
+      rebuildT1Layer();
+      return entry;
+    }
+
+    function refreshActiveHighlight(){
+      const related = relatedNodesForActiveB();
+      for (const e of state.markers){
+        const el = e.marker.getElement && e.marker.getElement();
+        if (!el) continue;
+        if (e.id===state.activeB) el.classList.add('active');
+        else el.classList.remove('active');
+        if (related.has(e.id)) el.classList.add('related');
+        else el.classList.remove('related');
+        const hasLabel = (e.id===state.activeB) || related.has(e.id);
+        setEntryTooltipPermanent(e, hasLabel);
+        if (hasLabel && e.marker.openTooltip) e.marker.openTooltip();
+        if (!hasLabel && e.marker.closeTooltip) e.marker.closeTooltip();
+      }
+    }
+
+    function setActiveB(newId){
+      if (newId==null) return;
+      state.activeB = newId;
+      t1Editing = null;
+      setT1ArcFormTitle('Nuevo arco');
+      const sel = document.getElementById('nodeBSelect');
+      if (sel) sel.value = String(newId);
+      loadT1Fields();
+      refreshArcsList();
+      refreshNodeAList();
+      refreshT3Stages();
+      refreshActiveHighlight();
+      refreshT3NodeInfo();
+      refreshSummaryStats();
+      rebuildT1Layer();
+    }
+
+    function getT1DiffLayer(){
+      if (!t1DiffLayer){ t1DiffLayer = L.layerGroup().addTo(map); }
+      return t1DiffLayer;
+    }
+    function getT1ActiveLayer(){
+      if (!t1ActiveLayer){ t1ActiveLayer = L.layerGroup().addTo(map); }
+      return t1ActiveLayer;
+    }
+
+    function getT3ArcLayer(){
+      if (!t3ArcLayer){ t3ArcLayer = L.layerGroup().addTo(map); }
+      return t3ArcLayer;
+    }
+
+    function getT3ConnectorLayer(){
+      if (!t3ConnectorLayer){ t3ConnectorLayer = L.layerGroup().addTo(map); }
+      return t3ConnectorLayer;
+    }
+
+    // ===== Tarjeta 2 (Conexiones Zona-Nodo) =====
+    function getT2Layer(){
+      if (!t2Layer){ t2Layer = L.layerGroup().addTo(map); }
+      return t2Layer;
+    }
+    function t2ZoneInputValue(){
+      const el = document.getElementById('t2ZoneInput');
+      if (!el) return null;
+      const raw = el.value.trim();
+      if (!raw) return null;
+      const num = parseInt(raw,10);
+      return Number.isFinite(num) ? num : null;
+    }
+    function t2NodeInputValue(){
+      const el = document.getElementById('t2NodeInput');
+      if (!el) return null;
+      const raw = el.value.trim();
+      if (!raw) return null;
+      const num = parseInt(raw,10);
+      return Number.isFinite(num) ? num : null;
+    }
+    function ensureT2Zone(zone){
+      if (!state.t2.has(zone)) state.t2.set(zone, new Set());
+      return state.t2.get(zone);
+    }
+    function setT2ZoneStats(text){
+      const el = document.getElementById('t2ZoneStats');
+      if (el) el.textContent = text || '';
+    }
+    function refreshT2EditorList(){
+      const box = document.getElementById('t2NodesList');
+      if (!box) return;
+      box.innerHTML = '';
+      let zone = t2ZoneInputValue();
+      if (zone == null) {
+        const zones = Array.from(state.t2.keys()).sort((a,b)=>a-b);
+        if (zones.length) {
+          zone = zones[0];
+          const input = document.getElementById('t2ZoneInput');
+          if (input) input.value = String(zone);
+        }
+      }
+      if (zone == null) {
+        setT2ZoneStats('Ingrese una zona para editar conexiones.');
+        return;
+      }
+      const nodeSet = state.t2.get(zone);
+      const nodes = Array.isArray(nodeSet) ? nodeSet : Array.from(nodeSet || []);
+      nodes.sort((a,b)=>a-b);
+      setT2ZoneStats(`Zona ${zone}: ${nodes.length} conexiones`);
+      nodes.forEach((nodeId) => {
+        const item = document.createElement('div');
+        item.className = 'arc-item';
+        const details = document.createElement('div');
+        details.className = 'arc-item-details';
+        details.textContent = `Nodo ${nodeId}`;
+        item.appendChild(details);
+        const btnD = document.createElement('button');
+        btnD.className = 'arc-delete';
+        btnD.type = 'button';
+        btnD.textContent = 'Eliminar';
+        btnD.onclick = () => {
+          const prev = Array.from(state.t2.get(zone) || []);
+          pushUndo(() => {
+            state.t2.set(zone, new Set(prev));
+            refreshT2EditorList();
+            rebuildT2Layer();
+          });
+          const set = ensureT2Zone(zone);
+          set.delete(nodeId);
+          if (!set.size) state.t2.delete(zone);
+          refreshT2EditorList();
+          rebuildT2Layer();
+        };
+        item.appendChild(btnD);
+        box.appendChild(item);
+      });
+    }
+    function addT2Connection(){
+      const zone = t2ZoneInputValue();
+      const node = t2NodeInputValue();
+      if (zone == null || node == null) {
+        alert('Ingrese zona y nodo validos.');
+        return;
+      }
+      const set = ensureT2Zone(zone);
+      if (set.has(node)) {
+        refreshT2EditorList();
+        return;
+      }
+      pushUndo(() => {
+        const prev = Array.from(state.t2.get(zone) || []);
+        const back = new Set(prev);
+        back.delete(node);
+        if (back.size) state.t2.set(zone, back);
+        else state.t2.delete(zone);
+        refreshT2EditorList();
+        rebuildT2Layer();
+      });
+      set.add(node);
+      refreshT2EditorList();
+      rebuildT2Layer();
+    }
+    function clearT2Zone(){
+      const zone = t2ZoneInputValue();
+      if (zone == null) return;
+      const prev = Array.from(state.t2.get(zone) || []);
+      pushUndo(() => {
+        state.t2.set(zone, new Set(prev));
+        refreshT2EditorList();
+        rebuildT2Layer();
+      });
+      state.t2.delete(zone);
+      refreshT2EditorList();
+      rebuildT2Layer();
+    }
+    function getMeasureLayer(){
+      if (!measureLayer){ measureLayer = L.layerGroup().addTo(map); }
+      return measureLayer;
+    }
+    function formatDistance(meters){
+      if (!Number.isFinite(meters)) return '0 m';
+      if (meters >= 1000) return `${(meters/1000).toFixed(2)} km`;
+      if (meters >= 100) return `${Math.round(meters)} m`;
+      return `${meters.toFixed(1)} m`;
+    }
+    function updateMeasureUI(totalMeters){
+      const status = document.getElementById('measureStatus');
+      if (status) {
+        status.textContent = measureEnabled ? 'Haz clic en el mapa para sumar puntos' : 'Desactivado';
+      }
+      const dist = document.getElementById('measureDistance');
+      if (dist) dist.textContent = formatDistance(totalMeters);
+      const btn = document.getElementById('measureToggle');
+      if (btn) {
+        btn.textContent = measureEnabled ? 'Salir' : 'Medir';
+        btn.className = measureEnabled ? 'saturn-primary' : 'saturn-secondary';
+      }
+    }
+    function redrawMeasure(){
+      const layer = getMeasureLayer();
+      layer.clearLayers();
+      let total = 0;
+      if (measurePoints.length > 1) {
+        measureLine = L.polyline(measurePoints, {color:'#38bdf8', weight:3, opacity:0.9}).addTo(layer);
+        for (let i = 1; i < measurePoints.length; i++) {
+          total += map.distance(measurePoints[i-1], measurePoints[i]);
+        }
+      } else {
+        measureLine = null;
+      }
+      measurePoints.forEach((pt) => {
+        L.circleMarker(pt, {radius:4, color:'#38bdf8', weight:2, fillColor:'#0ea5e9', fillOpacity:0.9}).addTo(layer);
+      });
+      updateMeasureUI(total);
+    }
+    function setMeasureEnabled(enabled){
+      measureEnabled = !!enabled;
+      redrawMeasure();
+    }
+    function clearMeasure(){
+      measurePoints = [];
+      redrawMeasure();
+    }
+    function addMeasurePoint(latlng){
+      measurePoints.push(latlng);
+      redrawMeasure();
+    }
+    function parseIntSafe(s){ const n = parseInt(String(s).trim(),10); return isNaN(n)? null: n; }
+    // Tarjeta 2: col 1-5 = Zona, el resto = nodos conectados (en campos de 5 col o por espacios)
+    function parse22222(text){
+      const lines = text.split(/\r?\n/);
+      const out = [];
+      let collect = false;
+      for (let i=0;i<lines.length;i++){
+        const raw = lines[i];
+        const t = raw.trim();
+        if (!collect) { if (t==='22222') { collect = true; } continue; }
+        if (/^\d{5}$/.test(t)) break; // fin de bloque
+        if (!raw || !raw.trim()) continue;
+        if (/^[*;#]/.test(raw.trim())) continue;
+        let zone = parseIntSafe(raw.substring(0,5));
+        let nodes = [];
+        if (zone!=null){
+          const rest = raw.length>5 ? raw.substring(5) : '';
+          if (rest.trim()){
+            nodes = rest.trim().split(/\s+/).map(parseIntSafe).filter(n=>n!=null);
+          }
+        }
+        if ((zone==null || nodes.length===0) && t){
+          const parts = t.split(/\s+/);
+          if (parts.length>1){
+            zone = parseIntSafe(parts[0]);
+            nodes = parts.slice(1).map(parseIntSafe).filter(n=>n!=null);
+          }
+        }
+        if (zone!=null && nodes.length){
+          out.push({z:zone, nodes});
+        }
+      }
+      return out;
+    }
+    function import22222(text){
+      const recs = parse22222(text);
+      if (!recs.length) return;
+      state.t2.clear();
+      const t2 = state.t2; // Map<zona, Set<nodoId>>
+      for (const r of recs){
+        if (!t2.has(r.z)) t2.set(r.z, new Set());
+        const set = t2.get(r.z);
+        for (const n of r.nodes){ set.add(n); }
+      }
+      rebuildT2Layer();
+      refreshT2EditorList();
+    }
+    function parseFloatSafe(str){
+      if (str==null) return null;
+      const t = String(str).trim().replace(',', '.');
+      if (!t) return null;
+      const n = parseFloat(t);
+      return Number.isFinite(n)? n : null;
+    }
+    function parse33333(text){
+      const lines = text.split(/\r?\n/);
+      const out = [];
+      let collect = false;
+      for (const raw of lines){
+        const t = raw.trim();
+        if (!collect){
+          if (t === '33333') collect = true;
+          continue;
+        }
+        if (/^\d{5}$/.test(t)) break;
+        out.push(raw);
+      }
+      return out;
+    }
+    function parseTarjeta3Line(line){
+      if (!line || !line.trim()) return null;
+      if (line.trim().startsWith('*')) return null;
+      const zoneA = (sliceVal(line,1,1).toUpperCase() === 'C');
+      const nodeA = parseIntSafe(sliceVal(line,2,10));
+      const zoneB = (sliceVal(line,11,11).toUpperCase() === 'C');
+      const nodeB = parseIntSafe(sliceVal(line,12,20));
+      if (nodeA==null || nodeB==null) return null;
+      const freeFlow = parseFloatSafe(sliceVal(line,21,25));
+      const capacityTime = parseFloatSafe(sliceVal(line,26,30));
+      const capacity = parseFloatSafe(sliceVal(line,31,35));
+      const dirChar = sliceVal(line,38,38).trim();
+      const direction = dirChar ? (parseInt(dirChar,10) || null) : null;
+      const speedFlag = sliceVal(line,39,39).trim().toUpperCase() === 'S';
+      const lengthVal = parseFloatSafe(sliceVal(line,41,45));
+      const powerVal = parseFloatSafe(sliceVal(line,46,50));
+      const indexVal = parseIntSafe(sliceVal(line,51,55));
+      const desc = line.length > 55 ? line.slice(55).trim() : '';
+      return {
+        nodeA,
+        nodeB,
+        zoneA,
+        zoneB,
+        freeFlow,
+        capacityTime,
+        capacity,
+        direction,
+        asSpeed: speedFlag,
+        length: lengthVal,
+        power: powerVal,
+        index: indexVal,
+        label: desc
+      };
+    }
+    let t3EditingIndex = null;
+
+    function ensureT3State(){
+      if (!state.t3 || typeof state.t3 !== 'object') state.t3 = { arcs: [], extras: [] };
+      if (!Array.isArray(state.t3.arcs)) state.t3.arcs = [];
+      if (!Array.isArray(state.t3.extras)) state.t3.extras = [];
+    }
+
+    function bufferRelatedNodes(B){
+      const related = new Set();
+      if (B==null) return related;
+      ensureT3State();
+      for (const arc of state.t3.arcs){
+        if (!arc || arc.zoneA || arc.zoneB) continue;
+        if (arc.nodeB === B && Number.isFinite(arc.nodeA)){
+          related.add(arc.nodeA);
+        }
+      }
+      return related;
+    }
+
+    function formatArcNodeLabel(id, isZone){
+      const prefix = isZone ? 'Z' : 'N';
+      return `${prefix}${id!=null ? id : ''}`;
+    }
+
+    function import33333(text){
+      const segment = parse33333(text);
+      state.t3 = { arcs: [], extras: [] };
+      if (!segment.length){
+        t3EditingIndex = null;
+        refreshT3ArcList();
+        rebuildT3Layers();
+        return;
+      }
+      for (const raw of segment){
+        const rec = parseTarjeta3Line(raw);
+        if (rec) state.t3.arcs.push(rec);
+        else if (raw && raw.trim() && !raw.trim().startsWith('*')) state.t3.extras.push(raw.trim());
+      }
+      t3EditingIndex = null;
+      refreshT3ArcList();
+      rebuildT3Layers();
+    }
+
+    function setT3EditIndicator(){
+      const el = document.getElementById('t3EditIndicator');
+      if (!el) return;
+      el.textContent = t3EditingIndex==null ? 'Nuevo arco externo' : `Editando arco externo #${t3EditingIndex+1}`;
+    }
+
+    function clearT3ArcForm(){
+      ['t3NodeA','t3NodeB','t3FreeFlow','t3CapTime','t3Capacity','t3Length','t3Power','t3Index','t3Label'].forEach(id=>{
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      ['t3NodeAZone','t3NodeBZone','t3AsSpeed'].forEach(id=>{
+        const el = document.getElementById(id);
+        if (el) el.checked = false;
+      });
+      const dir = document.getElementById('t3Direction');
+      if (dir) dir.value = '';
+      t3EditingIndex = null;
+      setT3EditIndicator();
+    }
+
+    function fillT3FormFromArc(arc){
+      if (!arc) return;
+      const setVal = (id, val)=>{ const el = document.getElementById(id); if (el!=null) el.value = (val==null? '' : val); };
+      const setChk = (id, val)=>{ const el = document.getElementById(id); if (el!=null) el.checked = !!val; };
+      setVal('t3NodeA', arc.nodeA ?? '');
+      setChk('t3NodeAZone', arc.zoneA);
+      setVal('t3NodeB', arc.nodeB ?? '');
+      setChk('t3NodeBZone', arc.zoneB);
+      setVal('t3FreeFlow', arc.freeFlow ?? '');
+      setVal('t3CapTime', arc.capacityTime ?? '');
+      setVal('t3Capacity', arc.capacity ?? '');
+      const dir = document.getElementById('t3Direction'); if (dir) dir.value = arc.direction ?? '';
+      setChk('t3AsSpeed', arc.asSpeed);
+      setVal('t3Length', arc.length ?? '');
+      setVal('t3Power', arc.power ?? '');
+      setVal('t3Index', arc.index ?? '');
+      setVal('t3Label', arc.label ?? '');
+      setT3EditIndicator();
+    }
+
+    function getNumberField(id, opts={}){
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const raw = el.value.trim();
+      if (!raw) return opts.allowZero ? 0 : null;
+      const num = parseFloat(raw);
+      return Number.isFinite(num) ? num : null;
+    }
+
+    function getIntField(id){
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const raw = el.value.trim();
+      if (!raw) return null;
+      const num = parseInt(raw,10);
+      return Number.isFinite(num) ? num : null;
+    }
+
+    function readT3FormValues(){
+      const nodeA = getIntField('t3NodeA');
+      const nodeB = getIntField('t3NodeB');
+      if (nodeA==null || nodeB==null){
+        alert('Indique IDs validos para A y B');
+        return null;
+      }
+      return {
+        nodeA,
+        nodeB,
+        zoneA: !!(document.getElementById('t3NodeAZone')?.checked),
+        zoneB: !!(document.getElementById('t3NodeBZone')?.checked),
+        freeFlow: getNumberField('t3FreeFlow'),
+        capacityTime: getNumberField('t3CapTime'),
+        capacity: getNumberField('t3Capacity'),
+        direction: getIntField('t3Direction'),
+        asSpeed: !!(document.getElementById('t3AsSpeed')?.checked),
+        length: getNumberField('t3Length'),
+        power: getNumberField('t3Power'),
+        index: getIntField('t3Index'),
+        label: document.getElementById('t3Label')?.value.trim() || ''
+      };
+    }
+
+    function saveT3ArcFromForm(){
+      ensureT3State();
+      const arc = readT3FormValues();
+      if (!arc) return;
+      const prev = clonePlain(state.t3.arcs || []);
+      pushUndo(() => {
+        state.t3.arcs = prev || [];
+        refreshT3ArcList();
+        rebuildT3Layers();
+      });
+      if (t3EditingIndex!=null && t3EditingIndex >=0 && t3EditingIndex < state.t3.arcs.length){
+        state.t3.arcs[t3EditingIndex] = arc;
+      } else {
+        state.t3.arcs.push(arc);
+      }
+      clearT3ArcForm();
+      refreshT3ArcList();
+      rebuildT3Layers();
+    }
+
+    function editT3Arc(idx){
+      ensureT3State();
+      const arc = state.t3.arcs[idx];
+      if (!arc) return;
+      t3EditingIndex = idx;
+      fillT3FormFromArc(arc);
+      setT3EditIndicator();
+    }
+
+    function deleteT3Arc(idx){
+      ensureT3State();
+      if (idx==null || idx<0 || idx>=state.t3.arcs.length) return;
+      if (!confirm('?Eliminar este arco externo?')) return;
+      const removed = state.t3.arcs[idx];
+      pushUndo(() => {
+        state.t3.arcs.splice(idx, 0, removed);
+        refreshT3ArcList();
+        rebuildT3Layers();
+      });
+      state.t3.arcs.splice(idx,1);
+      if (t3EditingIndex === idx) {
+        clearT3ArcForm();
+      } else if (t3EditingIndex!=null && idx < t3EditingIndex) {
+        t3EditingIndex--;
+      }
+      refreshT3ArcList();
+      rebuildT3Layers();
+    }
+
+    function formatT3ArcSummary(arc){
+      if (!arc) return '';
+      const parts = [];
+      const labelA = `${arc.zoneA? 'Z':'N'}${arc.nodeA}`;
+      const labelB = `${arc.zoneB? 'Z':'N'}${arc.nodeB}`;
+      parts.push(`${labelA} -> ${labelB}`);
+      if (Number.isFinite(arc.freeFlow)) parts.push(`FF=${arc.freeFlow}`);
+      if (Number.isFinite(arc.capacity)) parts.push(`Cap=${arc.capacity}`);
+      if (Number.isFinite(arc.length)) parts.push(`L=${arc.length}`);
+      if (arc.direction) parts.push(`Dir=${arc.direction}`);
+      if (arc.label) parts.push(arc.label);
+      return parts.join(' | ');
+    }
+
+    function refreshT3ArcList(){
+      setT3EditIndicator();
+      refreshT3NodeInfo();
+      refreshActiveHighlight();
+      refreshSummaryStats();
+    }
+
+    function refreshT3NodeInfo(){
+      ensureT3State();
+      const box = document.getElementById('t3NodeInfo');
+      if (!box) return;
+      if (state.activeB==null){
+        box.textContent = 'Selecciona un nodo para ver sus arcos externos.';
+        return;
+      }
+      const B = state.activeB;
+      box.innerHTML = '';
+      let count = 0;
+      state.t3.arcs.forEach((arc, idx) => {
+        if (!arc || arc.nodeB !== B) return;
+        count++;
+        const item = document.createElement('div');
+        item.className = 'arc-item';
+        const details = document.createElement('div');
+        details.className = 'arc-item-details';
+        const summary = document.createElement('span');
+        summary.textContent = `${count}. ${formatT3ArcSummary(arc)}`;
+        details.appendChild(summary);
+        item.appendChild(details);
+        const btnE = document.createElement('button');
+        btnE.className = 'arc-edit';
+        btnE.type = 'button';
+        btnE.textContent = 'Editar';
+        btnE.onclick = ()=>{ editT3Arc(idx); };
+        item.appendChild(btnE);
+        const btnD = document.createElement('button');
+        btnD.className = 'arc-delete';
+        btnD.type = 'button';
+        btnD.textContent = 'Eliminar';
+        btnD.onclick = ()=>{ deleteT3Arc(idx); };
+        item.appendChild(btnD);
+        box.appendChild(item);
+      });
+      if (!count){
+        box.textContent = `Nodo ${B} no tiene arcos externos (Tarjeta 3).`;
+      }
+    }
+    function findMarkerById(id){
+      for (const e of state.markers){ if (e.id===id) return e; }
+      return null;
+    }
+
+    const T1_DISTANCE_TOLERANCE = 50; // umbral para marcar Modelo > Real
+
+    function ensureEntryXY(entry){
+      if (!entry) return null;
+      if (entry.dataXY && Number.isFinite(entry.dataXY.x) && Number.isFinite(entry.dataXY.y)){
+        return entry.dataXY;
+      }
+      const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+      if (!ll) return null;
+      const xy = latLngToData(ll);
+      entry.dataXY = xy;
+      return xy;
+    }
+
+    function entryDistanceMeters(entryA, entryB){
+      const xyA = ensureEntryXY(entryA);
+      const xyB = ensureEntryXY(entryB);
+      if (!xyA || !xyB) return null;
+      return Math.hypot(xyA.x - xyB.x, xyA.y - xyB.y);
+    }
+
+    function rebuildActiveConnectionsLayer(){
+      const layer = getT1ActiveLayer();
+      layer.clearLayers();
+    }
+
+    function updateDistanceStats(stats){
+      const el = document.getElementById('t1Stats');
+      if (!el) return;
+      const t1 = stats && stats.t1 ? stats.t1 : {total:0, drawn:0};
+      const t3 = stats && stats.t3 ? stats.t3 : {total:0, drawn:0};
+      el.textContent = `Distancias >=${T1_DISTANCE_TOLERANCE}m | T1 ${t1.drawn}/${t1.total} | T3 ${t3.drawn}/${t3.total}`;
+    }
+
+    function rebuildDistanceLayer(){
+      const layer = getT1DiffLayer();
+      layer.clearLayers();
+      const stats = { t1: { total: 0, drawn: 0 }, t3: { total: 0, drawn: 0 } };
+      const chk = document.getElementById('t1ShowDistances');
+      if (!chk || !chk.checked){
+        updateDistanceStats(stats);
+        return;
+      }
+      const addLine = (points, tooltip, color)=>{
+        const poly = L.polyline(points, {color, weight:3, opacity:0.9}).addTo(layer);
+        poly.bindTooltip(tooltip.join(' | '), {sticky:true, direction:'center', opacity:0.9});
+      };
+      for (const [B, data] of state.t1.entries()){
+        if (!data || !Array.isArray(data.arcs)) continue;
+        for (const arc of data.arcs){
+          const entryB = findMarkerById(B);
+          const entryA = findMarkerById(arc.nodeA);
+          if (!entryA || !entryB) continue;
+          stats.t1.total++;
+          const llA = entryA.marker.getLatLng();
+          const llB = entryB.marker.getLatLng();
+          if (!llA || !llB) continue;
+          const dist = entryDistanceMeters(entryA, entryB);
+          if (!Number.isFinite(dist)) continue;
+          const modeled = Number(arc.long);
+          if (!Number.isFinite(modeled)) continue;
+          const delta = modeled - dist;
+          if (delta < T1_DISTANCE_TOLERANCE) continue;
+          stats.t1.drawn++;
+          const tooltip = [
+            `Tarjeta 1`,
+            `A=${arc.nodeA} -> B=${B}`,
+            `Real=${dist.toFixed(1)} m`,
+            `Modelo=${modeled.toFixed(1)} m`,
+            `Modelo-Real=+${delta.toFixed(1)} m`
+          ];
+          addLine([llA, llB], tooltip, '#e74c3c');
+        }
+      }
+      ensureT3State();
+      for (const arc of state.t3.arcs){
+        if (!arc || arc.zoneA || arc.zoneB) continue;
+        const entryA = findMarkerById(arc.nodeA);
+        const entryB = findMarkerById(arc.nodeB);
+        if (!entryA || !entryB) continue;
+        stats.t3.total++;
+        const llA = entryA.marker.getLatLng();
+        const llB = entryB.marker.getLatLng();
+        if (!llA || !llB) continue;
+        const dist = entryDistanceMeters(entryA, entryB);
+        if (!Number.isFinite(dist)) continue;
+        const modeled = Number(arc.length);
+        if (!Number.isFinite(modeled)) continue;
+        const delta = modeled - dist;
+        if (delta < T1_DISTANCE_TOLERANCE) continue;
+        stats.t3.drawn++;
+        const tooltip = [
+          `Tarjeta 3`,
+          `${formatArcNodeLabel(arc.nodeA, arc.zoneA)} -> ${formatArcNodeLabel(arc.nodeB, arc.zoneB)}`,
+          `Real=${dist.toFixed(1)} m`,
+          `Modelo=${modeled.toFixed(1)} m`,
+          `Modelo-Real=+${delta.toFixed(1)} m`
+        ];
+        if (arc.label) tooltip.push(arc.label);
+        addLine([llA, llB], tooltip, '#d35400');
+      }
+      updateDistanceStats(stats);
+    }
+
+    function updateT3StatsDisplay(totalConnectors, drawnConnectors){
+      const el = document.getElementById('t3Stats');
+      if (!el) return;
+      el.textContent = `Tarjeta 3: Conectores dibujados ${drawnConnectors}/${totalConnectors}`;
+    }
+
+    function rebuildT3Layers(){
+      ensureT3State();
+      const data = state.t3.arcs;
+      const arcLayer = getT3ArcLayer();
+      const connectorLayer = getT3ConnectorLayer();
+      arcLayer.clearLayers();
+      connectorLayer.clearLayers();
+      const connectors = data.filter(arc=>arc && (arc.zoneA || arc.zoneB));
+      const totalConn = connectors.length;
+      let drawnConn = 0;
+      const chkConn = document.getElementById('t3ShowConnectors');
+      const showConn = chkConn ? chkConn.checked : true;
+      if (showConn){
+        for (const arc of connectors){
+          const entryA = findMarkerById(arc.nodeA);
+          const entryB = findMarkerById(arc.nodeB);
+          if (!entryA || !entryB) continue;
+          const llA = entryA.marker.getLatLng();
+          const llB = entryB.marker.getLatLng();
+          if (!llA || !llB) continue;
+          drawnConn++;
+          const tooltip = [
+            `${formatArcNodeLabel(arc.nodeA, arc.zoneA)} -> ${formatArcNodeLabel(arc.nodeB, arc.zoneB)}`
+          ];
+          if (Number.isFinite(arc.freeFlow)) tooltip.push(`FF=${arc.freeFlow}`);
+          if (Number.isFinite(arc.capacity)) tooltip.push(`Cap=${arc.capacity}`);
+          if (Number.isFinite(arc.length)) tooltip.push(`L=${arc.length}`);
+          if (arc.label) tooltip.push(arc.label);
+          L.polyline([llA, llB], {color:'#f1c40f', weight:2.5, opacity:0.85, dashArray:'4,6'}).addTo(connectorLayer)
+            .bindTooltip(tooltip.join(' | '), {sticky:true, direction:'center', opacity:0.9});
+        }
+      }
+      updateT3StatsDisplay(totalConn, drawnConn);
+      refreshT3NodeInfo();
+      refreshActiveHighlight();
+    }
+
+    function rebuildT1Layer(){
+      refreshNodeColors();
+      renderNodeLegend();
+      rebuildActiveConnectionsLayer();
+      rebuildDistanceLayer();
+      rebuildT3Layers();
+    }
+    function rebuildT2Layer(){
+      const show = (document.getElementById('t2Show') && document.getElementById('t2Show').checked);
+      const layer = getT2Layer();
+      layer.clearLayers();
+      // Estadisticas
+      let zones = 0, zonesWithCentroid = 0, refs = 0, drawn = 0;
+      for (const [z, nodeSet] of state.t2.entries()){
+        zones++;
+        const cz = findMarkerById(z);
+        const hasC = !!(cz && cz.isCentroid);
+        const nodes = Array.isArray(nodeSet)? nodeSet : Array.from(nodeSet || []);
+        refs += nodes.length;
+        if (hasC) zonesWithCentroid++;
+        if (!show || !hasC) continue;
+        const zll = cz.marker.getLatLng();
+        for (const nid of nodes){
+          const ne = findMarkerById(nid);
+          if (!ne) continue;
+          const nll = ne.marker.getLatLng();
+          L.polyline([zll, nll], {color:'#27ae60', weight:2, opacity:0.9, dashArray:'4,4'}).addTo(layer);
+          drawn++;
+        }
+      }
+      const stats = document.getElementById('t2Stats');
+      if (stats){
+        stats.textContent = `Zonas: ${zones} | Centroides presentes: ${zonesWithCentroid} | Conexiones dibujadas: ${drawn}/${refs}`;
+      }
+    }
+
+    function exportDat() {
+      // Construir 55555
+      let lines = ['55555'];
+      // Orden por ID (primero centroides luego nodos? dejamos juntos por ahora)
+      // Respetar UTM 19S (o seleccionada)
+      for (const e of state.markers) {
+        const ll = e.marker.getLatLng();
+        const xy = e.dataXY && Number.isFinite(e.dataXY.x) && Number.isFinite(e.dataXY.y)
+          ? e.dataXY
+          : latLngToData(ll);
+        lines.push(formatLine(e.isCentroid, e.id, xy.x, xy.y));
+      }
+      lines.push('99999');
+      const content = lines.join('\n');
+      const blob = new Blob([content], {type: 'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'saturn_55555.dat';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function parseDatLine(line) {
+      // Admite: 'C id x y ...' o 'id x y ...'
+      const t = line.trim();
+      if (!t) return null;
+      if (/^\d{5}$/.test(t)) return null; // cA3digos de bloque
+      // comentarios o basura
+      if (/^[*;#]/.test(t)) return null;
+      let isC = false;
+      let rest = t;
+      if (t[0].toUpperCase() === 'C') { isC = true; rest = t.slice(1).trim(); }
+      const parts = rest.split(/\s+/);
+      if (parts.length < 3) return null;
+      const id = parseInt(parts[0], 10);
+      const x = parseFloat(parts[1]);
+      const y = parseFloat(parts[2]);
+      if (isNaN(id) || isNaN(x) || isNaN(y)) return null;
+      return { isCentroid: isC, id, x, y };
+    }
+
+    function importDat(text) {
+      const snap = snapshotState();
+      pushUndo(() => { applySnapshot(snap); });
+      historySuspend = true;
+      // Extraer bloque 55555 ... hasta otro 5-dAgitos o EOF
+      const lines = text.split(/\r?\n/);
+      let collecting = false;
+      const payload = [];
+      state.t3 = { arcs: [], extras: [] };
+      for (const ln of lines) {
+        const s = ln.trim();
+        if (s === '55555') { collecting = true; continue; }
+        if (!collecting) continue;
+        if (/^\d{5}$/.test(s)) break;
+        const rec = parseDatLine(ln);
+        if (rec) payload.push(rec);
+      }
+      if (payload.length) {
+        const selectedCommune = selectCommuneAnchor(text);
+        state.localCommune = selectedCommune || null;
+        const coordInfo = detectCoordinateType(payload);
+        let localStats = null;
+        let fallbackNotice = false;
+        if (coordInfo.type === 'wgs84') {
+          state.coordMode = 'utm';
+          state.localRefXY = { x: 0, y: 0 };
+          state.localShape = null;
+          resetLocalTransform();
+          for (const rec of payload) {
+            const lon = Number(rec.x);
+            const lat = Number(rec.y);
+            if (!Number.isFinite(lon) || !Number.isFinite(lat)) continue;
+            const latlng = { lat, lng: lon };
+            addEntry(latlng, rec.isCentroid, rec.id, { dataXY: { x: lon, y: lat } });
+          }
+        } else if (coordInfo.type === 'utm') {
+          state.coordMode = 'utm';
+          state.localRefXY = { x: 0, y: 0 };
+          state.localShape = null;
+          resetLocalTransform();
+          const anchorRecordForUtm = (selectedCommune && Number.isFinite(selectedCommune.lat) && Number.isFinite(selectedCommune.lon))
+            ? selectedCommune
+            : null;
+          state.hemisphere = 'south';
+          const zoneSelection = chooseBestUtmZone(payload, state.utmZone, anchorRecordForUtm, state.hemisphere);
+          if (zoneSelection && Number.isFinite(zoneSelection.zone)) {
+            state.utmZone = zoneSelection.zone;
+          }
+          if (zoneSelection && zoneSelection.anchor) {
+            state.localCommune = zoneSelection.anchor;
+          }
+          const projectionCode = zoneSelection && zoneSelection.code ? zoneSelection.code : null;
+          for (const rec of payload) {
+            const ll = projectionCode
+              ? utmToLatLngWithCode(rec.x, rec.y, projectionCode)
+              : utmToLatLngWithZone(rec.x, rec.y, state.utmZone, state.hemisphere);
+            if (!ll) continue;
+            addEntry({ lat: ll.lat, lng: ll.lng }, rec.isCentroid, rec.id, { dataXY: { x: rec.x, y: rec.y } });
+          }
+        } else {
+          fallbackNotice = true;
+          state.coordMode = 'local';
+          localStats = computeLocalShapeStats(payload);
+          state.localShape = localStats;
+          if (localStats) {
+            state.localRefXY = { x: localStats.meanX, y: localStats.meanY };
+          } else {
+            state.localRefXY = computeXYCentroid(payload);
+          }
+          const anchor = (selectedCommune && Number.isFinite(selectedCommune.lat) && Number.isFinite(selectedCommune.lon))
+            ? { lat: selectedCommune.lat, lng: selectedCommune.lon }
+            : state.localAnchor || { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON };
+          setLocalAnchor(anchor, false);
+          alignToCommuneOrientation(localStats, selectedCommune);
+          for (const rec of payload) {
+            const latlng = dataXYToLatLng(rec.x, rec.y);
+            addEntry(latlng, rec.isCentroid, rec.id, { dataXY: { x: rec.x, y: rec.y } });
+          }
+        }
+        let group = L.featureGroup(state.markers.map(m=>m.marker));
+        map.fitBounds(group.getBounds().pad(0.25));
+        if (state.coordMode === 'local') {
+          const recentered = recenterLocalNetwork();
+          if (recentered) {
+            group = L.featureGroup(state.markers.map(m=>m.marker));
+            map.fitBounds(group.getBounds().pad(0.25));
+          }
+        }
+        if (fallbackNotice) {
+          setTimeout(() => {
+            alert('Coordenadas no coinciden con rangos UTM/WGS84. Se muestran en modo local.');
+          }, 0);
+        }
+      }
+      // Tambien intentar importar Tarjeta 1 (11111)
+      import11111(text);
+      // Y Tarjeta 2 (22222) para dibujar conectores
+      import22222(text);
+      // Finalmente Tarjeta 3 (33333) para red externa
+      import33333(text);
+      refreshNodeBList();
+      refreshT3Stages();
+      if (state.activeB!=null) { setActiveB(state.activeB); }
+      rebuildT2Layer();
+      rebuildT1Layer();
+      historySuspend = false;
+    }
+
+    // ====== Import Tarjeta 1 (11111) ======
+    function sliceVal(s, a, b){ // 1-based inclusive
+      if (!s) return '';
+      const start = Math.max(0, a-1);
+      const end = Math.min(s.length, b);
+      return s.substring(start, end).trim();
+    }
+    function isDigits(str){ return /^[0-9]+$/.test(str); }
+    function parseIntOrNull(v){ if (v==null || v==='') return null; const n = parseInt(v,10); return isNaN(n)? null: n; }
+    function parse11111(text){
+      const lines = text.split(/\r?\n/);
+      const out = [];
+      let collect = false;
+      for (let i=0;i<lines.length;i++){
+        const raw = lines[i];
+        const t = raw.trim();
+        if (!collect) { if (t==='11111') { collect = true; } continue; }
+        if (/^\d{5}$/.test(t)) break; // fin de bloque
+        out.push(raw);
+      }
+      return out;
+    }
+    function import11111(text){
+      const segment = parse11111(text);
+      if (!segment.length) return;
+      let currentB = null;
+      let currentStage = null; // acumular continuaciones de etapa
+      const importedBs = new Set();
+      function flushStage(){
+        if (currentB!=null && currentStage){
+          const d = state.t1.get(currentB) || { arcs:[], stages:[] };
+          d.stages = d.stages || [];
+          d.stages.push(currentStage);
+          state.t1.set(currentB, d);
+        }
+        currentStage = null;
+      }
+      for (const raw of segment){
+        const line = raw; // mantener posiciones
+        if (!line || !line.trim()) continue;
+        // Ignorar comentarios en Tarjeta 1: '*' en la columna 1
+        if (line[0] === '*') continue;
+        const bStr = sliceVal(line,1,5);
+        const aStr = sliceVal(line,6,10);
+        // Tipo 1: cabecera nodo B
+        if (isDigits(bStr)){
+          flushStage();
+          const B = parseInt(bStr,10);
+          currentB = B;
+          const tipo = parseIntOrNull(sliceVal(line,11,15));
+          const rotEtapas = parseIntOrNull(sliceVal(line,16,20));
+          const desfase = parseIntOrNull(sliceVal(line,21,25));
+          const capRot = parseIntOrNull(sliceVal(line,26,30));
+          const ciclo = parseIntOrNull(sliceVal(line,31,35));
+          const unidades = parseIntOrNull(sliceVal(line,36,40));
+          const gapPrior = parseIntOrNull(sliceVal(line,41,45));
+          const gapAutop = parseIntOrNull(sliceVal(line,46,50));
+          const d = state.t1.get(B) || { arcs:[], stages:[] };
+          d.tipo = tipo==null? (d.tipo||1) : tipo;
+          d.rotEtapas = rotEtapas;
+          d.desfase = desfase;
+          d.capRot = capRot;
+          d.ciclo = ciclo;
+          d.unidades = unidades;
+          d.gapPrior = gapPrior;
+          d.gapAutop = gapAutop;
+          if (!d.arcs) d.arcs=[]; if (!d.stages) d.stages=[];
+          state.t1.set(B, d);
+          importedBs.add(B);
+          continue;
+        }
+        // Tipo 2: arco A->B
+        if (isDigits(aStr)){
+          flushStage();
+          const B = currentB; if (B==null) continue;
+          const A = parseInt(aStr,10);
+          const pistas = parseIntOrNull(sliceVal(line,12,15));
+          const vel = parseIntOrNull(sliceVal(line,16,20));
+          const lon = parseIntOrNull(sliceVal(line,21,25));
+          let v = [];
+          const maxCol = Math.max(55, line.length);
+          const slots = [];
+          let lastFilled = -1;
+          let slotIndex = 0;
+          for (let start=26; start<=maxCol; start+=10, slotIndex++){
+            const flow = sliceVal(line, start, start+4);
+            const mark = sliceVal(line, start+5, start+5);
+            const ini = sliceVal(line, start+7, start+7);
+            const fin = sliceVal(line, start+9, start+9);
+            const hasAny = flow || mark || ini || fin;
+            if (hasAny) {
+              const flujo = String(flow || '') + (mark ? mark.toUpperCase() : '');
+              slots[slotIndex] = {flujo, ini: ini||'', fin: fin||''};
+              lastFilled = slotIndex;
+            } else {
+              slots[slotIndex] = null;
+            }
+          }
+          for (let i=0;i<=lastFilled;i++){
+            v.push(slots[i] || null);
+          }
+          const nonEmptySlots = v.filter(Boolean).length;
+          const tail = line.length > 25 ? line.slice(25).trim() : '';
+          if (tail) {
+            const tokens = tail.split(/\s+/).filter(Boolean);
+            const parsed = [];
+            let i = 0;
+            while (i < tokens.length) {
+              let token = tokens[i++];
+              if (!token) continue;
+              let flow = token;
+              let markToken = '';
+              const m = flow.match(/^(\d+)([GXF])?$/i);
+              if (m) {
+                flow = m[1];
+                markToken = (m[2] || '').toUpperCase();
+              } else {
+                const m2 = flow.match(/(\d+)([GXF])?/i);
+                if (m2) {
+                  flow = m2[1];
+                  markToken = (m2[2] || '').toUpperCase();
+                }
+              }
+              if (!markToken && i < tokens.length && /^[GXF]$/i.test(tokens[i])) {
+                markToken = tokens[i++].toUpperCase();
+              }
+              const ini = i < tokens.length ? tokens[i++] : '';
+              const fin = i < tokens.length ? tokens[i++] : '';
+              const flujo = String(flow || '') + (markToken || '');
+              parsed.push({flujo, ini: ini||'', fin: fin||''});
+            }
+            if (parsed.length > nonEmptySlots) {
+              v = parsed;
+            }
+          }
+          const d = state.t1.get(B) || { arcs:[], stages:[] };
+          d.arcs = d.arcs||[];
+          d.arcs.push({ nodeA:A, pistas, vel, long:lon, virajes:v });
+          state.t1.set(B, d);
+          continue;
+        }
+        // Tipo 3: etapa o continuacion de etapa
+        const durStr = sliceVal(line,11,15);
+        const igStr = sliceVal(line,16,20);
+        const B = currentB; if (B==null) continue;
+        // Extraer pares A,C presentes en la fila
+        const pairs = [];
+        for (let off=0; off<5; off++){
+          const a = sliceVal(line, 26+off*10, 30+off*10);
+          const c = sliceVal(line, 31+off*10, 35+off*10);
+          if (isDigits(a) && isDigits(c)) pairs.push({A:parseInt(a,10), C:parseInt(c,10)});
+        }
+        if (isDigits(durStr) && isDigits(igStr)){
+          // Inicio de etapa
+          flushStage();
+          currentStage = { dur: parseInt(durStr,10), ig: parseInt(igStr,10), pairs: pairs };
+          continue;
+        }
+        // Continuacion de la etapa actual: sin dur/ig pero con pares
+        if (pairs.length && currentStage){
+          currentStage.pairs.push(...pairs);
+        }
+      }
+      // Flush final
+      flushStage();
+      // Set activeB si viene vacio
+      if (!state.activeB && importedBs.size){ state.activeB = Array.from(importedBs).sort((a,b)=>a-b)[0]; }
+    }
+
+    function initWhenReady(){
+      map = window[MAP_VAR_NAME];
+      if (!map) { setTimeout(initWhenReady, 50); return; }
+
+      renderNodeLegend();
+      // Inicializar UI
+      document.getElementById('utmZone').value = state.utmZone;
+      document.getElementById('hemisphere').value = state.hemisphere;
+      document.getElementById('utmZone').addEventListener('change', (e)=>{
+        state.utmZone = parseInt(e.target.value,10)||state.utmZone;
+        refreshSummaryStats();
+      });
+      document.getElementById('hemisphere').addEventListener('change', (e)=>{
+        state.hemisphere = e.target.value;
+        refreshSummaryStats();
+      });
+      document.getElementById('btnExport').addEventListener('click', exportDat);
+      const btn111 = document.getElementById('btnExport11111');
+      if (btn111) btn111.addEventListener('click', function(){ saveT1Fields(); export11111(); });
+      document.getElementById('fileInput').addEventListener('change', function(){
+        const f = this.files[0]; if (!f) return;
+        const reader = new FileReader();
+        reader.onload = function(){ importDat(String(reader.result||'')); };
+        reader.readAsText(f);
+      });
+      const selB = document.getElementById('nodeBSelect');
+      if (selB) selB.addEventListener('change', function(){ const v = parseInt(this.value,10); setActiveB(v); });
+      ['t1Tipo','t1Desfase','t1Ciclo','t1Unidades','t1RotEtapas','t1CapRot','t1GapPrior','t1GapAutop'].forEach(id=>{
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('change', saveT1Fields);
+          if (id==='t1Tipo') el.addEventListener('input', saveT1Fields);
+        }
+      });
+      const ba = document.getElementById('btnAddArc'); if (ba) ba.addEventListener('click', function(){ showAddArc(true); });
+      const bc = document.getElementById('btnCancelArc'); if (bc) bc.addEventListener('click', function(){ showAddArc(false); });
+      const bs = document.getElementById('btnSaveArc'); if (bs) bs.addEventListener('click', addArcFromForm);
+      const t1AddTurn = document.getElementById('t1AddTurn');
+      if (t1AddTurn) t1AddTurn.addEventListener('click', function(){
+        const list = document.getElementById('t1TurnsList');
+        if (list) list.appendChild(buildT1TurnRow());
+      });
+      const addPair = document.getElementById('t3AddPair'); if (addPair) addPair.addEventListener('click', addT3Pair);
+      const saveStage = document.getElementById('t3SaveStage'); if (saveStage) saveStage.addEventListener('click', saveT3Stage);
+      const cancelStage = document.getElementById('t3CancelStage'); if (cancelStage) cancelStage.addEventListener('click', clearT3Form);
+      const t2Chk = document.getElementById('t2Show'); if (t2Chk) t2Chk.addEventListener('change', rebuildT2Layer);
+      const t1Chk = document.getElementById('t1ShowDistances'); if (t1Chk) t1Chk.addEventListener('change', rebuildT1Layer);
+      const t3ConnChk = document.getElementById('t3ShowConnectors'); if (t3ConnChk) t3ConnChk.addEventListener('change', rebuildT3Layers);
+      const t3SaveArcBtn = document.getElementById('t3SaveArcBtn'); if (t3SaveArcBtn) t3SaveArcBtn.addEventListener('click', saveT3ArcFromForm);
+      const t3ClearArcBtn = document.getElementById('t3ClearArcBtn'); if (t3ClearArcBtn) t3ClearArcBtn.addEventListener('click', clearT3ArcForm);
+      const t2ZoneInput = document.getElementById('t2ZoneInput');
+      if (t2ZoneInput) t2ZoneInput.addEventListener('input', refreshT2EditorList);
+      const t2AddNode = document.getElementById('t2AddNode');
+      if (t2AddNode) t2AddNode.addEventListener('click', addT2Connection);
+      const t2ClearZone = document.getElementById('t2ClearZone');
+      if (t2ClearZone) t2ClearZone.addEventListener('click', clearT2Zone);
+      const measureToggle = document.getElementById('measureToggle');
+      if (measureToggle) measureToggle.addEventListener('click', function(){ setMeasureEnabled(!measureEnabled); });
+      const measureClear = document.getElementById('measureClear');
+      if (measureClear) measureClear.addEventListener('click', clearMeasure);
+      updateMeasureUI(0);
+      document.addEventListener('keydown', function(ev){
+        if (isFormField(ev.target)) return;
+        if ((ev.ctrlKey || ev.metaKey) && !ev.shiftKey && String(ev.key).toLowerCase() === 'z') {
+          ev.preventDefault();
+          undoLastChange();
+        }
+      });
+      // Inicializar listas basadas en nodos ya agregados
+      refreshNodeBList();
+
+      // Inicializar visibilidad de secciA3n T3 segAon estado actual del select
+      saveT1Fields();
+      rebuildT1Layer();
+      clearT3ArcForm();
+      refreshT3ArcList();
+
+      // Click en el mapa para agregar
+      map.on('click', function(ev){
+        const latlng = ev.latlng;
+        if (measureEnabled) {
+          addMeasurePoint(latlng);
+          return;
+        }
+        const idStr = prompt('Ingrese ID de Nodo/Centroide (nAomero):');
+        if (idStr === null) return; // cancel
+        const id = parseInt(idStr, 10);
+        if (isNaN(id)) { alert('ID invA!lido'); return; }
+        const type = prompt('Tipo: N para Nodo, C para Centroide', 'N');
+        const isCentroid = (String(type||'').trim().toUpperCase() === 'C');
+        addEntry(latlng, isCentroid, id);
+      });
+    }
+
+    // Esperar a que el mapa exista
+    if (document.readyState !== 'loading') { initWhenReady(); }
+    else { document.addEventListener('DOMContentLoaded', initWhenReady); }
+
+  })();
+</script>
+    
+            <div class="folium-map" id="map_1a037a45e281ea4b5ce29c65cf40ebac" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_1a037a45e281ea4b5ce29c65cf40ebac = L.map(
+                "map_1a037a45e281ea4b5ce29c65cf40ebac",
+                {
+                    center: [-35.4264, -71.6554],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_1a037a45e281ea4b5ce29c65cf40ebac);
+
+            
+
+        
+    
+            var tile_layer_c693e6cbdbd67c12208dcada0a8a9829 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; OpenStreetMap contributors", "detectRetina": false, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_c693e6cbdbd67c12208dcada0a8a9829.addTo(map_1a037a45e281ea4b5ce29c65cf40ebac);
+        
+    
+            var tile_layer_e4902dccde50df5dd8d4f529a1c52865 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {"attribution": "Tiles \u00a9 Esri", "detectRetina": false, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            var layer_control_49a63e3b77af0205c42280594c3ca9eb_layers = {
+                base_layers : {
+                    "OpenStreetMap" : tile_layer_c693e6cbdbd67c12208dcada0a8a9829,
+                    "Esri World Imagery" : tile_layer_e4902dccde50df5dd8d4f529a1c52865,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_49a63e3b77af0205c42280594c3ca9eb = L.control.layers(
+                layer_control_49a63e3b77af0205c42280594c3ca9eb_layers.base_layers,
+                layer_control_49a63e3b77af0205c42280594c3ca9eb_layers.overlays,
+                {"autoZIndex": true, "collapsed": true, "position": "bottomleft"}
+            ).addTo(map_1a037a45e281ea4b5ce29c65cf40ebac);
+
+        
+</script>
+</html>

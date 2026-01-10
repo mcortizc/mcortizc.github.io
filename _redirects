@@ -1,0 +1,2 @@
+# Redirect dominio secundario
+https://mocmovilidad.cl/* https://mocmobility.cl/:splat 301!
