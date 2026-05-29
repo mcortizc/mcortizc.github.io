@@ -717,248 +717,415 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </script>
 
 <style>
+/* ============================================================
+   SATURN EDITOR UI - DESIGN SYSTEM v4
+   Do not add visual rules above this block.
+   ============================================================ */
 :root {
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #e2e8f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 400;
+  --bg-app: #f6f8fb;
+  --bg-surface: rgba(255, 255, 255, 0.96);
+  --bg-surface-2: #f8fafc;
+  --bg-surface-3: #eef3f7;
+  --text-main: #111827;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --primary: #1f5eff;
+  --primary-hover: #1749c8;
+  --primary-soft: #eaf1ff;
+  --success: #0f766e;
+  --success-soft: #dff7f3;
+  --warning: #a16207;
+  --warning-soft: #fef3c7;
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
+  --shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-2: 0 10px 28px rgba(15, 23, 42, 0.10);
+  --radius-1: 8px;
+  --radius-2: 12px;
+  --radius-3: 16px;
+  --topbar-h: 52px;
+  --nav-w: 76px;
+  --inspector-w: clamp(580px, 35vw, 680px);
+  --dock-w: 280px;
 }
-html, body {
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html,
+body {
+  width: 100%;
   height: 100%;
   margin: 0;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.2), transparent 45%),
-    radial-gradient(circle at 80% 10%, rgba(147, 197, 253, 0.15), transparent 40%),
-    #020617;
-  color: inherit;
+    radial-gradient(circle at top left, rgba(191, 219, 254, 0.55), transparent 28%),
+    linear-gradient(180deg, #f8fbfd 0%, #edf3f8 100%);
+  color: var(--text-main);
+}
+#map {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 }
 .leaflet-container {
   font-family: inherit;
+  background: #eef3f7;
+}
+.leaflet-tile-pane {
+  filter: grayscale(0.35) saturate(0.58) brightness(1.04) contrast(0.96);
 }
 .saturn-ui {
   position: fixed;
   inset: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 24px;
-  pointer-events: none;
-  box-sizing: border-box;
   z-index: 1000;
-}
-@media (max-width: 1024px) {
-  .saturn-ui {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px;
-  }
+  display: grid;
+  grid-template-columns: var(--nav-w) var(--inspector-w) minmax(0, 1fr);
+  grid-template-rows: var(--topbar-h) minmax(0, 1fr);
+  pointer-events: none;
 }
 .glass-panel {
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  border-radius: 24px;
-  box-shadow: 0 25px 60px rgba(2, 6, 23, 0.55);
-  backdrop-filter: blur(18px);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-2);
+  backdrop-filter: blur(8px);
 }
-.saturn-panel {
-  width: 420px;
-  max-width: 90vw;
-  max-height: calc(100vh - 48px);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+.app-topbar {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  height: var(--topbar-h);
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-1);
   pointer-events: auto;
 }
-@media (max-width: 1024px) {
-  .saturn-panel {
-    width: 100%;
-    max-height: none;
-  }
+.topbar-brand,
+.topbar-meta,
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
-.panel-header {
+.topbar-brand { gap: 12px; }
+.topbar-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+.topbar-status,
+.mini-stat,
+.panel-shell-note,
+.empty-state p,
+.overlay-tip,
+.measure-panel .measure-status {
+  color: var(--text-muted);
+}
+.topbar-status {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.82rem;
+}
+.topbar-pill {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.topbar-pill strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+.saturn-nav {
+  grid-column: 1;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
-.panel-eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.6);
-  margin: 0;
-}
-.panel-header h1 {
-  margin: 0;
-  font-size: 1.45rem;
-  font-weight: 600;
-}
-.panel-header p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: rgba(226, 232, 240, 0.75);
-}
-.stat-grid {
-  margin: 14px 0 6px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+  padding: 10px 8px;
+  background: #ffffff;
+  border-right: 1px solid var(--border-subtle);
+  pointer-events: auto;
 }
-.stat-card {
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  padding: 8px;
-  background: linear-gradient(135deg, rgba(226, 232, 240, 0.08), rgba(148, 163, 184, 0.08));
+.module-nav-button {
+  min-height: 54px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
 }
-.stat-card span {
-  display: block;
-  font-size: 0.6rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.65);
+.module-nav-button:hover {
+  background: var(--bg-surface-2);
+  color: var(--text-main);
 }
-.stat-card strong {
-  display: block;
-  font-size: 1.1rem;
-  margin-top: 2px;
-  color: #f8fafc;
+.module-nav-button.is-active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: rgba(31, 94, 255, 0.22);
+  box-shadow: inset 3px 0 0 var(--primary);
 }
+.module-nav-button:disabled,
+.saturn-panel button:disabled,
+.app-topbar button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.module-nav-kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+.module-nav-label {
+  font-size: 0.75rem;
+  line-height: 1.15;
+}
+.saturn-panel {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  height: calc(100vh - var(--topbar-h));
+  overflow: hidden;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.98);
+  pointer-events: auto;
+}
+.panel-header,
+.stat-grid { display: none; }
 .panel-scroll {
-  margin-top: 12px;
+  height: 100%;
+  min-height: 0;
   overflow-y: auto;
-  padding-right: 6px;
+  overflow-x: hidden;
+  padding: 18px 18px 20px;
 }
 .panel-section {
-  border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(15, 23, 42, 0.65);
-  padding: 16px;
-  margin-bottom: 18px;
+  position: relative;
+  margin-bottom: 16px;
+  padding: 15px 15px 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 252, 0.98));
+  box-shadow: var(--shadow-1);
 }
+.panel-section::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 0;
+  width: 4px;
+  height: 22px;
+  border-radius: 0 999px 999px 0;
+  background: var(--primary);
+}
+#convSection::before { background: var(--warning); }
+#validationSection::before { background: var(--danger); }
+#t3Section::before,
+#t3ArcSection::before { background: var(--success); }
+#t6Section::before { background: #2563eb; }
 .section-title {
-  font-size: 0.8rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.7);
-  margin: 0 0 14px;
+  margin: 0 0 12px 10px;
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.empty-state {
+  margin-bottom: 16px;
+  padding: 22px 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 14px;
+  background: #f8fafc;
+  box-shadow: var(--shadow-1);
+}
+.empty-state[hidden],
+.module-section[hidden] { display: none !important; }
+.empty-state h2 {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  font-weight: 750;
 }
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
 }
-.form-field {
+.form-field,
+.stacked-inputs {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 .form-field label,
-.field-label {
+.field-label,
+#t6Section label {
+  display: block;
+  color: var(--text-secondary);
   font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.7);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .saturn-panel input,
 .saturn-panel select,
+.saturn-panel textarea,
 .saturn-panel button,
-.saturn-panel textarea {
+.app-topbar button {
   font-family: inherit;
 }
 .saturn-panel input,
 .saturn-panel select,
 .saturn-panel textarea {
   width: 100%;
-  border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  background: rgba(15, 23, 42, 0.8);
-  color: #f8fafc;
-  padding: 7px 10px;
-  font-size: 0.85rem;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-1);
+  background: #fff;
+  color: var(--text-main);
+  font-size: 0.84rem;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 .saturn-panel textarea {
   resize: vertical;
+  line-height: 1.5;
 }
-.saturn-panel button {
-  border: none;
-  border-radius: 12px;
-  padding: 9px 14px;
+.saturn-panel input[type="number"],
+.numeric,
+.node-id,
+#t6NodesStr,
+.measure-distance,
+#hudActiveNode,
+#hudUtm,
+.arc-item-details,
+#t3Pairs,
+#t3StagesList,
+#t6List {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.saturn-panel input[type="number"] { text-align: right; }
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(31, 94, 255, 0.55);
+  outline-offset: 2px;
+}
+.saturn-panel button,
+.app-topbar button {
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-.saturn-panel button:active {
-  transform: scale(0.98);
 }
 .saturn-primary {
-  background: linear-gradient(135deg, #34d399, #0ea5e9);
-  color: #04121f;
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 6px 14px rgba(31, 94, 255, 0.18);
 }
+.saturn-primary:hover { background: var(--primary-hover); }
 .saturn-secondary {
-  background: rgba(226, 232, 240, 0.12);
-  color: #f8fafc;
+  background: #ffffff;
+  color: var(--text-main);
+  border-color: var(--border-strong);
 }
+.saturn-secondary:hover { background: var(--bg-surface-2); }
 .ghost-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: transparent;
-  border: 1px dashed rgba(148, 163, 184, 0.5);
-  color: #cbd5f5;
-  padding: 9px 14px;
+  padding: 8px 12px;
+  border: 1px dashed var(--border-strong);
   border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 .ghost-btn .btn-icon {
   display: inline-flex;
   width: 18px;
   height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(203, 213, 225, 0.8);
   align-items: center;
   justify-content: center;
+  border: 1px solid rgba(31, 94, 255, 0.35);
+  border-radius: 50%;
   font-weight: 700;
   font-size: 0.85rem;
 }
-.button-row {
+.button-row,
+.toggle-row,
+.measure-panel .measure-actions,
+.t3-flex {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-.toggle-row {
-  display: flex;
-  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 12px;
+  gap: 8px;
 }
 .checkbox-label {
-  font-size: 0.85rem;
-  color: rgba(226, 232, 240, 0.85);
-  display: flex;
-  gap: 6px;
+  display: inline-flex;
   align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  background: var(--bg-surface-2);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
 }
-.mini-stat {
-  font-size: 0.75rem;
-  color: rgba(148, 163, 184, 0.9);
-}
+.checkbox-label input { accent-color: var(--primary); }
 .card {
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  background: rgba(2, 6, 23, 0.4);
-  padding: 12px;
   margin-top: 12px;
+  padding: 13px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--bg-surface-2), #ffffff);
+  box-shadow: var(--shadow-1);
 }
 .card-title {
-  font-size: 0.85rem;
-  margin: 0 0 8px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.75);
+  margin: 0 0 10px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .scroll-area {
-  max-height: 150px;
+  max-height: 220px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .arc-list {
   display: flex;
@@ -966,171 +1133,48 @@ html, body {
   gap: 8px;
   padding-right: 4px;
 }
-.arc-item {
-  display: flex;
+.arc-item,
+#t6List .route-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(15, 23, 42, 0.55);
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: #fff;
+  box-shadow: var(--shadow-1);
 }
 .arc-item-details {
-  flex: 1 1 auto;
-  font-size: 0.82rem;
-  line-height: 1.35;
-  color: rgba(226, 232, 240, 0.9);
-}
-.arc-item-details span {
-  display: block;
-  color: rgba(226, 232, 240, 0.7);
-  font-size: 0.75rem;
-}
-.arc-delete {
-  flex: 0 0 auto;
-  padding: 4px 11px;
-  font-size: 0.72rem;
-  border-radius: 999px;
-  border: 1px solid rgba(248, 113, 113, 0.4);
-  background: rgba(248, 113, 113, 0.12);
-  color: #fecaca;
-}
-.arc-delete:hover {
-  background: rgba(248, 113, 113, 0.22);
-}
-.arc-edit {
-  flex: 0 0 auto;
-  padding: 4px 11px;
-  font-size: 0.72rem;
-  border-radius: 999px;
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  background: rgba(56, 189, 248, 0.12);
-  color: #bae6fd;
-}
-.arc-edit:hover {
-  background: rgba(56, 189, 248, 0.22);
-}
-.map-overlay {
-  padding: 18px;
-  pointer-events: none;
-}
-.overlay-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.overlay-pill {
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  padding: 8px 14px;
-  text-align: right;
-  background: rgba(15, 23, 42, 0.8);
-}
-.overlay-pill span {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.6);
-}
-.overlay-pill strong {
-  display: block;
-  font-size: 0.9rem;
-  margin-top: 2px;
-  color: #f8fafc;
-}
-.overlay-tip {
+  min-width: 0;
   font-size: 0.8rem;
-  color: rgba(226, 232, 240, 0.8);
-  text-align: right;
+  line-height: 1.35;
+  color: var(--text-main);
 }
-.saturn-side {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  align-items: flex-end;
-  flex: 1;
-}
-.legend-panel {
-  pointer-events: auto;
-  padding: 18px;
-  min-width: 220px;
-}
-.legend-panel h4 {
-  margin: 0 0 10px;
+.arc-item-details span,
+#selectionSummary,
+#validationResults,
+#t3NodeInfo,
+#t2NodesList,
+#arcsList,
+#t6List { color: var(--text-secondary); }
+#t6List .route-item span {
+  min-width: 0;
+  margin-right: 8px;
   font-size: 0.9rem;
 }
-.measure-panel {
-  pointer-events: auto;
-  padding: 16px;
-  min-width: 220px;
+#t6EditIndicator {
+  display: block;
+  margin: 12px 0 6px;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 700;
 }
-.measure-panel h4 {
-  margin: 0 0 10px;
-  font-size: 0.9rem;
-}
-.measure-panel .measure-status {
-  font-size: 0.78rem;
-  color: rgba(226, 232, 240, 0.75);
-  margin-bottom: 10px;
-}
-.measure-panel .measure-distance {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #f8fafc;
-}
-.measure-panel .measure-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-.measure-panel .measure-actions button {
-  flex: 1 1 100px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: rgba(226, 232, 240, 0.9);
-  margin: 6px 0;
-}
-.legend-swatch {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  border: 1px solid rgba(15, 23, 42, 0.6);
-}
-.leaflet-popup-content { font-size: 13px; }
-.saturn-dot { cursor: pointer; }
-.saturn-tooltip { font-size: 12px; font-weight: 600; }
-.saturn-dot > div {
-  transition: transform 0.08s ease;
-  transform-origin: center center;
-}
-.saturn-dot:hover > div { transform: scale(1.8); }
-.saturn-dot.active {
-  z-index: 1002 !important;
-}
-.saturn-dot.active > div {
-  transform: scale(1.4);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.9);
-  background:#2ecc71 !important;
-  border-color:#27ae60 !important;
-}
-.saturn-dot.related {
-  z-index: 1001 !important;
-}
-.saturn-dot.related > div {
-  transform: scale(1.25);
-  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.9);
-  border-color:#f39c12 !important;
-}
-.stacked-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+#t6NodesStr {
+  min-height: 120px;
+  font-size: 13px;
+  line-height: 1.55;
+  resize: vertical;
 }
 .turns-grid {
   display: grid;
@@ -1138,18 +1182,8 @@ html, body {
 }
 .turn-row {
   display: grid;
-  grid-template-columns: 1fr 70px 70px 70px;
+  grid-template-columns: 1fr 62px 62px 64px;
   gap: 8px;
-}
-.turn-delete {
-  border-radius: 10px;
-  border: 1px solid rgba(248, 113, 113, 0.4);
-  background: rgba(248, 113, 113, 0.12);
-  color: #fecaca;
-  font-size: 0.72rem;
-}
-.turn-delete:hover {
-  background: rgba(248, 113, 113, 0.22);
 }
 .tag-list {
   display: flex;
@@ -1160,101 +1194,287 @@ html, body {
 .tag {
   padding: 4px 8px;
   border-radius: 999px;
-  background: rgba(16, 185, 129, 0.15);
-  color: rgba(16, 185, 129, 0.95);
-}
-.t3-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  background: var(--success-soft);
+  color: var(--success);
 }
 .validation-item {
-  padding: 8px 10px;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 8px;
   margin-bottom: 6px;
+  padding: 8px 10px;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  background: #fff8f2;
+  box-shadow: var(--shadow-1);
   cursor: pointer;
-  transition: all 0.2s;
-}
-.validation-item:hover {
-  background: rgba(239, 68, 68, 0.25);
-  transform: translateX(2px);
 }
 .validation-item strong {
-  color: #fca5a5;
   display: block;
+  color: #c2410c;
   font-size: 0.85rem;
 }
 .validation-item span {
-  color: rgba(254, 202, 202, 0.8);
+  display: block;
+  color: #9a3412;
   font-size: 0.75rem;
-  display: block;
 }
-/* Mejora UI Tarjeta 6 - V3 (Fuente Maxima y ajustes) */
-#t6List .route-item {
-  font-size: 1.3rem; /* 30% mas grande que V2 */
-  font-weight: 500;
+.saturn-side {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: end;
+  align-self: start;
+  width: var(--dock-w);
+  max-width: calc(100vw - var(--nav-w) - var(--inspector-w) - 32px);
+  max-height: calc(100vh - var(--topbar-h) - 24px);
+  overflow-y: auto;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.1); 
-  margin-bottom: 8px;
-  border-radius: 8px;
-  line-height: 1.5;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.saturn-side > * { pointer-events: auto; }
+.map-overlay,
+.legend-panel,
+.measure-panel {
+  width: 100%;
+  max-width: 280px;
+  margin: 0;
+  overflow: hidden;
+  padding: 10px 12px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
+  backdrop-filter: blur(8px);
+}
+.map-overlay *,
+.legend-panel *,
+.measure-panel * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.overlay-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.overlay-pill {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
   align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
-#t6List .route-item span {
-  flex: 1; /* Texto ocupa espacio */
-  margin-right: 12px; /* Separar botones */
+.overlay-pill span {
+  font-size: 11px;
+  color: var(--text-muted);
 }
-#t6List .route-item:hover {
-  background: rgba(255, 255, 255, 0.18);
+.overlay-pill strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
 }
-#t6List .route-item button {
-  font-size: 0.95rem; /* Botones acciones equilibrados */
-  padding: 6px 12px;
+.overlay-tip {
+  margin: 6px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 12px;
 }
-/* Inputs y Selects grandes */
-#t6Section input, #t6Section select, #t6Section button {
-  font-size: 1.1rem; 
-  padding: 6px 8px;
+.legend-panel h4,
+.measure-panel h4 {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
 }
-#t6Filter {
-  font-size: 1.15rem;
-  padding: 8px;
-  height: auto;
+.measure-panel .measure-distance {
+  font-size: 1.05rem;
+  font-weight: 700;
 }
-/* Labels mas legibles */
-#t6Section label {
-  font-size: 0.95rem;
-  color: #cbd5e1; /* Mas brillante */
-  margin-bottom: 4px;
-  display: block;
+.measure-panel .measure-actions button {
+  flex: 1 1 110px;
 }
-#t6EditIndicator {
-  font-size: 1.2rem;
-  margin: 16px 0 10px;
-  color: #60a5fa; /* Azul claro */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 0.82rem;
 }
-#t6NodesStr {
-  font-size: 1.1rem;
-  font-family: monospace;
-  min-height: 80px;
+.legend-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
 }
-::-webkit-scrollbar {
-  width: 8px;
+.leaflet-popup-content {
+  font-size: 12px;
+  color: var(--text-main);
 }
+.saturn-dot { cursor: pointer; }
+.saturn-dot > div {
+  transition: transform 0.08s ease;
+  transform-origin: center center;
+}
+.saturn-dot:hover > div { transform: scale(1.25); }
+.saturn-dot.active {
+  z-index: 1002 !important;
+}
+.saturn-dot.active > div {
+  transform: scale(1.35);
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 0 0 6px rgba(15, 98, 254, 0.26),
+    0 8px 18px rgba(15, 23, 42, 0.22);
+}
+.saturn-dot.related {
+  z-index: 1001 !important;
+}
+.saturn-dot.related > div {
+  transform: scale(1.22);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.18);
+}
+.saturn-cluster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(15, 98, 254, 0.88);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22);
+}
+.saturn-cluster.medium {
+  background: rgba(8, 145, 178, 0.84);
+}
+.saturn-tooltip {
+  padding: 3px 6px;
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f2937;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+#t6ExternalSection {
+  border-top: 1px dashed var(--border-subtle) !important;
+}
+#t6ExternalSection p {
+  color: var(--text-muted) !important;
+}
+::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.35);
+  background: rgba(148, 163, 184, 0.5);
   border-radius: 999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(226, 232, 240, 0.6);
+@media (max-width: 1366px) {
+  :root {
+    --inspector-w: 560px;
+    --nav-w: 72px;
+  }
+}
+@media (max-width: 1180px) {
+  .app-topbar {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    padding: 10px 12px;
+  }
+  .topbar-meta,
+  .topbar-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 1100px) {
+  .saturn-ui {
+    grid-template-columns: 72px minmax(460px, 560px) minmax(0, 1fr);
+  }
+}
+@media (max-width: 1024px) {
+  .saturn-ui {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+  .app-topbar,
+  .saturn-nav,
+  .saturn-panel,
+  .saturn-side {
+    grid-column: 1;
+  }
+  .saturn-nav {
+    grid-row: 2;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 10px 12px;
+  }
+  .module-nav-button { min-width: 110px; }
+  .saturn-panel {
+    grid-row: 3;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    height: auto;
+  }
+  .saturn-side { display: none; }
 }
 </style>
 
 <div class="saturn-ui">
+  <div class="app-topbar">
+    <div class="topbar-brand">
+      <span class="topbar-title">SATURN Editor</span>
+      <span class="topbar-status" id="topbarStatus">Sin red cargada</span>
+    </div>
+    <div class="topbar-meta">
+      <span class="topbar-pill"><strong id="topbarProjection">UTM 19S</strong></span>
+      <span class="topbar-pill" id="topbarSummary">Carga un DAT para comenzar</span>
+    </div>
+    <div class="topbar-actions">
+      <button id="topbarImportBtn" class="saturn-secondary">Importar DAT</button>
+      <button id="topbarValidateBtn" class="saturn-secondary">Validar</button>
+      <button id="topbarExportBtn" class="saturn-primary">Exportar</button>
+    </div>
+  </div>
+  <aside class="saturn-nav">
+    <button class="module-nav-button is-active" data-module-target="overview">
+      <span class="module-nav-kicker">Inicio</span>
+      <span class="module-nav-label">Resumen</span>
+    </button>
+    <button class="module-nav-button" data-module-target="convert">
+      <span class="module-nav-kicker">T0</span>
+      <span class="module-nav-label">Conversión</span>
+    </button>
+    <button class="module-nav-button" data-module-target="t1">
+      <span class="module-nav-kicker">T1</span>
+      <span class="module-nav-label">Red interna</span>
+    </button>
+    <button class="module-nav-button" data-module-target="t2">
+      <span class="module-nav-kicker">T2</span>
+      <span class="module-nav-label">Zonas</span>
+    </button>
+    <button class="module-nav-button" data-module-target="t3">
+      <span class="module-nav-kicker">T3</span>
+      <span class="module-nav-label">Externos</span>
+    </button>
+    <button class="module-nav-button" data-module-target="t6">
+      <span class="module-nav-kicker">T6</span>
+      <span class="module-nav-label">Rutas</span>
+    </button>
+    <button class="module-nav-button" data-module-target="validation">
+      <span class="module-nav-kicker">QA</span>
+      <span class="module-nav-label">Validación</span>
+    </button>
+  </aside>
   <aside class="saturn-panel glass-panel">
     <header class="panel-header">
       <p class="panel-eyebrow">Saturn - Editor</p>
@@ -1282,8 +1502,56 @@ html, body {
     </div>
 
     <div class="panel-scroll">
-      <section class="panel-section">
+      <div class="empty-state" id="emptyState">
+        <h2>Sin red cargada</h2>
+        <p>Carga un archivo DAT para visualizar nodos, arcos, conectores y rutas. Requisito mínimo: tarjeta 55555 con coordenadas.</p>
+        <div class="button-row">
+          <button id="emptyImportBtn" class="saturn-primary">Importar DAT</button>
+        </div>
+      </div>
+
+      <section class="panel-section module-section" id="githubSection" data-module="overview">
+        <p class="section-title">Integraci&oacute;n GitHub</p>
+        <p class="panel-shell-note">Conecta un repositorio para cargar y guardar redes DAT desde GitHub.</p>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="ghOwner">Usuario/organizaci&oacute;n</label>
+            <input type="text" id="ghOwner" placeholder="mi-usuario">
+          </div>
+          <div class="form-field">
+            <label for="ghRepo">Repositorio</label>
+            <input type="text" id="ghRepo" placeholder="mi-proyecto">
+          </div>
+          <div class="form-field">
+            <label for="ghBranch">Rama</label>
+            <input type="text" id="ghBranch" value="main" placeholder="main">
+          </div>
+          <div class="form-field">
+            <label for="ghPath">Carpeta</label>
+            <input type="text" id="ghPath" placeholder="datos/redes">
+          </div>
+          <div class="form-field" style="grid-column: 1 / -1;">
+            <label for="ghToken">Token personal (PAT)</label>
+            <input type="password" id="ghToken" placeholder="ghp_...">
+          </div>
+        </div>
+        <div class="button-row" style="margin-top: 12px;">
+          <button id="btnGhConnect" class="saturn-secondary">Conectar y listar archivos</button>
+        </div>
+        <div id="ghFileListContainer" style="display: none; margin-top: 16px;">
+          <label class="field-label" for="ghFileSelect">Red disponible</label>
+          <select id="ghFileSelect"></select>
+          <div class="button-row" style="margin-top: 8px;">
+            <button id="btnGhLoadFile" class="saturn-primary">Cargar red</button>
+            <button id="btnGhSaveFile" class="saturn-primary" style="background:#0f766e; border-color:#0f766e; display:none;">Guardar en GitHub</button>
+          </div>
+          <p id="ghStatus" class="panel-shell-note" style="margin-top: 8px; color: var(--success); font-weight: 600;"></p>
+        </div>
+      </section>
+
+      <section class="panel-section module-section" id="ioSection" data-module="overview">
         <p class="section-title">Importar y exportar</p>
+        <p class="panel-shell-note">Carga una red, valida su consistencia y exporta nuevamente en formato DAT.</p>
         <label class="field-label" for="fileInput">Archivo .dat</label>
         <input type="file" id="fileInput" accept=".dat,.txt">
         <div class="button-row">
@@ -1292,8 +1560,19 @@ html, body {
         </div>
       </section>
 
-      <section class="panel-section">
-        <p class="section-title">Validacion de Red</p>
+      <section class="panel-section module-section" id="convSection" data-module="convert">
+        <p class="section-title">Conversión Buffer -&gt; Inner</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button id="btnToggleSelection" class="saturn-secondary">Modo Selección Inner: OFF</button>
+          <div id="selectionSummary" style="font-size:0.75rem; color:rgba(226, 232, 240, 0.75);">
+            Nodos seleccionados: <strong id="selCount">0</strong>
+          </div>
+          <button id="btnRunConversion" class="saturn-primary" style="background:#f59e0b; border-color:#d97706;">Generar Borrador 11111</button>
+        </div>
+      </section>
+
+      <section class="panel-section module-section" id="validationSection" data-module="validation">
+        <p class="section-title">Validaci&oacute;n de red</p>
         <div class="button-row">
             <button id="btnValidateOrder" class="saturn-secondary">Validar Orden Angular</button>
         </div>
@@ -1303,8 +1582,8 @@ html, body {
         </div>
       </section>
 
-      <section class="panel-section">
-        <p class="section-title">Proyeccion UTM</p>
+      <section class="panel-section module-section" id="t2Section" data-module="t2">
+        <p class="section-title">Proyecci&oacute;n UTM</p>
         <div class="form-grid">
           <div class="form-field">
             <label for="utmZone">Zona</label>
@@ -1343,7 +1622,7 @@ html, body {
         </div>
       </section>
 
-      <section class="panel-section">
+      <section class="panel-section module-section" id="t1MainSection" data-module="t1">
         <p class="section-title">Tarjeta 1 - Red interna</p>
         <div class="form-field">
           <label for="nodeBSelect">Nodo B activo</label>
@@ -1380,21 +1659,21 @@ html, body {
             <input id="t1RotEtapas" type="number">
           </div>
           <div class="form-field">
-            <label for="t1CapRot">Cap. rotonda</label>
+            <label for="t1CapRot">Capacidad rotonda</label>
             <input id="t1CapRot" type="number">
           </div>
           <div class="form-field">
-            <label for="t1GapPrior">Gap prior (10s)</label>
+            <label for="t1GapPrior">Gap prioridad (10 s)</label>
             <input id="t1GapPrior" type="number">
           </div>
           <div class="form-field">
-            <label for="t1GapAutop">Gap autop (10s)</label>
+            <label for="t1GapAutop">Gap autopista (10 s)</label>
             <input id="t1GapAutop" type="number">
           </div>
         </div>
         <div class="toggle-row">
           <button id="btnAddArc" class="ghost-btn"><span class="btn-icon">+</span>Agregar arco (A -> B)</button>
-          <label class="checkbox-label"><input type="checkbox" id="t1ShowDistances" checked> Ver distancias A-B</label>
+          <label class="checkbox-label"><input type="checkbox" id="t1ShowDistances"> Ver diferencias de distancia</label>
           <span id="t1Stats" class="mini-stat"></span>
         </div>
         <div id="addArcRow" class="card" style="display:none">
@@ -1409,11 +1688,11 @@ html, body {
               <input id="arcPistas" type="number">
             </div>
             <div class="form-field">
-              <label for="arcVel">Vel (km/h)</label>
+              <label for="arcVel">Velocidad (km/h)</label>
               <input id="arcVel" type="number">
             </div>
             <div class="form-field">
-              <label for="arcLong">Long (m)</label>
+              <label for="arcLong">Longitud (m)</label>
               <input id="arcLong" type="number">
             </div>
           </div>
@@ -1434,10 +1713,10 @@ html, body {
       </section>
 
       <section class="panel-section" id="t3Section" style="display:none">
-        <p class="section-title">Semaforo (tipo 3) - etapas</p>
+        <p class="section-title">Sem&aacute;foro (tipo 3) - etapas</p>
         <div class="form-grid">
           <div class="form-field">
-            <label for="t3Dur">Duracion (s)
+            <label for="t3Dur">Duraci&oacute;n (s)</label>
             <input id="t3Dur" type="number">
           </div>
           <div class="form-field">
@@ -1470,7 +1749,7 @@ html, body {
         </div>
       </section>
 
-      <section class="panel-section">
+      <section class="panel-section module-section" id="t3ArcSection" data-module="t3">
         <p class="section-title">Tarjeta 3 - enlaces externos</p>
         <div class="toggle-row">
           <span id="t3Stats" class="mini-stat" style="flex:1 1 auto"></span>
@@ -1493,7 +1772,7 @@ html, body {
             <label class="checkbox-label"><input type="checkbox" id="t3NodeBZone"> Zona B</label>
           </div>
           <div class="form-field">
-            <label for="t3FreeFlow">Libre</label>
+            <label for="t3FreeFlow">Tiempo libre</label>
             <input id="t3FreeFlow" type="number" step="any">
           </div>
           <div class="form-field">
@@ -1505,7 +1784,7 @@ html, body {
             <input id="t3CapTime" type="number" step="any">
           </div>
           <div class="form-field">
-            <label for="t3Direction">Direccion</label>
+            <label for="t3Direction">Direcci&oacute;n</label>
             <select id="t3Direction">
               <option value="">(auto)</option>
               <option value="1">1 Unidireccional</option>
@@ -1513,7 +1792,7 @@ html, body {
             </select>
           </div>
           <div class="form-field checkbox-label" style="margin-top:18px;">
-            <label><input type="checkbox" id="t3AsSpeed"> Tiempos son velocidad</label>
+            <label><input type="checkbox" id="t3AsSpeed"> Interpretar tiempos como velocidad</label>
           </div>
           <div class="form-field">
             <label for="t3Length">Longitud (m)</label>
@@ -1524,7 +1803,7 @@ html, body {
             <input id="t3Power" type="number" step="any">
           </div>
           <div class="form-field">
-            <label for="t3Index">Indice</label>
+            <label for="t3Index">&Iacute;ndice</label>
             <input id="t3Index" type="number">
           </div>
         </div>
@@ -1544,7 +1823,7 @@ html, body {
         </div>
       </section>
 
-      <section class="panel-section">
+      <section class="panel-section module-section" id="t6Section" data-module="t6">
 
         <p class="section-title">Tarjeta 6 - Rutas de Buses</p>
         <div class="toggle-row">
@@ -1617,7 +1896,7 @@ html, body {
       <div id="nodeLegendItems"></div>
     </div>
     <div class="measure-panel glass-panel" id="measurePanel">
-      <h4>Medicion</h4>
+      <h4>Medici&oacute;n</h4>
       <div class="measure-status" id="measureStatus">Desactivado</div>
       <div class="measure-distance" id="measureDistance">0 m</div>
       <div class="measure-actions">
@@ -1641,6 +1920,12 @@ hemisphere: "south", // 'south' | 'north'
       markers: [], // {marker, isCentroid, id}
       entryById: new Map(), // nodeId -> entry
       importedCardOrder: [], // export order inferred from imported DAT
+      importPreambleLines: [], // lines before the first imported card block
+      imported55555Order: [], // imported node/centroid order for Card 5
+      imported11111Order: [], // imported B header order for Card 1
+      imported22222ZoneOrder: [], // imported zone order for Card 2
+      imported22222NodesByZone: {}, // imported node order by zone for Card 2
+      imported22222LineSizesByZone: {}, // imported node counts per line by zone for Card 2
       t1: new Map(), // nodoBId -> datos Tarjeta 1
       activeB: null,
       t2: new Map(), // zona -> Set de nodos conectados
@@ -1649,14 +1934,18 @@ hemisphere: "south", // 'south' | 'north'
       nodeAliases: new Map(), // Mapping from duplicate node ID -> original node ID
       format: {
         c5: { idW: 8, xW: 15, yW: 15, xDec: 5, yDec: 5, leading: "  ", hasC: false },
-        c3: { style: 'header', bW: 10, aW: 10, valW: 5, bOffset: 0, aOffset: 10, dutch: false }
+        c3: { style: 'header', bW: 10, aW: 10, valW: 5, bOffset: 0, aOffset: 10 },
+        dutch: false
       },
       coordMode: 'utm', // 'utm' | 'local'
       localAnchor: { lat: DEFAULT_CENTER_LAT, lng: DEFAULT_CENTER_LON },
       localRefXY: { x: 0, y: 0 },
       localTransform: { rotation: 0, scale: 1, flipX: false, flipY: false },
       localShape: null,
-      localCommune: null
+      localCommune: null,
+      selectionMode: false,
+      selectedForInner: new Set(),
+      sourceLabel: 'Sin archivo cargado'
     };
     const HISTORY_LIMIT = 50;
     const undoStack = [];
@@ -1665,6 +1954,32 @@ hemisphere: "south", // 'south' | 'north'
 
     function clonePlain(value) {
       return value == null ? value : JSON.parse(JSON.stringify(value));
+    }
+    function getEntryLatLng(entry) {
+      if (!entry) return null;
+      if (entry.latlng && Number.isFinite(entry.latlng.lat) && Number.isFinite(entry.latlng.lng)) {
+        return entry.latlng;
+      }
+      const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+      if (!ll || !Number.isFinite(ll.lat) || !Number.isFinite(ll.lng)) return null;
+      entry.latlng = { lat: ll.lat, lng: ll.lng };
+      return entry.latlng;
+    }
+    function setEntryLatLng(entry, latlng) {
+      if (!entry || !latlng || !Number.isFinite(latlng.lat) || !Number.isFinite(latlng.lng)) return null;
+      entry.latlng = { lat: latlng.lat, lng: latlng.lng };
+      if (entry.marker && entry.marker.setLatLng) {
+        entry.marker.setLatLng(entry.latlng);
+      }
+      return entry.latlng;
+    }
+    function getEntriesBounds(entries) {
+      const pts = [];
+      for (const entry of entries || []) {
+        const ll = getEntryLatLng(entry);
+        if (ll) pts.push(ll);
+      }
+      return pts.length ? L.latLngBounds(pts) : null;
     }
     function serializeT1() {
       const out = [];
@@ -1694,7 +2009,7 @@ hemisphere: "south", // 'south' | 'north'
         activeB: state.activeB,
         format: clonePlain(state.format),
         markers: state.markers.map(entry => {
-          const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+          const ll = getEntryLatLng(entry);
           return {
             id: entry.id,
             isCentroid: !!entry.isCentroid,
@@ -1707,6 +2022,12 @@ hemisphere: "south", // 'south' | 'north'
         t3: clonePlain(state.t3),
         t6: clonePlain(state.t6),
         importedCardOrder: Array.isArray(state.importedCardOrder) ? state.importedCardOrder.slice() : [],
+        importPreambleLines: Array.isArray(state.importPreambleLines) ? state.importPreambleLines.slice() : [],
+        imported55555Order: Array.isArray(state.imported55555Order) ? state.imported55555Order.slice() : [],
+        imported11111Order: Array.isArray(state.imported11111Order) ? state.imported11111Order.slice() : [],
+        imported22222ZoneOrder: Array.isArray(state.imported22222ZoneOrder) ? state.imported22222ZoneOrder.slice() : [],
+        imported22222NodesByZone: clonePlain(state.imported22222NodesByZone || {}),
+        imported22222LineSizesByZone: clonePlain(state.imported22222LineSizesByZone || {}),
         t3TempPairs: clonePlain(t3TempPairs)
       };
     }
@@ -1720,8 +2041,13 @@ hemisphere: "south", // 'south' | 'north'
       for (const entry of state.markers) {
         if (entry && entry.marker) {
           map.removeLayer(entry.marker);
+          if (entry.marker.off) entry.marker.off();
+          entry.marker = null;
         }
       }
+      if (nodeRenderLayer) nodeRenderLayer.clearLayers();
+      if (nodeClusterLayer) nodeClusterLayer.clearLayers();
+      nodeRenderedIds.clear();
       state.markers = [];
       state.entryById = new Map();
       state.nodeAliases = new Map();
@@ -1741,13 +2067,19 @@ hemisphere: "south", // 'south' | 'north'
       state.format = snapshot.format || state.format;
       state.activeB = snapshot.activeB == null ? null : snapshot.activeB;
       state.importedCardOrder = Array.isArray(snapshot.importedCardOrder) ? snapshot.importedCardOrder.slice() : [];
+      state.importPreambleLines = Array.isArray(snapshot.importPreambleLines) ? snapshot.importPreambleLines.slice() : [];
+      state.imported55555Order = Array.isArray(snapshot.imported55555Order) ? snapshot.imported55555Order.slice() : [];
+      state.imported11111Order = Array.isArray(snapshot.imported11111Order) ? snapshot.imported11111Order.slice() : [];
+      state.imported22222ZoneOrder = Array.isArray(snapshot.imported22222ZoneOrder) ? snapshot.imported22222ZoneOrder.slice() : [];
+      state.imported22222NodesByZone = snapshot.imported22222NodesByZone || {};
+      state.imported22222LineSizesByZone = snapshot.imported22222LineSizesByZone || {};
       state.t1 = new Map();
       (snapshot.t1 || []).forEach(([key, value]) => {
         state.t1.set(key, value || { arcs: [], stages: [] });
       });
       state.t2 = new Map();
       (snapshot.t2 || []).forEach(([key, value]) => {
-        state.t2.set(key, new Set(value || []));
+        state.t2.set(key, Array.isArray(value) ? value.slice() : Array.from(value || []));
       });
       state.t3 = snapshot.t3 || { arcs: [], extras: [] };
       state.t6 = snapshot.t6 || { routes: [], modeNames: {}, hasExternal: false, blockMeta: [], defaultHeaderRaw: '66666', defaultTerminatorRaw: '99999', defaultNodeFieldWidth: 5 };
@@ -1755,7 +2087,7 @@ hemisphere: "south", // 'south' | 'north'
       if (Array.isArray(snapshot.markers)) {
         for (const item of snapshot.markers) {
           if (!item || !item.latlng) continue;
-          addEntry({ lat: item.latlng.lat, lng: item.latlng.lng }, item.isCentroid, item.id, { dataXY: item.dataXY, skipHistory: true, skipRefresh: true });
+          addEntry({ lat: item.latlng.lat, lng: item.latlng.lng }, item.isCentroid, item.id, { dataXY: item.dataXY, skipHistory: true, skipRefresh: true, skipRender: true });
         }
       }
       const utmEl = document.getElementById('utmZone');
@@ -1774,8 +2106,11 @@ hemisphere: "south", // 'south' | 'north'
         refreshSummaryStats();
         rebuildT1Layer();
       }
+      scheduleNodeRender(true);
       rebuildT2Layer();
       rebuildT3Layers();
+      rebuildT2Layer();
+      rebuildT6Layer();
       refreshT3Pairs();
       refreshT3ArcList();
       clearT3ArcForm();
@@ -1797,26 +2132,34 @@ hemisphere: "south", // 'south' | 'north'
     let t3ArcLayer = null;
     let t3ConnectorLayer = null;
     let t2Layer = null;
+    let nodeRenderLayer = null;
+    let nodeClusterLayer = null;
     let measureLayer = null;
     let measureLine = null;
     let measurePoints = [];
     let measureEnabled = false;
+    let nodeRenderScheduled = false;
+    let nodeRenderedIds = new Set();
+    const LARGE_NETWORK_THRESHOLD = 5000;
+    const ZOOM_CLUSTER_FAR = 13;
+    const ZOOM_CLUSTER_MEDIUM = 15;
+    const ZOOM_INDIVIDUAL = 16;
     const METERS_PER_DEG_LAT = 111320;
     const NODE_TYPE_DEFS = [
-      { value: 0, label: '0 Externo', fill: '#1abc9c', stroke: '#16a085' },
-      { value: 1, label: '1 Prioritario', fill: '#3498db', stroke: '#1f78c1' },
-      { value: 2, label: '2 Rotonda', fill: '#e67e22', stroke: '#d35400' },
-      { value: 3, label: '3 Semaforizado', fill: '#9b59b6', stroke: '#8e44ad' },
-      { value: 4, label: '4 Dummy', fill: '#7f8c8d', stroke: '#56636b' },
-      { value: 5, label: '5 Rotonda con U', fill: '#27ae60', stroke: '#1f8a4c' }
+      { value: 0, label: '0 Externo', fill: '#334155', stroke: '#ffffff' },
+      { value: 1, label: '1 Prioritario', fill: '#0891b2', stroke: '#ffffff' },
+      { value: 2, label: '2 Rotonda', fill: '#854d0e', stroke: '#ffffff' },
+      { value: 3, label: '3 Semaforizado', fill: '#0f62fe', stroke: '#ffffff' },
+      { value: 4, label: '4 Dummy', fill: '#475569', stroke: '#ffffff' },
+      { value: 5, label: '5 Rotonda con U', fill: '#7c3aed', stroke: '#ffffff' }
     ];
     const NODE_TYPE_LOOKUP = NODE_TYPE_DEFS.reduce((acc, def) => {
       acc[def.value] = { fill: def.fill, stroke: def.stroke };
       return acc;
     }, {});
-    const DEFAULT_NODE_STYLE = { fill: '#34495e', stroke: '#2c3e50', label: 'Nodo sin tipo' };
-    const BUFFER_NODE_STYLE = { fill: '#f39c12', stroke: '#c97c0c', label: 'Red buffer (Tarjeta 3)' };
-    const CENTROID_STYLE = { fill: '#e74c3c', stroke: '#c0392b' };
+    const DEFAULT_NODE_STYLE = { fill: '#334155', stroke: '#ffffff', label: 'Nodo sin tipo' };
+    const BUFFER_NODE_STYLE = { fill: '#b45309', stroke: '#ffffff', label: 'Red buffer (Tarjeta 3)' };
+    const CENTROID_STYLE = { fill: '#7c3aed', stroke: '#ffffff' };
     const CUSTOM_PROJ_DEFS = {
       'EPSG:5367': '+proj=utm +zone=18 +south +ellps=GRS80 +units=m +no_defs',
       'EPSG:5361': '+proj=utm +zone=19 +south +ellps=GRS80 +units=m +no_defs',
@@ -2098,12 +2441,13 @@ hemisphere: "south", // 'south' | 'north'
       for (const e of state.markers) {
         if (!e || !e.dataXY) continue;
         const latlng = dataXYToLatLng(e.dataXY.x, e.dataXY.y);
-        e.marker.setLatLng(latlng);
+        setEntryLatLng(e, latlng);
         any = true;
       }
       if (any) {
-        const group = L.featureGroup(state.markers.map(m=>m.marker));
-        map.fitBounds(group.getBounds().pad(0.15));
+        const bounds = getEntriesBounds(state.markers);
+        if (bounds) map.fitBounds(bounds.pad(0.15));
+        scheduleNodeRender(true);
       }
     }
 
@@ -2113,8 +2457,7 @@ hemisphere: "south", // 'south' | 'north'
       let sumLng = 0;
       let count = 0;
       for (const e of state.markers) {
-        if (!e || !e.marker || !e.marker.getLatLng) continue;
-        const ll = e.marker.getLatLng();
+        const ll = getEntryLatLng(e);
         if (!ll || !Number.isFinite(ll.lat) || !Number.isFinite(ll.lng)) continue;
         sumLat += ll.lat;
         sumLng += ll.lng;
@@ -2412,6 +2755,391 @@ hemisphere: "south", // 'south' | 'north'
       return related;
     }
 
+    function getIncomingArcVector(nodeB, nodeA){
+      const entryB = findMarkerById(nodeB);
+      const entryA = findMarkerById(nodeA);
+      if (!entryB || !entryA) return null;
+      const posB = ensureEntryXY(entryB) || getEntryLatLng(entryB);
+      const posA = ensureEntryXY(entryA) || getEntryLatLng(entryA);
+      if (!posB || !posA) return null;
+      if (posB.x !== undefined && posA.x !== undefined) {
+        return { dx: posA.x - posB.x, dy: posA.y - posB.y };
+      }
+      if (posB.lng !== undefined && posA.lng !== undefined) {
+        return { dx: posA.lng - posB.lng, dy: posA.lat - posB.lat };
+      }
+      return null;
+    }
+
+    function calculateIncomingArcAngleNorthCCW(nodeB, nodeA){
+      const vector = getIncomingArcVector(nodeB, nodeA);
+      if (!vector) return null;
+      let angle = Math.atan2(-vector.dx, vector.dy);
+      if (angle < 0) angle += 2 * Math.PI;
+      return angle;
+    }
+
+    function sortIncomingArcsNorthCCW(nodeB, arcs){
+      const list = Array.isArray(arcs) ? arcs.slice() : [];
+      const decorated = list.map((arc, index) => ({
+        arc,
+        index,
+        angle: arc && Number.isFinite(arc.nodeA) ? calculateIncomingArcAngleNorthCCW(nodeB, arc.nodeA) : null
+      }));
+      decorated.sort((a, b) => {
+        const aMissing = a.angle == null;
+        const bMissing = b.angle == null;
+        if (aMissing && bMissing) return a.index - b.index;
+        if (aMissing) return 1;
+        if (bMissing) return -1;
+        if (a.angle !== b.angle) return a.angle - b.angle;
+        const aNode = a.arc && Number.isFinite(a.arc.nodeA) ? a.arc.nodeA : Number.POSITIVE_INFINITY;
+        const bNode = b.arc && Number.isFinite(b.arc.nodeA) ? b.arc.nodeA : Number.POSITIVE_INFINITY;
+        if (aNode !== bNode) return aNode - bNode;
+        return a.index - b.index;
+      });
+      return decorated.map(item => item.arc);
+    }
+
+    function getOutgoingArcVector(nodeB, nodeC){
+      const entryB = findMarkerById(nodeB);
+      const entryC = findMarkerById(nodeC);
+      if (!entryB || !entryC) return null;
+      const posB = ensureEntryXY(entryB) || getEntryLatLng(entryB);
+      const posC = ensureEntryXY(entryC) || getEntryLatLng(entryC);
+      if (!posB || !posC) return null;
+      if (posB.x !== undefined && posC.x !== undefined) {
+        return { dx: posC.x - posB.x, dy: posC.y - posB.y };
+      }
+      if (posB.lng !== undefined && posC.lng !== undefined) {
+        return { dx: posC.lng - posB.lng, dy: posC.lat - posB.lat };
+      }
+      return null;
+    }
+
+    function signedTurnAngleDegrees(nodeA, nodeB, nodeC){
+      const incoming = getIncomingArcVector(nodeB, nodeA);
+      const outgoing = getOutgoingArcVector(nodeB, nodeC);
+      if (!incoming || !outgoing) return null;
+      const inDx = -incoming.dx;
+      const inDy = -incoming.dy;
+      const outDx = outgoing.dx;
+      const outDy = outgoing.dy;
+      const cross = inDx * outDy - inDy * outDx;
+      const dot = inDx * outDx + inDy * outDy;
+      return Math.atan2(cross, dot) * 180 / Math.PI;
+    }
+
+    function classifyTurnType(nodeA, nodeB, nodeC){
+      if (nodeA === nodeC) return 'uturn';
+      const angle = signedTurnAngleDegrees(nodeA, nodeB, nodeC);
+      if (angle == null) return 'straight';
+      if (Math.abs(angle) >= 150) return 'uturn';
+      if (angle <= -45) return 'right';
+      if (angle >= 45) return 'left';
+      return 'straight';
+    }
+
+    function saturationProfileFromCapacity(capacity){
+      const cap = Number(capacity);
+      if (!Number.isFinite(cap)) return { flow: '700G', lanes: 1, baseFlow: 700, ceded: true };
+      if (cap <= 900) return { flow: '700G', lanes: 1, baseFlow: 700, ceded: true };
+      if (cap <= 1300) return { flow: '1200G', lanes: 1, baseFlow: 1200, ceded: true };
+      if (cap <= 1600) return { flow: '1400', lanes: 1, baseFlow: 1400, ceded: false };
+      if (cap <= 2200) return { flow: '1800', lanes: 1, baseFlow: 1800, ceded: false };
+      if (cap <= 3200) return { flow: '2800', lanes: 2, baseFlow: 2800, ceded: false };
+      if (cap <= 4000) return { flow: '3600', lanes: 2, baseFlow: 3600, ceded: false };
+      if (cap <= 5000) return { flow: '4200', lanes: 3, baseFlow: 4200, ceded: false };
+      if (cap <= 5800) return { flow: '5400', lanes: 3, baseFlow: 5400, ceded: false };
+      if (cap <= 7600) return { flow: '7200', lanes: 4, baseFlow: 7200, ceded: false };
+      const lanes = Math.max(4, Math.ceil(cap / 1800));
+      return { flow: String(lanes * 1800), lanes, baseFlow: lanes * 1800, ceded: false };
+    }
+
+    function laneCountFromCapacity(capacity){
+      const profile = saturationProfileFromCapacity(capacity);
+      return Math.max(1, profile.lanes || 1);
+    }
+
+    function laneRangeForTurn(turnType, lanes){
+      const laneCount = Math.max(1, Number.isFinite(lanes) ? Math.round(lanes) : 1);
+      if (laneCount === 1) return { ini: 1, fin: 1 };
+      if (turnType === 'right') return { ini: 1, fin: 1 };
+      if (turnType === 'left') return { ini: laneCount, fin: laneCount };
+      return { ini: 1, fin: laneCount };
+    }
+
+    function movementFlowForTurn(isMajorArm, turnType, lanes){
+      const laneCount = Math.max(1, Number.isFinite(lanes) ? Math.round(lanes) : 1);
+      if (!isMajorArm) {
+        if (turnType === 'left') return '600G';
+        if (turnType === 'right') return '700G';
+        return '800G';
+      }
+      if (turnType === 'left') return '1440';
+      if (turnType === 'right') return '1550';
+      if (laneCount === 1) return '1800';
+      return String(laneCount * 1800);
+    }
+
+    function armScoreAtNode(nodeB, incomingArc, outgoingArcs){
+      if (!incomingArc) return Number.NEGATIVE_INFINITY;
+      const incomingCap = Number(incomingArc.capacity);
+      let best = { score: Number.NEGATIVE_INFINITY };
+      outgoingArcs.forEach(outArc => {
+        if (!outArc || outArc.nodeB === incomingArc.nodeA) return;
+        const outgoingCap = Number(outArc.capacity);
+        const angle = signedTurnAngleDegrees(incomingArc.nodeA, nodeB, outArc.nodeB);
+        const absAngle = angle == null ? 180 : Math.abs(angle);
+        const alignmentBonus = absAngle <= 25 ? 600 : (absAngle <= 45 ? 300 : 0);
+        const score = (Number.isFinite(incomingCap) ? incomingCap : 0) + (Number.isFinite(outgoingCap) ? outgoingCap : 0) + alignmentBonus;
+        if (score > best.score) best = { score, angle: absAngle, nodeC: outArc.nodeB };
+      });
+      return best.score;
+    }
+
+    function majorIncomingArmsAtNode(nodeB, incomingArcs, outgoingArcs){
+      const decorated = (incomingArcs || []).map(arc => ({
+        arc,
+        score: armScoreAtNode(nodeB, arc, outgoingArcs),
+        angle: calculateIncomingArcAngleNorthCCW(nodeB, arc.nodeA)
+      })).filter(item => item.arc && Number.isFinite(item.arc.nodeA));
+      if (decorated.length <= 2) return new Set(decorated.map(item => item.arc.nodeA));
+      decorated.sort((a, b) => b.score - a.score);
+      let bestPair = null;
+      for (let i = 0; i < decorated.length; i++) {
+        for (let j = i + 1; j < decorated.length; j++) {
+          const ai = decorated[i].angle;
+          const aj = decorated[j].angle;
+          if (!Number.isFinite(ai) || !Number.isFinite(aj)) continue;
+          let diff = Math.abs(ai - aj) * 180 / Math.PI;
+          if (diff > 180) diff = 360 - diff;
+          if (diff < 120) continue;
+          const pairScore = decorated[i].score + decorated[j].score;
+          if (!bestPair || pairScore > bestPair.score) {
+            bestPair = { score: pairScore, ids: [decorated[i].arc.nodeA, decorated[j].arc.nodeA] };
+          }
+        }
+      }
+      if (bestPair) return new Set(bestPair.ids);
+      return new Set(decorated.slice(0, 2).map(item => item.arc.nodeA));
+    }
+
+    function buildTurnMovementsForNode(nodeB, incomingArcs, outgoingArcs){
+      const majorArms = majorIncomingArmsAtNode(nodeB, incomingArcs, outgoingArcs);
+      const byIncoming = new Map();
+      (incomingArcs || []).forEach(inArc => {
+        if (!inArc || !Number.isFinite(inArc.nodeA)) return;
+        const moves = [];
+        (outgoingArcs || []).forEach(outArc => {
+          if (!outArc || !Number.isFinite(outArc.nodeB)) return;
+          const nodeC = outArc.nodeB;
+          const turnType = classifyTurnType(inArc.nodeA, nodeB, nodeC);
+          if (turnType === 'uturn') return;
+          const laneCount = laneCountFromCapacity(inArc.capacity);
+          const lanes = laneRangeForTurn(turnType, laneCount);
+          moves.push({
+            sortOrder: turnType === 'right' ? 0 : (turnType === 'straight' ? 1 : 2),
+            flujo: movementFlowForTurn(majorArms.has(inArc.nodeA), turnType, laneCount),
+            ini: lanes.ini,
+            fin: lanes.fin
+          });
+        });
+        moves.sort((a, b) => a.sortOrder - b.sortOrder);
+        byIncoming.set(inArc.nodeA, moves.map(({ flujo, ini, fin }) => ({ flujo, ini, fin })));
+      });
+      return byIncoming;
+    }
+
+    function resolveNodeId(id){
+      let current = id;
+      const seen = new Set();
+      while (state.nodeAliases && state.nodeAliases.has(current) && !seen.has(current)) {
+        seen.add(current);
+        current = state.nodeAliases.get(current);
+      }
+      return current;
+    }
+
+    function collectNetworkNodeIds(){
+      const ids = new Set();
+      if (Array.isArray(state.markers)) {
+        state.markers.forEach(entry => {
+          if (entry && Number.isFinite(entry.id)) ids.add(entry.id);
+        });
+      }
+      if (state.t1 instanceof Map) {
+        state.t1.forEach((data, nodeB) => {
+          if (Number.isFinite(nodeB)) ids.add(nodeB);
+          if (data && Array.isArray(data.arcs)) {
+            data.arcs.forEach(arc => {
+              if (arc && Number.isFinite(arc.nodeA)) ids.add(arc.nodeA);
+            });
+          }
+          if (data && Array.isArray(data.stages)) {
+            data.stages.forEach(stage => {
+              if (!stage || !Array.isArray(stage.pairs)) return;
+              stage.pairs.forEach(pair => {
+                if (pair && Number.isFinite(pair.A)) ids.add(pair.A);
+                if (pair && Number.isFinite(pair.C)) ids.add(pair.C);
+              });
+            });
+          }
+        });
+      }
+      if (state.t2 instanceof Map) {
+        state.t2.forEach(nodeSet => {
+          const nodes = Array.isArray(nodeSet) ? nodeSet : Array.from(nodeSet || []);
+          nodes.forEach(id => {
+            if (Number.isFinite(id)) ids.add(id);
+          });
+        });
+      }
+      ensureT3State();
+      state.t3.arcs.forEach(arc => {
+        if (!arc) return;
+        if (!arc.zoneA && Number.isFinite(arc.nodeA)) ids.add(arc.nodeA);
+        if (!arc.zoneB && Number.isFinite(arc.nodeB)) ids.add(arc.nodeB);
+      });
+      ensureT6State();
+      state.t6.routes.forEach(route => {
+        const nodes = route && Array.isArray(route.nodes) ? route.nodes : [];
+        nodes.forEach(id => {
+          if (Number.isFinite(id)) ids.add(id);
+        });
+      });
+      return ids;
+    }
+
+    function findAvailableFiveDigitNodeId(oldId){
+      const numericId = parseInt(oldId, 10);
+      if (!Number.isFinite(numericId)) return null;
+      if (numericId >= 0 && numericId <= 99999) return numericId;
+      const used = collectNetworkNodeIds();
+      used.delete(numericId);
+      const preferred = Math.abs(numericId) % 100000;
+      const start = preferred > 0 ? preferred : 1;
+      for (let offset = 0; offset < 99999; offset++) {
+        const candidate = ((start - 1 + offset) % 99999) + 1;
+        if (!used.has(candidate)) return candidate;
+      }
+      return null;
+    }
+
+    function ensureFiveDigitNodeId(oldId){
+      const resolvedId = resolveNodeId(oldId);
+      if (!Number.isFinite(resolvedId)) {
+        throw new Error(`ID de nodo invalido: ${oldId}.`);
+      }
+      if (String(resolvedId).length <= 5) return { id: resolvedId, renamed: false };
+      const newId = findAvailableFiveDigitNodeId(resolvedId);
+      if (!Number.isFinite(newId)) {
+        throw new Error(`No se pudo asignar un ID de 5 digitos libre para el nodo ${resolvedId}.`);
+      }
+      return { id: renameNodeAcrossNetwork(resolvedId, newId), renamed: true };
+    }
+
+    function replaceImportedOrderId(list, oldId, newId){
+      if (!Array.isArray(list)) return list;
+      return list.map(id => id === oldId ? newId : id);
+    }
+
+    function renameNodeAcrossNetwork(oldId, newId){
+      if (!Number.isFinite(oldId) || !Number.isFinite(newId) || oldId === newId) return newId;
+      if (state.entryById && state.entryById.has(newId) && resolveNodeId(newId) !== oldId) {
+        throw new Error(`El ID ${newId} ya existe en la red.`);
+      }
+
+      const entry = findMarkerById(oldId);
+      if (entry) {
+        if (state.entryById.get(entry.id) === entry) state.entryById.delete(entry.id);
+        entry.id = newId;
+        state.entryById.set(newId, entry);
+      }
+
+      if (state.t1 instanceof Map) {
+        const nextT1 = new Map();
+        state.t1.forEach((data, key) => {
+          const nextKey = key === oldId ? newId : key;
+          const nextData = data || { arcs: [], stages: [] };
+          if (Array.isArray(nextData.arcs)) {
+            nextData.arcs = nextData.arcs.map(arc => {
+              if (!arc) return arc;
+              return { ...arc, nodeA: arc.nodeA === oldId ? newId : arc.nodeA };
+            });
+          }
+          if (Array.isArray(nextData.stages)) {
+            nextData.stages = nextData.stages.map(stage => {
+              if (!stage || !Array.isArray(stage.pairs)) return stage;
+              return {
+                ...stage,
+                pairs: stage.pairs.map(pair => {
+                  if (!pair) return pair;
+                  return {
+                    ...pair,
+                    A: pair.A === oldId ? newId : pair.A,
+                    C: pair.C === oldId ? newId : pair.C
+                  };
+                })
+              };
+            });
+          }
+          nextT1.set(nextKey, nextData);
+        });
+        state.t1 = nextT1;
+      }
+
+      if (state.t2 instanceof Map) {
+        state.t2.forEach((nodeSet, zone) => {
+          const nodes = Array.isArray(nodeSet) ? nodeSet.slice() : Array.from(nodeSet || []);
+          const replaced = nodes.map(id => id === oldId ? newId : id);
+          state.t2.set(zone, replaced);
+        });
+      }
+
+      ensureT3State();
+      state.t3.arcs = state.t3.arcs.map(arc => {
+        if (!arc) return arc;
+        return {
+          ...arc,
+          nodeA: (!arc.zoneA && arc.nodeA === oldId) ? newId : arc.nodeA,
+          nodeB: (!arc.zoneB && arc.nodeB === oldId) ? newId : arc.nodeB
+        };
+      });
+
+      ensureT6State();
+      state.t6.routes = state.t6.routes.map(route => {
+        if (!route || !Array.isArray(route.nodes)) return route;
+        return {
+          ...route,
+          nodes: route.nodes.map(id => id === oldId ? newId : id)
+        };
+      });
+
+      state.imported55555Order = replaceImportedOrderId(state.imported55555Order, oldId, newId);
+      state.imported11111Order = replaceImportedOrderId(state.imported11111Order, oldId, newId);
+      if (state.imported22222NodesByZone && typeof state.imported22222NodesByZone === 'object') {
+        Object.keys(state.imported22222NodesByZone).forEach(zone => {
+          state.imported22222NodesByZone[zone] = replaceImportedOrderId(state.imported22222NodesByZone[zone], oldId, newId);
+        });
+      }
+
+      if (state.activeB === oldId) state.activeB = newId;
+      if (state.selectedForInner && state.selectedForInner.has(oldId)) {
+        state.selectedForInner.delete(oldId);
+        state.selectedForInner.add(newId);
+      }
+
+      if (!(state.nodeAliases instanceof Map)) state.nodeAliases = new Map();
+      state.nodeAliases.set(oldId, newId);
+      for (const [alias, target] of Array.from(state.nodeAliases.entries())) {
+        if (target === oldId) state.nodeAliases.set(alias, newId);
+      }
+      state.nodeAliases.delete(newId);
+
+      return newId;
+    }
+
     function makeIcon(entry){
       const size = entry && entry.isCentroid ? 10 : 9;
       let style = entry && entry.isCentroid ? CENTROID_STYLE : DEFAULT_NODE_STYLE;
@@ -2427,8 +3155,12 @@ hemisphere: "south", // 'south' | 'north'
 
     function refreshNodeColors(){
       for (const entry of state.markers){
-        if (entry.marker) entry.marker.setIcon(makeIcon(entry));
+        if (entry.marker) {
+          entry.marker.setIcon(makeIcon(entry));
+          entry._visualKey = visualKeyForEntry(entry);
+        }
       }
+      scheduleNodeRender();
     }
 
     function collectUsedNodeTypes(){
@@ -2477,7 +3209,7 @@ hemisphere: "south", // 'south' | 'north'
         appendLegendRow(def.label, def.fill, def.stroke);
       });
       if (hasBuffer){
-        appendLegendRow('Red buffer (Tarjeta 3)', '#f39c12', '#c97c0c');
+        appendLegendRow('Red buffer (Tarjeta 3)', '#b45309', '#ffffff');
       }
     }
 
@@ -2491,15 +3223,15 @@ hemisphere: "south", // 'south' | 'north'
        const yStr = y.toFixed(fmt.yDec);
        
        let line = "";
+       const idWidth = isCentroid ? Math.max(1, fmt.idW - 1) : fmt.idW;
        if (isCentroid) line += "C";
-       else if (fmt.hasC) line += " "; // Si el formato detectado usa C, los nodos llevan un espacio inicial
        
        // Intentar replicar el padding detectado
-       line += idStr.padStart(fmt.idW, ' ');
+       line += idStr.padStart(idWidth, ' ');
        line += xStr.padStart(fmt.xW, ' ');
        line += yStr.padStart(fmt.yW, ' ');
        return line;
-     }
+      }
 
     // ===== Tarjeta 1 helpers =====
     function pad(numOrStr, w=5){
@@ -2520,10 +3252,9 @@ hemisphere: "south", // 'south' | 'north'
       return parts.join('');
     }
     function fmtArcLine(B, arc){
-       const fmt = state.format.c3;
        // Nodo A en su posición detectada
        const arr = Array(80).fill(' ');
-       function put(start, end, val, opts={}){
+       function put(start, end, val){
          let s = val==null? '': String(val);
          const w = end - start + 1;
          s = s.padStart(w, ' ');
@@ -2531,12 +3262,11 @@ hemisphere: "south", // 'south' | 'north'
          for (let i=0;i<s.length;i++) arr[start-1+i] = s[i];
        }
 
-       put(fmt.aOffset + 1, fmt.aOffset + fmt.aW, arc.nodeA, {});
+       put(6, 10, arc && arc.nodeA);
        // Valores numéricos (pistas, vel, long) suelen ir en bloques de valW (5 o 10)
-       const vW = fmt.valW;
-       put(fmt.aOffset + fmt.aW + 1, fmt.aOffset + fmt.aW + vW, arc.pistas, {});
-       put(fmt.aOffset + fmt.aW + vW + 1, fmt.aOffset + fmt.aW + 2*vW, arc.vel, {});
-       put(fmt.aOffset + fmt.aW + 2*vW + 1, fmt.aOffset + fmt.aW + 3*vW, arc.long, {});
+       put(12, 15, arc && arc.pistas);
+       put(16, 20, arc && arc.vel);
+       put(21, 25, arc && arc.long);
 
       const v = arc.virajes||[];
       function parseFlujoMark(f){
@@ -2563,7 +3293,6 @@ hemisphere: "south", // 'south' | 'north'
        const lines = [];
        const nodes = r.nodes || [];
        const width = nodeFieldWidth === 10 ? 10 : 5;
-       const routeFormat = r.routeFormat || (width === 10 ? 'compact' : 'classic');
        const nodesPerLine = Math.max(1, Math.floor(65 / width));
        
        // Header line
@@ -2583,7 +3312,7 @@ hemisphere: "south", // 'south' | 'north'
        }
        
        put(2, 5, r.name, false);
-       put(6, 6, routeFormat === 'classic' && r.reversible ? 'T' : ' ', false);
+       put(6, 6, r.reversible ? 'T' : ' ', false);
        put(7, 10, r.freq);
        put(11, 15, nodes.length);
        
@@ -2611,7 +3340,11 @@ hemisphere: "south", // 'south' | 'north'
     function build11111Block(){
       if (!(state.t1 && state.t1.size)) return [];
       const lines = ['11111'];
-      const Bs = Array.from(state.t1.keys()).sort((a,b)=>a-b);
+      const Bs = orderByImportedKeys(
+        Array.from(state.t1.keys()),
+        Array.isArray(state.imported11111Order) ? state.imported11111Order : [],
+        (a, b) => a - b
+      );
       for (const B of Bs){
         lines.push(fmtHeaderLine(B));
         const arcs = (state.t1.get(B).arcs)||[];
@@ -2633,8 +3366,11 @@ hemisphere: "south", // 'south' | 'north'
     function build22222Block(){
       if (!(state.t2 && state.t2.size)) return [];
       const lines = ['22222'];
-      const zones = Array.from(state.t2.keys()).sort((a,b)=>a-b);
-      const maxNodesPerLine = 10;
+      const zones = orderByImportedKeys(
+        Array.from(state.t2.keys()),
+        Array.isArray(state.imported22222ZoneOrder) ? state.imported22222ZoneOrder : [],
+        (a, b) => a - b
+      );
       function putCols(arr, start, end, val){
         let s = val == null ? '' : String(val);
         const w = end - start + 1;
@@ -2644,12 +3380,31 @@ hemisphere: "south", // 'south' | 'north'
       }
       for (const z of zones){
         const nodeSet = state.t2.get(z);
-        const nodes = Array.isArray(nodeSet) ? nodeSet : Array.from(nodeSet || []);
-        nodes.sort((a,b)=>a-b);
+        const rawNodes = Array.isArray(nodeSet) ? nodeSet.slice() : Array.from(nodeSet || []);
+        const importedNodes = state.imported22222NodesByZone && Array.isArray(state.imported22222NodesByZone[z])
+          ? state.imported22222NodesByZone[z]
+          : [];
+        const nodes = Array.isArray(nodeSet)
+          ? rawNodes
+          : orderByImportedKeys(rawNodes, importedNodes, (a, b) => a - b);
         if (!nodes.length) continue;
-        for (let i=0;i<nodes.length;i+=maxNodesPerLine){
-          const slice = nodes.slice(i, i+maxNodesPerLine);
-          const width = 5 + maxNodesPerLine * 5;
+        const importedLineSizes = state.imported22222LineSizesByZone && Array.isArray(state.imported22222LineSizesByZone[z])
+          ? state.imported22222LineSizesByZone[z].filter(n => Number.isFinite(n) && n > 0)
+          : [];
+        const lineSlices = [];
+        if (importedLineSizes.length) {
+          let cursor = 0;
+          importedLineSizes.forEach(size => {
+            if (cursor >= nodes.length) return;
+            lineSlices.push(nodes.slice(cursor, cursor + size));
+            cursor += size;
+          });
+          if (cursor < nodes.length) lineSlices.push(nodes.slice(cursor));
+        } else {
+          lineSlices.push(nodes.slice());
+        }
+        for (const slice of lineSlices){
+          const width = 5 + slice.length * 5;
           const arr = Array(width).fill(' ');
           putCols(arr, 1, 5, z);
           slice.forEach((nodeId, idx) => {
@@ -2666,23 +3421,7 @@ hemisphere: "south", // 'south' | 'north'
 
     function formatT3NodeValue(id, isZone){
       if (id == null) return '';
-      const fmt = state.format.c3 || {};
-      if (fmt.dutch) return String(id);
       return isZone ? `${id}C` : String(id);
-    }
-
-    function putT3Node(arr, valueStart, valueWidth, id, isZone, markerCol=null){
-      if (id == null) return;
-      if (markerCol != null && isZone && markerCol >= 1 && markerCol <= arr.length) {
-        arr[markerCol - 1] = 'C';
-      }
-      let s = String(id);
-      s = s.padStart(valueWidth, ' ');
-      if (s.length > valueWidth) s = s.slice(-valueWidth);
-      for (let k = 0; k < s.length; k++) {
-        const idx = valueStart - 1 + k;
-        if (idx >= 0 && idx < arr.length) arr[idx] = s[k];
-      }
     }
 
     function buildT3ArcLine(arc, includeB){
@@ -2698,24 +3437,40 @@ hemisphere: "south", // 'south' | 'north'
         if (s.length > w) s = alignRight ? s.slice(-w) : s.slice(0, w);
         for (let k=0; k<s.length; k++) arr[start-1+k] = s[k];
       }
-      if (fmt.dutch) {
-        putT3Node(arr, 2, 9, arc.nodeA, arc.zoneA, 1);
-        if (includeB) putT3Node(arr, 12, 9, arc.nodeB, arc.zoneB, 11);
+      if (state.format.dutch) {
+        if (includeB) {
+          put(1, 1, arc.zoneA ? 'C' : '');
+          put(2, 10, arc.nodeA);
+          put(11, 11, arc.zoneB ? 'C' : '');
+          put(12, 20, arc.nodeB);
+        } else {
+          put(11, 11, arc.zoneB ? 'C' : '');
+          put(12, 20, arc.nodeB);
+        }
+        put(21, 25, arc.freeFlow);
+        put(26, 30, arc.capacityTime);
+        put(31, 35, arc.capacity);
+        put(38, 38, arc.direction);
+        put(39, 39, arc.asSpeed ? 'S' : '');
+        put(41, 45, arc.length);
+        put(46, 50, arc.power);
+        put(53, 55, arc.index);
+        if (labelText) put(56, arr.length, labelText, false);
       } else {
         if (includeB) {
-          put((fmt.bOffset || 0) + 1, (fmt.bOffset || 0) + (fmt.bW || 10), formatT3NodeValue(arc.nodeB, arc.zoneB));
+          put((fmt.bOffset || 0) + 1, (fmt.bOffset || 0) + (fmt.bW || 10), formatT3NodeValue(arc.nodeA, arc.zoneA));
         }
-        put((fmt.aOffset || 10) + 1, (fmt.aOffset || 10) + (fmt.aW || 10), formatT3NodeValue(arc.nodeA, arc.zoneA));
+        put((fmt.aOffset || 10) + 1, (fmt.aOffset || 10) + (fmt.aW || 10), formatT3NodeValue(arc.nodeB, arc.zoneB));
+        put(26, 30, arc.freeFlow);
+        put(31, 35, arc.capacityTime);
+        put(36, 40, arc.capacity);
+        put(41, 41, arc.direction);
+        put(42, 42, arc.asSpeed ? 'S' : '');
+        put(46, 50, arc.length);
+        put(51, 55, arc.power);
+        put(56, 60, arc.index);
+        if (labelText) put(61, arr.length, labelText, false);
       }
-      put(26, 30, arc.freeFlow);
-      put(31, 35, arc.capacityTime);
-      put(36, 40, arc.capacity);
-      put(41, 41, arc.direction);
-      put(42, 42, arc.asSpeed ? 'S' : '');
-      put(46, 50, arc.length);
-      put(51, 55, arc.power);
-      put(56, 60, arc.index);
-      if (labelText) put(61, arr.length, labelText, false);
       return arr.join('').replace(/\s+$/,'');
     }
 
@@ -2729,8 +3484,12 @@ hemisphere: "south", // 'south' | 'north'
         if (s.length > w) s = s.slice(-w);
         for (let k=0; k<s.length; k++) arr[start-1+k] = s[k];
       }
-      if (fmt.dutch) putT3Node(arr, 2, 9, arc.nodeB, arc.zoneB, 1);
-      else put((fmt.bOffset || 0) + 1, (fmt.bOffset || 0) + (fmt.bW || 10), formatT3NodeValue(arc.nodeB, arc.zoneB));
+      if (state.format.dutch) {
+        put(11, 11, arc.zoneA ? 'C' : '');
+        put(12, 20, arc.nodeA);
+      } else {
+        put((fmt.bOffset || 0) + 1, (fmt.bOffset || 0) + (fmt.bW || 10), formatT3NodeValue(arc.nodeA, arc.zoneA));
+      }
       return arr.join('').replace(/\s+$/,'');
     }
 
@@ -2746,7 +3505,7 @@ hemisphere: "south", // 'south' | 'north'
         } else {
           let lastKey = null;
           state.t3.arcs.forEach(arc => {
-            const key = `${arc.zoneB ? 'C' : 'N'}:${arc.nodeB}`;
+            const key = `${arc.zoneA ? 'C' : 'N'}:${arc.nodeA}`;
             if (key !== lastKey) {
               lines.push(buildT3HeaderLine(arc));
               lastKey = key;
@@ -2798,7 +3557,8 @@ hemisphere: "south", // 'south' | 'north'
         };
         lines.push(meta.headerRaw || '66666');
         for (const r of blockRoutes) {
-          const rLines = fmtCard6Route(r, r.nodeFieldWidth || meta.nodeFieldWidth || state.t6.defaultNodeFieldWidth || 5);
+          const w6 = r.nodeFieldWidth || meta.nodeFieldWidth || state.t6.defaultNodeFieldWidth || 5;
+          const rLines = fmtCard6Route(r, w6);
           rLines.forEach(L => lines.push(L));
         }
         lines.push(meta.terminatorRaw || state.t6.defaultTerminatorRaw || '99999');
@@ -2809,7 +3569,17 @@ hemisphere: "south", // 'south' | 'north'
     function build55555Block(){
       if (!(Array.isArray(state.markers) && state.markers.length)) return [];
       const lines = ['55555'];
-      for (const e of state.markers) {
+      const orderedMarkers = orderByImportedValues(
+        state.markers,
+        entry => entry && entry.id,
+        Array.isArray(state.imported55555Order) ? state.imported55555Order : [],
+        (a, b) => {
+          const centroidDelta = Number(!!b?.isCentroid) - Number(!!a?.isCentroid);
+          if (centroidDelta !== 0) return centroidDelta;
+          return (a?.id ?? 0) - (b?.id ?? 0);
+        }
+      );
+      for (const e of orderedMarkers) {
         const xy = ensureEntryXY(e);
         const x = xy && Number.isFinite(xy.x) ? xy.x : 0;
         const y = xy && Number.isFinite(xy.y) ? xy.y : 0;
@@ -2841,24 +3611,51 @@ hemisphere: "south", // 'south' | 'north'
     }
 
     function exportCardOrder(){
-      const defaultOrder = ['55555', '11111', '22222', '33333', '66666'];
+      const defaultOrder = ['11111', '22222', '33333', '55555', '66666'];
       const present = new Set(availableCardCodes());
-      const order = [];
-      const seen = new Set();
       const imported = Array.isArray(state.importedCardOrder) ? state.importedCardOrder : [];
+      const canonicalIndex = new Map(defaultOrder.map((code, idx) => [code, idx]));
+      const orderSet = new Set();
       for (const code of imported) {
-        if (present.has(code) && !seen.has(code)) {
-          order.push(code);
-          seen.add(code);
-        }
+        if (present.has(code)) orderSet.add(code);
       }
       for (const code of defaultOrder) {
-        if (present.has(code) && !seen.has(code)) {
-          order.push(code);
-          seen.add(code);
-        }
+        if (present.has(code)) orderSet.add(code);
       }
-      return order;
+      return Array.from(orderSet).sort((a, b) => {
+        const ai = canonicalIndex.has(a) ? canonicalIndex.get(a) : Number.POSITIVE_INFINITY;
+        const bi = canonicalIndex.has(b) ? canonicalIndex.get(b) : Number.POSITIVE_INFINITY;
+        if (ai !== bi) return ai - bi;
+        return String(a).localeCompare(String(b));
+      });
+    }
+
+    function orderByImportedKeys(values, importedOrder, fallbackCompare){
+      const importedIndex = new Map();
+      (Array.isArray(importedOrder) ? importedOrder : []).forEach((key, idx) => {
+        if (!importedIndex.has(key)) importedIndex.set(key, idx);
+      });
+      return values.slice().sort((a, b) => {
+        const ai = importedIndex.has(a) ? importedIndex.get(a) : Number.POSITIVE_INFINITY;
+        const bi = importedIndex.has(b) ? importedIndex.get(b) : Number.POSITIVE_INFINITY;
+        if (ai !== bi) return ai - bi;
+        return typeof fallbackCompare === 'function' ? fallbackCompare(a, b) : 0;
+      });
+    }
+
+    function orderByImportedValues(values, keyFn, importedOrder, fallbackCompare){
+      const importedIndex = new Map();
+      (Array.isArray(importedOrder) ? importedOrder : []).forEach((key, idx) => {
+        if (!importedIndex.has(key)) importedIndex.set(key, idx);
+      });
+      return values.slice().sort((a, b) => {
+        const aKey = keyFn(a);
+        const bKey = keyFn(b);
+        const ai = importedIndex.has(aKey) ? importedIndex.get(aKey) : Number.POSITIVE_INFINITY;
+        const bi = importedIndex.has(bKey) ? importedIndex.get(bKey) : Number.POSITIVE_INFINITY;
+        if (ai !== bi) return ai - bi;
+        return typeof fallbackCompare === 'function' ? fallbackCompare(a, b) : 0;
+      });
     }
 
     function downloadDatFile(content, filename){
@@ -2909,6 +3706,66 @@ hemisphere: "south", // 'south' | 'north'
       }
     }
 
+    let activeModule = 'overview';
+    function hasNetworkData(){
+      return (
+        (Array.isArray(state.markers) && state.markers.length > 0) ||
+        (state.t1 && state.t1.size > 0) ||
+        (state.t2 && state.t2.size > 0) ||
+        (state.t3 && Array.isArray(state.t3.arcs) && state.t3.arcs.length > 0) ||
+        (state.t6 && Array.isArray(state.t6.routes) && state.t6.routes.length > 0)
+      );
+    }
+    function updateModuleNav(){
+      document.querySelectorAll('[data-module-target]').forEach(btn => {
+        const target = btn.dataset.moduleTarget;
+        btn.disabled = false;
+        btn.classList.toggle('is-active', target === activeModule);
+      });
+    }
+    function updatePanelModules(){
+      const hasData = hasNetworkData();
+      const emptyState = document.getElementById('emptyState');
+      if (emptyState) emptyState.hidden = hasData || activeModule !== 'overview';
+      document.querySelectorAll('.module-section').forEach(section => {
+        const moduleName = section.dataset.module || '';
+        section.hidden = moduleName !== activeModule;
+      });
+      updateModuleNav();
+    }
+    function setActiveModule(moduleName){
+      activeModule = moduleName || 'overview';
+      updatePanelModules();
+    }
+    function updateAppChrome(nodeCount, centroidCount, internalArcs, externalArcs){
+      const hasData = hasNetworkData();
+      const statusEl = document.getElementById('topbarStatus');
+      const projectionEl = document.getElementById('topbarProjection');
+      const summaryEl = document.getElementById('topbarSummary');
+      const validateBtn = document.getElementById('topbarValidateBtn');
+      const exportBtn = document.getElementById('topbarExportBtn');
+      const exportDatBtn = document.getElementById('btnExport');
+      const export55555Btn = document.getElementById('btnExport11111');
+      if (statusEl) {
+        statusEl.textContent = hasData
+          ? ((state.sourceLabel && state.sourceLabel !== 'Sin archivo cargado') ? state.sourceLabel : 'Red en edición')
+          : 'Sin red cargada';
+      }
+      if (projectionEl) {
+        const hemiShort = state.hemisphere && state.hemisphere.toLowerCase().startsWith('n') ? 'N' : 'S';
+        projectionEl.textContent = `UTM ${state.utmZone || '?'}${hemiShort}`;
+      }
+      if (summaryEl) {
+        summaryEl.textContent = hasData
+          ? `${nodeCount} nodos · ${centroidCount} centroides · ${internalArcs} T1 · ${externalArcs} T3`
+          : 'Carga un DAT para comenzar';
+      }
+      if (validateBtn) validateBtn.disabled = !hasData;
+      if (exportBtn) exportBtn.disabled = !hasData;
+      if (exportDatBtn) exportDatBtn.disabled = !hasData;
+      if (export55555Btn) export55555Btn.disabled = !hasData;
+    }
+
     function refreshSummaryStats(){
       const markers = Array.isArray(state.markers) ? state.markers : [];
       let nodeCount = 0;
@@ -2943,6 +3800,8 @@ hemisphere: "south", // 'south' | 'north'
         const zoneLabel = state.utmZone ? `Zona ${state.utmZone}` : 'Zona ?';
         utmEl.textContent = `${hemiLabel} - ${zoneLabel}`;
       }
+      updateAppChrome(nodeCount, centroidCount, internalArcs, externalArcs);
+      updatePanelModules();
     }
     function loadT1Fields(){
       if (state.activeB==null) return;
@@ -3376,7 +4235,7 @@ hemisphere: "south", // 'south' | 'north'
     }
     function entrySnapshot(entry){
       if (!entry) return null;
-      const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+      const ll = getEntryLatLng(entry);
       return {
         id: entry.id,
         isCentroid: !!entry.isCentroid,
@@ -3387,10 +4246,28 @@ hemisphere: "south", // 'south' | 'north'
     function updateEntryVisual(entry){
       if (!entry || !entry.marker) return;
       entry.marker.setIcon(makeIcon(entry));
+      entry._visualKey = visualKeyForEntry(entry);
       if (entry.marker.getTooltip && entry.marker.getTooltip()) {
         entry.marker.getTooltip().setContent(labelFor(entry));
       } else if (entry.marker.bindTooltip) {
         entry.marker.bindTooltip(labelFor(entry), {direction:'top', className:'saturn-tooltip', offset:[0,-4]});
+      }
+    }
+    function visualKeyForEntry(entry){
+      if (!entry) return '';
+      const tipo = entry.isCentroid ? 'C' : getNodeTypeValue(entry.id);
+      const buffer = !entry.isCentroid && nodeInBuffer(entry.id) ? 'B' : '';
+      return `${entry.id}|${entry.isCentroid ? 1 : 0}|${tipo}|${buffer}`;
+    }
+    function ensureEntryVisual(entry){
+      if (!entry || !entry.marker) return;
+      const key = visualKeyForEntry(entry);
+      if (entry._visualKey !== key) updateEntryVisual(entry);
+      else if (entry.marker.getTooltip && entry.marker.getTooltip()) {
+        const tooltip = entry.marker.getTooltip();
+        if (tooltip && tooltip.getContent && tooltip.getContent() !== labelFor(entry)) {
+          tooltip.setContent(labelFor(entry));
+        }
       }
     }
     function setEntryTooltipPermanent(entry, permanent){
@@ -3409,14 +4286,226 @@ hemisphere: "south", // 'south' | 'north'
         entry.marker.bindTooltip(content, options);
       }
     }
-    function removeEntry(entry){
+    function getNodeRenderLayer(){
+      if (!nodeRenderLayer){ nodeRenderLayer = L.layerGroup().addTo(map); }
+      return nodeRenderLayer;
+    }
+    function getNodeClusterLayer(){
+      if (!nodeClusterLayer){ nodeClusterLayer = L.layerGroup().addTo(map); }
+      return nodeClusterLayer;
+    }
+    function shouldUseProgressiveNodes(){
+      return Array.isArray(state.markers) && state.markers.length > LARGE_NETWORK_THRESHOLD;
+    }
+    function currentNodeRenderMode(){
+      if (!shouldUseProgressiveNodes()) return 'individual';
+      const zoom = map && map.getZoom ? map.getZoom() : ZOOM_INDIVIDUAL;
+      if (zoom < ZOOM_CLUSTER_FAR) return 'cluster-far';
+      if (zoom < ZOOM_CLUSTER_MEDIUM) return 'cluster-medium';
+      if (zoom < ZOOM_INDIVIDUAL) return 'cluster-near';
+      return 'individual';
+    }
+    function pinnedNodeIds(){
+      const ids = new Set();
+      if (state.activeB != null) ids.add(state.activeB);
+      relatedNodesForActiveB().forEach(id => ids.add(id));
+      if (state.selectedForInner) {
+        state.selectedForInner.forEach(id => ids.add(id));
+      }
+      return ids;
+    }
+    function ensureEntryMarker(entry) {
+      if (!entry) return null;
+      if (entry.marker) return entry.marker;
+      const latlng = getEntryLatLng(entry);
+      if (!latlng) return null;
+      const marker = L.marker(latlng, { draggable: true, icon: makeIcon(entry) });
+      entry.marker = marker;
+      entry._visualKey = visualKeyForEntry(entry);
+      attachPopup(entry);
+      if (marker.bindTooltip) {
+        marker.bindTooltip(labelFor(entry), {direction:'top', className:'saturn-tooltip', offset:[0,-4], sticky:true});
+      }
+      marker.on('dragstart', function(){
+        const startLatLng = getEntryLatLng(entry);
+        entry._dragStart = {
+          latlng: startLatLng ? { lat: startLatLng.lat, lng: startLatLng.lng } : null,
+          dataXY: entry.dataXY ? { x: entry.dataXY.x, y: entry.dataXY.y } : null
+        };
+      });
+      marker.on('dragend', function(){
+        const ll = marker.getLatLng();
+        const start = entry._dragStart;
+        entry._dragStart = null;
+        if (start && start.latlng) {
+          const moved = !ll || start.latlng.lat !== ll.lat || start.latlng.lng !== ll.lng;
+          if (moved) {
+            pushUndo(() => {
+              setEntryLatLng(entry, start.latlng);
+              entry.dataXY = start.dataXY ? { x: start.dataXY.x, y: start.dataXY.y } : null;
+              rebuildT2Layer();
+              rebuildT1Layer();
+              scheduleNodeRender();
+            });
+          }
+        }
+        setEntryLatLng(entry, ll);
+        entry.dataXY = latLngToData(ll);
+        rebuildT1Layer();
+        scheduleNodeRender();
+      });
+      marker.on('click', function(e){
+         if (state.selectionMode) {
+            L.DomEvent.stopPropagation(e);
+            toggleInnerSelection(entry.id);
+            return;
+         }
+         if (e.originalEvent && e.originalEvent.altKey) {
+            const ta = document.getElementById('t6NodesStr');
+            if (ta) {
+               ta.value = (ta.value + ' ' + entry.id).trim();
+            }
+            return;
+         }
+         setActiveB(entry.id);
+      });
+      return marker;
+    }
+    function destroyEntryMarker(entry) {
       if (!entry || !entry.marker) return;
       map.removeLayer(entry.marker);
+      if (entry.marker.off) entry.marker.off();
+      entry.marker = null;
+      entry._visualKey = null;
+      nodeRenderedIds.delete(entry.id);
+    }
+    function clusterPixelSize(mode) {
+      if (mode === 'cluster-far') return 96;
+      if (mode === 'cluster-medium') return 64;
+      return 40;
+    }
+    function buildNodeClusters(entries, pixelSize) {
+      const buckets = new Map();
+      const zoom = map.getZoom();
+      for (const entry of entries) {
+        const ll = getEntryLatLng(entry);
+        if (!ll) continue;
+        const pt = map.project(ll, zoom);
+        const key = `${Math.floor(pt.x / pixelSize)}:${Math.floor(pt.y / pixelSize)}`;
+        let bucket = buckets.get(key);
+        if (!bucket) {
+          bucket = { entries: [], lat: 0, lng: 0 };
+          buckets.set(key, bucket);
+        }
+        bucket.entries.push(entry);
+        bucket.lat += ll.lat;
+        bucket.lng += ll.lng;
+      }
+      return Array.from(buckets.values()).map(bucket => ({
+        entries: bucket.entries,
+        latlng: {
+          lat: bucket.lat / bucket.entries.length,
+          lng: bucket.lng / bucket.entries.length
+        }
+      }));
+    }
+    function addClusterMarker(bucket, mode) {
+      const count = bucket.entries.length;
+      const size = count >= 100 ? 42 : count >= 25 ? 36 : 30;
+      const cls = mode === 'cluster-far' ? 'saturn-cluster' : 'saturn-cluster medium';
+      const icon = L.divIcon({
+        className: '',
+        html: `<div class="${cls}" style="width:${size}px;height:${size}px;">${count}</div>`,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      });
+      const marker = L.marker(bucket.latlng, { icon, keyboard: false });
+      marker.on('click', function(){
+        const bounds = getEntriesBounds(bucket.entries);
+        if (bounds) {
+          map.fitBounds(bounds.pad(0.35), { maxZoom: ZOOM_INDIVIDUAL });
+        }
+      });
+      marker.bindTooltip(`${count} nodos`, { direction: 'top', opacity: 0.92 });
+      marker.addTo(getNodeClusterLayer());
+    }
+    function scheduleNodeRender(immediate=false) {
+      if (!map) return;
+      if (immediate) {
+        nodeRenderScheduled = false;
+        renderVisibleNodes();
+        return;
+      }
+      if (nodeRenderScheduled) return;
+      nodeRenderScheduled = true;
+      const run = () => {
+        nodeRenderScheduled = false;
+        renderVisibleNodes();
+      };
+      if (window.requestAnimationFrame) window.requestAnimationFrame(run);
+      else setTimeout(run, 0);
+    }
+    function renderVisibleNodes() {
+      if (!map) return;
+      const renderLayer = getNodeRenderLayer();
+      const clusterLayer = getNodeClusterLayer();
+      clusterLayer.clearLayers();
+      const mode = currentNodeRenderMode();
+      const bounds = map.getBounds().pad(0.25);
+      const pinned = pinnedNodeIds();
+      const viewportEntries = [];
+      const pinnedEntries = [];
+      for (const entry of state.markers) {
+        const ll = getEntryLatLng(entry);
+        if (!ll) continue;
+        if (pinned.has(entry.id)) {
+          pinnedEntries.push(entry);
+        } else if (!shouldUseProgressiveNodes() || bounds.contains(ll)) {
+          viewportEntries.push(entry);
+        }
+      }
+      const visibleEntries = new Map();
+      if (mode === 'individual') {
+        viewportEntries.concat(pinnedEntries).forEach(entry => visibleEntries.set(entry.id, entry));
+      } else {
+        const bucketSource = viewportEntries.filter(entry => !pinned.has(entry.id));
+        buildNodeClusters(bucketSource, clusterPixelSize(mode)).forEach(bucket => {
+          if (bucket.entries.length === 1) {
+            const onlyEntry = bucket.entries[0];
+            visibleEntries.set(onlyEntry.id, onlyEntry);
+            return;
+          }
+          addClusterMarker(bucket, mode);
+        });
+        pinnedEntries.forEach(entry => visibleEntries.set(entry.id, entry));
+      }
+      for (const id of Array.from(nodeRenderedIds)) {
+        if (visibleEntries.has(id)) continue;
+        const entry = findMarkerById(id);
+        if (entry && entry.marker && renderLayer.hasLayer(entry.marker)) {
+          renderLayer.removeLayer(entry.marker);
+        }
+        nodeRenderedIds.delete(id);
+      }
+      for (const entry of visibleEntries.values()) {
+        const marker = ensureEntryMarker(entry);
+        if (!marker) continue;
+        if (!renderLayer.hasLayer(marker)) marker.addTo(renderLayer);
+        nodeRenderedIds.add(entry.id);
+        ensureEntryVisual(entry);
+        setEntryTooltipPermanent(entry, false);
+      }
+      refreshActiveHighlight();
+    }
+    function removeEntry(entry){
+      if (!entry) return;
+      destroyEntryMarker(entry);
       const idx = state.markers.indexOf(entry);
       if (idx >= 0) state.markers.splice(idx,1);
       if (state.entryById.get(entry.id) === entry) {
         state.entryById.delete(entry.id);
       }
+      scheduleNodeRender();
       refreshNodeBList();
       rebuildT2Layer();
       rebuildT1Layer();
@@ -3475,62 +4564,24 @@ hemisphere: "south", // 'south' | 'north'
         alert(`El ID ${id} ya existe.`);
         return null;
       }
-      const entry = { marker: null, isCentroid: !!isCentroid, id: id, dataXY: null };
-      const m = L.marker(latlng, { draggable: true, icon: makeIcon(entry) });
-      entry.marker = m;
-      attachPopup(entry);
-      m.addTo(map);
-      if (m.bindTooltip) {
-        m.bindTooltip(labelFor(entry), {direction:'top', className:'saturn-tooltip', offset:[0,-4]});
-      }
-      const latLngObj = m.getLatLng ? m.getLatLng() : latlng;
+      const entry = {
+        marker: null,
+        isCentroid: !!isCentroid,
+        id: id,
+        dataXY: null,
+        latlng: { lat: latlng.lat, lng: latlng.lng }
+      };
       if (opts.dataXY && Number.isFinite(opts.dataXY.x) && Number.isFinite(opts.dataXY.y)) {
         entry.dataXY = { x: opts.dataXY.x, y: opts.dataXY.y };
-      } else if (latLngObj) {
-        entry.dataXY = latLngToData(latLngObj);
+      } else {
+        entry.dataXY = latLngToData(entry.latlng);
       }
-      m.on('dragstart', function(){
-        entry._dragStart = {
-          latlng: m.getLatLng(),
-          dataXY: entry.dataXY ? { x: entry.dataXY.x, y: entry.dataXY.y } : null
-        };
-      });
-      m.on('dragend', function(){
-        const ll = m.getLatLng();
-        const start = entry._dragStart;
-        entry._dragStart = null;
-        if (start && start.latlng) {
-          const moved = !ll || start.latlng.lat !== ll.lat || start.latlng.lng !== ll.lng;
-          if (moved) {
-            pushUndo(() => {
-              entry.marker.setLatLng(start.latlng);
-              entry.dataXY = start.dataXY ? { x: start.dataXY.x, y: start.dataXY.y } : null;
-              rebuildT2Layer();
-              rebuildT1Layer();
-            });
-          }
-        }
-        entry.dataXY = latLngToData(ll);
-        rebuildT1Layer();
-      });
-      // Click en el marcador: activar B
-      m.on('click', function(e){ 
-         // Click en marcador
-         if (e.originalEvent && e.originalEvent.altKey) {
-            // Append to T6 nodes list if Alt pressed
-            const ta = document.getElementById('t6NodesStr');
-            if (ta) {
-               ta.value = (ta.value + ' ' + entry.id).trim();
-            }
-            return;
-         }
-         setActiveB(entry.id); 
-      });
       state.markers.push(entry);
       state.entryById.set(entry.id, entry);
       if (!opts.skipHistory) {
         pushUndo(() => { removeEntry(entry); });
       }
+      if (!opts.skipRender) scheduleNodeRender();
       if (!opts.skipRefresh) {
         refreshNodeBList();
         rebuildT2Layer();
@@ -3542,6 +4593,7 @@ hemisphere: "south", // 'south' | 'north'
     function refreshActiveHighlight(){
       const related = relatedNodesForActiveB();
       for (const e of state.markers){
+        if (!e.marker) continue;
         const el = e.marker.getElement && e.marker.getElement();
         if (!el) continue;
         if (e.id===state.activeB) el.classList.add('active');
@@ -3558,6 +4610,7 @@ hemisphere: "south", // 'south' | 'north'
     function setActiveB(newId){
       if (newId==null) return;
       state.activeB = newId;
+      scheduleNodeRender(true);
       t1Editing = null;
       setT1ArcFormTitle('Nuevo arco');
       const sel = document.getElementById('nodeBSelect');
@@ -3570,6 +4623,91 @@ hemisphere: "south", // 'south' | 'north'
       refreshT3NodeInfo();
       refreshSummaryStats();
       rebuildT1Layer();
+    }
+
+
+    // ====== Conversión Buffer -> Inner ======
+    function toggleInnerSelection(nodeId) {
+      if (!state.selectedForInner) state.selectedForInner = new Set();
+      if (state.selectedForInner.has(nodeId)) {
+        state.selectedForInner.delete(nodeId);
+      } else {
+        state.selectedForInner.add(nodeId);
+      }
+      updateSelectionUI();
+      refreshNodeColors();
+    }
+
+    function updateSelectionUI() {
+      const btn = document.getElementById('btnToggleSelection');
+      if (btn) {
+        btn.textContent = state.selectionMode ? 'Modo Selección Inner: ON' : 'Modo Selección Inner: OFF';
+        btn.className = state.selectionMode ? 'saturn-primary' : 'saturn-secondary';
+      }
+      const countEl = document.getElementById('selCount');
+      if (countEl) countEl.textContent = state.selectedForInner ? state.selectedForInner.size : 0;
+    }
+
+    function batchConvertToSimulation() {
+      if (!state.selectedForInner || state.selectedForInner.size === 0) {
+        alert('No hay nodos seleccionados para convertir.');
+        return;
+      }
+      const count = state.selectedForInner.size;
+      if (!confirm(`¿Convertir ${count} nodos a Tarjeta 1? Se moverán sus arcos de Tarjeta 3.`)) return;
+
+      const nodesToConvert = Array.from(state.selectedForInner);
+      let convertedArcs = 0;
+      let renamedNodes = 0;
+      try {
+        nodesToConvert.forEach(originalNodeId => {
+          const normalizedB = ensureFiveDigitNodeId(originalNodeId);
+          let nodeId = normalizedB.id;
+          if (normalizedB.renamed) renamedNodes++;
+          let relevantArcs = state.t3.arcs.filter(a => a.nodeB === nodeId && !a.zoneA && !a.zoneB);
+          const incomingNodeIds = Array.from(new Set(relevantArcs.map(a => a && a.nodeA).filter(id => Number.isFinite(id))));
+          incomingNodeIds.forEach(nodeAId => {
+            const normalizedA = ensureFiveDigitNodeId(nodeAId);
+            if (normalizedA.renamed) renamedNodes++;
+          });
+          relevantArcs = state.t3.arcs.filter(a => a.nodeB === nodeId && !a.zoneA && !a.zoneB);
+          const outgoingArcs = state.t3.arcs.filter(a => a.nodeA === nodeId && !a.zoneA && !a.zoneB && a.nodeB !== nodeId);
+          const turnMap = buildTurnMovementsForNode(nodeId, relevantArcs, outgoingArcs);
+          if (relevantArcs.length > 0) {
+            const t1Node = state.t1.get(nodeId) || { arcs: [], stages: [] };
+            relevantArcs.forEach(t3Arc => {
+              const vel = Math.round((t3Arc.length / (t3Arc.freeFlow || 1)) * 3.6) || 50;
+              const inProfile = saturationProfileFromCapacity(t3Arc.capacity);
+              t1Node.arcs.push({
+                nodeA: t3Arc.nodeA,
+                pistas: inProfile.lanes,
+                vel: Math.min(Math.max(vel, 10), 120),
+                long: t3Arc.length,
+                virajes: turnMap.get(t3Arc.nodeA) || []
+              });
+              convertedArcs++;
+            });
+            t1Node.arcs = sortIncomingArcsNorthCCW(nodeId, t1Node.arcs);
+            state.t1.set(nodeId, t1Node);
+            state.t3.arcs = state.t3.arcs.filter(a => !(a.nodeB === nodeId && !a.zoneA && !a.zoneB));
+          }
+        });
+      } catch (err) {
+        alert(err && err.message ? err.message : 'No se pudo completar la conversion Buffer -> Inner.');
+        return;
+      }
+
+      state.selectedForInner.clear();
+      state.selectionMode = false;
+      updateSelectionUI();
+      refreshNodeColors();
+      refreshNodeBList();
+      if (state.activeB != null) setActiveB(state.activeB);
+      rebuildT1Layer();
+      rebuildT3Layers();
+      rebuildT2Layer();
+      rebuildT6Layer();
+      alert(`Conversión finalizada: ${nodesToConvert.length} nodos procesados, ${convertedArcs} arcos movidos a Tarjeta 1, ${renamedNodes} nodos renumerados a 5 digitos.`);
     }
 
     function getT1DiffLayer(){
@@ -3613,7 +4751,7 @@ hemisphere: "south", // 'south' | 'north'
       return Number.isFinite(num) ? num : null;
     }
     function ensureT2Zone(zone){
-      if (!state.t2.has(zone)) state.t2.set(zone, new Set());
+      if (!state.t2.has(zone)) state.t2.set(zone, []);
       return state.t2.get(zone);
     }
     function setT2ZoneStats(text){
@@ -3638,15 +4776,14 @@ hemisphere: "south", // 'south' | 'north'
         return;
       }
       const nodeSet = state.t2.get(zone);
-      const nodes = Array.isArray(nodeSet) ? nodeSet : Array.from(nodeSet || []);
-      nodes.sort((a,b)=>a-b);
+      const nodes = Array.isArray(nodeSet) ? nodeSet.slice() : Array.from(nodeSet || []);
       setT2ZoneStats(`Zona ${zone}: ${nodes.length} conexiones`);
-      nodes.forEach((nodeId) => {
+      nodes.forEach((nodeId, idx) => {
         const item = document.createElement('div');
         item.className = 'arc-item';
         const details = document.createElement('div');
         details.className = 'arc-item-details';
-        details.textContent = `Nodo ${nodeId}`;
+        details.textContent = `${idx + 1}. Nodo ${nodeId}`;
         item.appendChild(details);
         const btnD = document.createElement('button');
         btnD.className = 'arc-delete';
@@ -3655,13 +4792,13 @@ hemisphere: "south", // 'south' | 'north'
         btnD.onclick = () => {
           const prev = Array.from(state.t2.get(zone) || []);
           pushUndo(() => {
-            state.t2.set(zone, new Set(prev));
+            state.t2.set(zone, prev.slice());
             refreshT2EditorList();
             rebuildT2Layer();
           });
-          const set = ensureT2Zone(zone);
-          set.delete(nodeId);
-          if (!set.size) state.t2.delete(zone);
+          const list = ensureT2Zone(zone);
+          list.splice(idx, 1);
+          if (!list.length) state.t2.delete(zone);
           refreshT2EditorList();
           rebuildT2Layer();
         };
@@ -3677,20 +4814,21 @@ hemisphere: "south", // 'south' | 'north'
         return;
       }
       const set = ensureT2Zone(zone);
-      if (set.has(node)) {
+      if (set.includes(node)) {
         refreshT2EditorList();
         return;
       }
       pushUndo(() => {
         const prev = Array.from(state.t2.get(zone) || []);
-        const back = new Set(prev);
-        back.delete(node);
-        if (back.size) state.t2.set(zone, back);
+        const back = prev.slice();
+        const pos = back.indexOf(node);
+        if (pos >= 0) back.splice(pos, 1);
+        if (back.length) state.t2.set(zone, back);
         else state.t2.delete(zone);
         refreshT2EditorList();
         rebuildT2Layer();
       });
-      set.add(node);
+      set.push(node);
       refreshT2EditorList();
       rebuildT2Layer();
     }
@@ -3699,7 +4837,7 @@ hemisphere: "south", // 'south' | 'north'
       if (zone == null) return;
       const prev = Array.from(state.t2.get(zone) || []);
       pushUndo(() => {
-        state.t2.set(zone, new Set(prev));
+        state.t2.set(zone, prev.slice());
         refreshT2EditorList();
         rebuildT2Layer();
       });
@@ -3788,7 +4926,7 @@ hemisphere: "south", // 'south' | 'north'
           }
         }
         if (zone!=null && nodes.length){
-          out.push({z:zone, nodes});
+          out.push({z:zone, nodes, lineSize: nodes.length});
         }
       }
       return out;
@@ -3797,11 +4935,21 @@ hemisphere: "south", // 'south' | 'north'
       const recs = parse22222(text);
       if (!recs.length) return;
       state.t2.clear();
+      state.imported22222ZoneOrder = [];
+      state.imported22222NodesByZone = {};
+      state.imported22222LineSizesByZone = {};
       const t2 = state.t2; // Map<zona, Set<nodoId>>
       for (const r of recs){
-        if (!t2.has(r.z)) t2.set(r.z, new Set());
-        const set = t2.get(r.z);
-        for (const n of r.nodes){ set.add(n); }
+        if (!t2.has(r.z)) t2.set(r.z, []);
+        if (!state.imported22222ZoneOrder.includes(r.z)) state.imported22222ZoneOrder.push(r.z);
+        if (!Array.isArray(state.imported22222NodesByZone[r.z])) state.imported22222NodesByZone[r.z] = [];
+        if (!Array.isArray(state.imported22222LineSizesByZone[r.z])) state.imported22222LineSizesByZone[r.z] = [];
+        const list = t2.get(r.z);
+        for (const n of r.nodes){
+          list.push(n);
+          state.imported22222NodesByZone[r.z].push(n);
+        }
+        state.imported22222LineSizesByZone[r.z].push(r.lineSize || r.nodes.length);
       }
       rebuildT2Layer();
       refreshT2EditorList();
@@ -3834,14 +4982,10 @@ hemisphere: "south", // 'south' | 'north'
        if (trimmed.startsWith('*')) return null;
 
        const fmt = state.format.c3;
-       function extractNode(start, len, markerStart=null) {
+       function extractNode(start, len) {
          if (line.length <= start) return { id: null, isZone: false };
-         let isZone = false;
-         if (markerStart != null && markerStart < line.length) {
-           isZone = line.substring(markerStart, Math.min(line.length, markerStart + 1)).toUpperCase() === 'C';
-         }
          let s = line.substring(start, Math.min(line.length, start + len)).toUpperCase();
-         if (markerStart == null) isZone = s.includes('C');
+         let isZone = s.includes('C');
          let idStr = s.replace(/C/g, '').trim();
          let id = idStr ? parseInt(idStr, 10) : null;
          return { id, isZone };
@@ -3852,44 +4996,53 @@ hemisphere: "south", // 'south' | 'north'
           return s ? parseFloat(s) : null;
        }
 
-       let a = null;
-       let b = null;
-
-       if (fmt.dutch && fmt.style === 'list') {
-          a = extractNode(1, 9, 0);
-          b = extractNode(11, 9, 10);
+       let a, b;
+       if (state.format.dutch) {
+          a = extractNode(0, 10);
+          b = extractNode(10, 10);
        } else {
-         a = extractNode(fmt.aOffset, fmt.aW);
-       }
-
-       if (fmt.style === 'list') {
-          if (!fmt.dutch) b = extractNode(fmt.bOffset, fmt.bW);
-       } else {
-          const bCandidate = fmt.dutch ? extractNode(1, 9, 0) : extractNode(fmt.bOffset, fmt.bW);
-          const hasArcPayload = line.slice(Math.max(fmt.aOffset, 0)).trim().length > 0;
-          const isHeaderLine = bCandidate.id != null && !hasArcPayload;
-          if (isHeaderLine) {
-            if (context) context.currentB = bCandidate;
-            return { __header: true };
+          a = extractNode(fmt.aOffset, fmt.aW);
+          if (fmt.style === 'list') {
+             b = extractNode(fmt.bOffset, fmt.bW);
+          } else {
+             const bCandidate = extractNode(fmt.bOffset, fmt.bW);
+             const hasArcPayload = line.slice(Math.max(fmt.aOffset, 0)).trim().length > 0;
+             const isHeaderLine = bCandidate.id != null && !hasArcPayload;
+             if (isHeaderLine) {
+               if (context) context.currentB = bCandidate;
+               return { __header: true };
+             }
+             b = context && context.currentB ? context.currentB : bCandidate;
           }
-          b = context && context.currentB ? context.currentB : bCandidate;
        }
 
        if (a.id == null || b.id == null) return null;
 
 
-      const freeFlow = extractVal(25, 5);
-      const capacityTime = extractVal(30, 5);
-      const capacity = extractVal(35, 5);
-      
-      const dirChar = (line.length > 40) ? line.substring(40, 41).trim() : '';
-      const direction = dirChar ? (parseInt(dirChar, 10) || null) : null;
-      const speedFlag = (line.length > 41) ? line.substring(41, 42).trim().toUpperCase() === 'S' : false;
-      const lengthVal = extractVal(45, 5);
-      const powerVal = extractVal(50, 5);
-      const indexVal = extractVal(55, 5);
-
-      const desc = line.length > 60 ? line.slice(60).trim() : '';
+      let freeFlow, capacityTime, capacity, direction, speedFlag, lengthVal, powerVal, indexVal, desc;
+      if (state.format.dutch) {
+        freeFlow = extractVal(20, 5);
+        capacityTime = extractVal(25, 5);
+        capacity = extractVal(30, 5);
+        const dirChar = (line.length > 37) ? line.substring(37, 38).trim() : '';
+        direction = dirChar ? (parseInt(dirChar, 10) || null) : null;
+        speedFlag = (line.length > 38) ? line.substring(38, 39).trim().toUpperCase() === 'S' : false;
+        lengthVal = extractVal(40, 5);
+        powerVal = extractVal(45, 5);
+        indexVal = extractVal(52, 3);
+        desc = line.length > 55 ? line.slice(55).trim() : '';
+      } else {
+        freeFlow = extractVal(25, 5);
+        capacityTime = extractVal(30, 5);
+        capacity = extractVal(35, 5);
+        const dirChar = (line.length > 40) ? line.substring(40, 41).trim() : '';
+        direction = dirChar ? (parseInt(dirChar, 10) || null) : null;
+        speedFlag = (line.length > 41) ? line.substring(41, 42).trim().toUpperCase() === 'S' : false;
+        lengthVal = extractVal(45, 5);
+        powerVal = extractVal(50, 5);
+        indexVal = extractVal(55, 5);
+        desc = line.length > 60 ? line.slice(60).trim() : '';
+      }
 
       return {
         nodeA: a.id,
@@ -4165,7 +5318,7 @@ hemisphere: "south", // 'south' | 'north'
       if (entry.dataXY && Number.isFinite(entry.dataXY.x) && Number.isFinite(entry.dataXY.y)){
         return entry.dataXY;
       }
-      const ll = entry.marker && entry.marker.getLatLng ? entry.marker.getLatLng() : null;
+      const ll = getEntryLatLng(entry);
       if (!ll) return null;
       const xy = latLngToData(ll);
       entry.dataXY = xy;
@@ -4212,8 +5365,8 @@ hemisphere: "south", // 'south' | 'north'
           const entryA = findMarkerById(arc.nodeA);
           if (!entryA || !entryB) continue;
           stats.t1.total++;
-          const llA = entryA.marker.getLatLng();
-          const llB = entryB.marker.getLatLng();
+          const llA = getEntryLatLng(entryA);
+          const llB = getEntryLatLng(entryB);
           if (!llA || !llB) continue;
           const dist = entryDistanceMeters(entryA, entryB);
           if (!Number.isFinite(dist)) continue;
@@ -4229,7 +5382,7 @@ hemisphere: "south", // 'south' | 'north'
             `Modelo=${modeled.toFixed(1)} m`,
             `Modelo-Real=+${delta.toFixed(1)} m`
           ];
-          addLine([llA, llB], tooltip, '#e74c3c');
+        addLine([llA, llB], tooltip, '#b91c1c');
         }
       }
       ensureT3State();
@@ -4239,8 +5392,8 @@ hemisphere: "south", // 'south' | 'north'
         const entryB = findMarkerById(arc.nodeB);
         if (!entryA || !entryB) continue;
         stats.t3.total++;
-        const llA = entryA.marker.getLatLng();
-        const llB = entryB.marker.getLatLng();
+        const llA = getEntryLatLng(entryA);
+        const llB = getEntryLatLng(entryB);
         if (!llA || !llB) continue;
         const dist = entryDistanceMeters(entryA, entryB);
         if (!Number.isFinite(dist)) continue;
@@ -4285,8 +5438,8 @@ hemisphere: "south", // 'south' | 'north'
           const entryA = findMarkerById(arc.nodeA);
           const entryB = findMarkerById(arc.nodeB);
           if (!entryA || !entryB) continue;
-          const llA = entryA.marker.getLatLng();
-          const llB = entryB.marker.getLatLng();
+          const llA = getEntryLatLng(entryA);
+          const llB = getEntryLatLng(entryB);
           if (!llA || !llB) continue;
           drawnConn++;
           const tooltip = [
@@ -4296,7 +5449,7 @@ hemisphere: "south", // 'south' | 'north'
           if (Number.isFinite(arc.capacity)) tooltip.push(`Cap=${arc.capacity}`);
           if (Number.isFinite(arc.length)) tooltip.push(`L=${arc.length}`);
           if (arc.label) tooltip.push(arc.label);
-          L.polyline([llA, llB], {color:'#f1c40f', weight:2.5, opacity:0.85, dashArray:'4,6'}).addTo(connectorLayer)
+          L.polyline([llA, llB], {color:'#64748b', weight:1.7, opacity:0.46, dashArray:'4,6'}).addTo(connectorLayer)
             .bindTooltip(tooltip.join(' | '), {sticky:true, direction:'center', opacity:0.9});
         }
       }
@@ -4327,12 +5480,14 @@ hemisphere: "south", // 'south' | 'north'
         refs += nodes.length;
         if (hasC) zonesWithCentroid++;
         if (!show || !hasC) continue;
-        const zll = cz.marker.getLatLng();
+        const zll = getEntryLatLng(cz);
+        if (!zll) continue;
         for (const nid of nodes){
           const ne = findMarkerById(nid);
           if (!ne) continue;
-          const nll = ne.marker.getLatLng();
-          L.polyline([zll, nll], {color:'#27ae60', weight:2, opacity:0.9, dashArray:'4,4'}).addTo(layer);
+          const nll = getEntryLatLng(ne);
+          if (!nll) continue;
+          L.polyline([zll, nll], {color:'#8a6f3d', weight:2, opacity:0.62, dashArray:'5,7'}).addTo(layer);
           drawn++;
         }
       }
@@ -4371,19 +5526,14 @@ hemisphere: "south", // 'south' | 'north'
       layer.clearLayers();
       if (!show) return;
 
-      // Draw routes
       const routes = state.t6.routes;
-      // Colores para distinguir rutas (individuales)
-      const palette = ['#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
-      
-      // Colores para modos (cuando se ven todos)
-      // M1: Orange, M2: Yellow, M3: Green, M4: Blue, M5: Red/Purple
+      const palette = ['#2563eb', '#0891b2', '#7c3aed', '#0f766e', '#be123c', '#9333ea', '#0369a1', '#854d0e', '#047857', '#475569'];
       const modeColors = {
-        1: '#ff9800', // Taxis (Naranja)
-        2: '#ffeb3b', // Taxibuses (Amarillo)
-        3: '#4caf50', // Bus (Verde)
-        4: '#2196f3', // Camiones 2 ejes (Azul)
-        5: '#f44336'  // Camiones >2 ejes (Rojo)
+        1: '#854d0e',
+        2: '#0f766e',
+        3: '#2563eb',
+        4: '#475569',
+        5: '#7c3aed'
       };
 
       routes.forEach((r, idx) => {
@@ -4398,21 +5548,22 @@ hemisphere: "south", // 'south' | 'north'
 
         if (!r.nodes || r.nodes.length < 2) return;
         
-        let color;
-        if (filterVal === 0) {
-           // Si se ven todos, usar color por modo
-           color = modeColors[r.mode] || palette[idx % palette.length];
-        } else {
-           // Si esta filtrado, usar paleta variada para distinguir rutas
-           color = palette[idx % palette.length];
+        let color = filterVal === 0 ? (modeColors[r.mode] || palette[idx % palette.length]) : palette[idx % palette.length];
+        let opacity = 0.78;
+        let weight = 3.2;
+        if (isIsolatedRoute) {
+          color = '#0f62fe';
+          opacity = 0.95;
+          weight = 4.2;
         }
 
         const points = [];
         const missing = [];
         for (const nid of r.nodes) {
            const mk = findMarkerById(nid);
-           if (mk && mk.marker) {
-             points.push(mk.marker.getLatLng());
+           if (mk) {
+             const ll = getEntryLatLng(mk);
+             if (ll) points.push(ll);
            } else {
              missing.push(nid);
            }
@@ -4421,8 +5572,8 @@ hemisphere: "south", // 'south' | 'north'
            const mName = getModeName(r.mode);
            L.polyline(points, {
              color: color,
-             weight: 4,
-             opacity: 0.7,
+             weight: weight,
+             opacity: opacity,
              dashArray: r.reversible ? '5, 5' : null
            }).addTo(layer).bindTooltip(`[${mName}] ${r.name} (${r.freq || '?'})`, {sticky:true});
         }
@@ -4448,15 +5599,16 @@ hemisphere: "south", // 'south' | 'north'
         const entry = findMarkerById(nodeId);
         if (!entry) return;
         
-        const latlng = entry.marker.getLatLng();
+        const latlng = getEntryLatLng(entry);
+        if (!latlng) return;
         
         // Create a circular marker for the node
         const marker = L.circleMarker(latlng, {
-          radius: 10,
-          color: '#ff6b6b',
-          fillColor: '#ff6b6b',
-          fillOpacity: 0.7,
-          weight: 3
+          radius: 7,
+          color: '#ffffff',
+          fillColor: '#0f62fe',
+          fillOpacity: 1,
+          weight: 2.4
         });
         
         // Add permanent tooltip with node sequence number
@@ -4527,9 +5679,7 @@ hemisphere: "south", // 'south' | 'north'
       const headerRaw = existingRoute?.headerRaw || fallbackMeta?.headerRaw || (blockLabel ? `66666 ${blockLabel}` : (state.t6.defaultHeaderRaw || '66666'));
       const terminatorRaw = existingRoute?.terminatorRaw || fallbackMeta?.terminatorRaw || state.t6.defaultTerminatorRaw || '99999';
       const nodeFieldWidth = existingRoute?.nodeFieldWidth || fallbackMeta?.nodeFieldWidth || state.t6.defaultNodeFieldWidth || 5;
-      const routeFormat = existingRoute?.routeFormat || fallbackMeta?.routeFormat || (nodeFieldWidth === 10 ? 'compact' : 'classic');
-      const reversible = routeFormat === 'classic' ? rev : false;
-      const newRoute = { name, freq, reversible, nodes, mode: modeToUse, blockKey, blockLabel, headerRaw, terminatorRaw, nodeFieldWidth, routeFormat };
+      const newRoute = { name, freq, reversible: rev, nodes, mode: modeToUse, blockKey, blockLabel, headerRaw, terminatorRaw, nodeFieldWidth };
       
       const prev = clonePlain(state.t6.routes);
       pushUndo(() => {
@@ -4538,7 +5688,7 @@ hemisphere: "south", // 'south' | 'north'
       });
 
       if (!state.t6.blockMeta.some(meta => meta && meta.key === blockKey)) {
-        state.t6.blockMeta.push({ key: blockKey, label: blockLabel, headerRaw, terminatorRaw, nodeFieldWidth, routeFormat, mode: modeToUse });
+        state.t6.blockMeta.push({ key: blockKey, label: blockLabel, headerRaw, terminatorRaw, nodeFieldWidth, mode: modeToUse });
       }
 
       if (t6EditingIndex != null && state.t6.routes[t6EditingIndex]) {
@@ -4648,25 +5798,40 @@ hemisphere: "south", // 'south' | 'north'
         alert('No hay datos de Tarjeta 55555 para exportar.');
         return;
       }
+      lines.push('99999');
       downloadDatFile(lines.join('\n'), 'saturn_55555.dat');
     }
 
-    function exportDat() {
+    function generateSaturnDatText() {
+      if (state.t1 && state.t1.size) saveT1Fields();
       const order = exportCardOrder();
       if (!order.length) {
-        alert('No hay tarjetas con datos para exportar.');
-        return;
+        throw new Error('No hay tarjetas con datos para exportar.');
       }
       const lines = [];
+      if (Array.isArray(state.importPreambleLines) && state.importPreambleLines.length) {
+        lines.push(...state.importPreambleLines);
+      }
       order.forEach(code => {
         const block = buildCardBlock(code);
         if (block && block.length) lines.push(...block);
       });
       if (!lines.length) {
-        alert('No hay tarjetas con datos para exportar.');
+        throw new Error('No hay tarjetas con datos para exportar.');
+      }
+      lines.push('99999');
+      return lines.join('\n');
+    }
+
+    function exportDat() {
+      let text;
+      try {
+        text = generateSaturnDatText();
+      } catch (err) {
+        alert(err.message || 'No hay tarjetas con datos para exportar.');
         return;
       }
-      downloadDatFile(lines.join('\n'), 'saturn_export.dat');
+      downloadDatFile(text, 'saturn_export.dat');
     }
 
      function parseDatLine(line) {
@@ -4678,8 +5843,9 @@ hemisphere: "south", // 'south' | 'north'
        
        // Si tenemos formato detectado, usarlo
        if (fmt.idW > 0) {
-          const idStr = line.substring(0, Math.min(line.length, fmt.idW + (fmt.hasC?1:0))).replace(/C/gi,'').trim();
-          const rest = line.substring(fmt.idW + (fmt.hasC?1:0));
+          const markerOffset = /^C\b/i.test(line) ? 1 : 0;
+          const idStr = line.substring(markerOffset, Math.min(line.length, fmt.idW)).trim();
+          const rest = line.substring(fmt.idW);
           const parts = rest.trim().split(/\s+/);
           const id = parseInt(idStr, 10);
           if (isNaN(id) || parts.length < 2) return null;
@@ -4702,50 +5868,38 @@ hemisphere: "south", // 'south' | 'north'
       // Eliminar marcadores del mapa y limpiar el array
       while (state.markers.length > 0) {
         const e = state.markers[0];
-        if (e.marker) map.removeLayer(e.marker);
+        destroyEntryMarker(e);
         state.markers.shift();
       }
       state.entryById = new Map();
       state.nodeAliases = new Map();
       state.importedCardOrder = [];
+      state.importPreambleLines = [];
+      state.imported55555Order = [];
+      state.imported11111Order = [];
+      state.imported22222ZoneOrder = [];
+      state.imported22222NodesByZone = {};
+      state.imported22222LineSizesByZone = {};
       // Limpiar estados de las tarjetas
       if (state.t1 && typeof state.t1.clear === 'function') state.t1.clear();
       if (state.t2 && typeof state.t2.clear === 'function') state.t2.clear();
       state.t3 = { arcs: [], extras: [] };
       state.t6 = { routes: [], modeNames: {}, hasExternal: false, blockMeta: [], defaultHeaderRaw: '66666', defaultTerminatorRaw: '99999', defaultNodeFieldWidth: 5 };
       
-      // Limpiar capas visuales
-      rebuildT1Layer();
-      rebuildT2Layer();
-      rebuildT3Layers();
-      rebuildT6Layer();
-      refreshSummaryStats();
+      // Las capas se reconstruyen al final de importDat(), cuando ya estan los datos nuevos.
     }
-
-     function detectDutchFlagFromText(text) {
-       const lines = String(text || '').split(/\r?\n/);
-       let inParam = false;
-       for (const raw of lines) {
-         const upper = String(raw || '').trim().toUpperCase();
-         if (upper === '&PARAM' || upper === '$PARAM') {
-           inParam = true;
-           continue;
-         }
-         if (!inParam) continue;
-         if (upper === '&END' || upper === '$END') break;
-         const match = upper.match(/\bDUTCH\s*=\s*([TF])\b/);
-         if (match) return match[1] === 'T';
-       }
-       return false;
-     }
 
      function detectFormatFromText(text) {
        const lines = text.split(/\r?\n/);
+       state.format.dutch = false;
        let inC5 = false, inC3 = false;
        let c5Sample = [], c3Sample = [];
-       state.format.c3.dutch = detectDutchFlagFromText(text);
        for (let ln of lines) {
          const t = ln.trim();
+         if (t.toUpperCase().includes('DUTCH')) {
+           const mDutch = t.match(/\bDUTCH\s*=\s*([TF])\b/i);
+           if (mDutch) state.format.dutch = mDutch[1].toUpperCase() === 'T';
+         }
          if (t === '55555') { inC5 = true; inC3 = false; continue; }
          if (t === '33333' || t === '333333') { inC3 = true; inC5 = false; continue; }
          if (t === '99999' || (/^\d{5,6}$/.test(t) && t !== '55555' && t !== '33333')) { inC5 = inC3 = false; continue; }
@@ -4761,12 +5915,12 @@ hemisphere: "south", // 'south' | 'north'
        }
        
        if (c5Sample.length) {
-         let line = c5Sample[0];
-         state.format.c5.hasC = line.toUpperCase().includes('C');
-         let offset = state.format.c5.hasC ? 1 : 0;
-         // Detectar ID Width (primer bloque de texto)
-         let idPart = line.substring(offset).match(/^\s*\d+/);
-         if (idPart) state.format.c5.idW = idPart[0].length;
+          let line = c5Sample[0];
+          state.format.c5.hasC = c5Sample.some(sample => /^C\b/i.test(sample));
+          let offset = /^C\b/i.test(line) ? 1 : 0;
+          // Detectar ID Width (primer bloque de texto)
+          let idPart = line.substring(offset).match(/^\s*\d+/);
+          if (idPart) state.format.c5.idW = idPart[0].length + offset;
          // Detectar decimales
          let dots = line.match(/\.\d+/g);
          if (dots) {
@@ -4781,17 +5935,10 @@ hemisphere: "south", // 'south' | 'north'
          for (let ln of c3Sample) if (ln.toUpperCase().includes('C')) listCount++;
          if (listCount > c3Sample.length * 0.5) {
            state.format.c3.style = 'list';
-           if (state.format.c3.dutch) {
-             state.format.c3.bOffset = 11;
-             state.format.c3.bW = 9;
-             state.format.c3.aOffset = 1;
-             state.format.c3.aW = 9;
-           } else {
-             state.format.c3.bOffset = 1; 
-             state.format.c3.bW = 9;
-             state.format.c3.aOffset = 10;
-             state.format.c3.aW = 10;
-           }
+           state.format.c3.bOffset = 1; 
+           state.format.c3.bW = 9;
+           state.format.c3.aOffset = 10;
+           state.format.c3.aW = 10;
          } else {
            state.format.c3.style = 'header';
            // Buscar una línea que parezca un arco (muchos números)
@@ -4835,11 +5982,25 @@ hemisphere: "south", // 'south' | 'north'
       return order;
     }
 
+    function extractImportPreamble(text){
+      const lines = String(text || '').split(/\r?\n/);
+      const preamble = [];
+      for (const line of lines) {
+        if (normalizeCardCode(line)) break;
+        preamble.push(line);
+      }
+      while (preamble.length && !String(preamble[preamble.length - 1] || '').trim()) {
+        preamble.pop();
+      }
+      return preamble;
+    }
+
      function importDat(text) {
        const snap = snapshotState();
        pushUndo(() => { applySnapshot(snap); });
        clearAll();
        state.importedCardOrder = detectImportedCardOrder(text);
+       state.importPreambleLines = extractImportPreamble(text);
        detectFormatFromText(text);
        historySuspend = true;
 
@@ -4851,15 +6012,23 @@ hemisphere: "south", // 'south' | 'north'
        
        let collecting = false;
        const payload = [];
-      state.t3 = { arcs: [], extras: [] };
-      for (const ln of lines) {
-        const s = ln.trim();
-        if (s === '55555' || s === '555555') { collecting = true; continue; }
+       const seen55555Ids = new Set();
+       state.imported55555Order = [];
+       state.t3 = { arcs: [], extras: [] };
+       for (const ln of lines) {
+         const s = ln.trim();
+         if (s === '55555' || s === '555555') { collecting = true; continue; }
         if (!collecting) continue;
-        if (/^\d{5,6}$/.test(s) && s !== '55555' && s !== '555555') break;
-        const rec = parseDatLine(ln);
-        if (rec) payload.push(rec);
-      }
+         if (/^\d{5,6}$/.test(s) && s !== '55555' && s !== '555555') break;
+         const rec = parseDatLine(ln);
+         if (rec) {
+           const duplicateKey = `${rec.isCentroid ? 'C' : 'N'}:${rec.id}`;
+           if (seen55555Ids.has(duplicateKey)) continue;
+           seen55555Ids.add(duplicateKey);
+           payload.push(rec);
+           state.imported55555Order.push(rec.id);
+         }
+       }
       if (payload.length) {
         const selectedCommune = selectCommuneAnchor(text);
         state.localCommune = selectedCommune || null;
@@ -4883,7 +6052,7 @@ hemisphere: "south", // 'south' | 'north'
             const lat = Number(rec.y);
             if (!Number.isFinite(lon) || !Number.isFinite(lat)) continue;
             const latlng = { lat, lng: lon };
-            addEntry(latlng, rec.isCentroid, rec.id, { dataXY: { x: lon, y: lat }, skipRefresh: true });
+            addEntry(latlng, rec.isCentroid, rec.id, { dataXY: { x: lon, y: lat }, skipRefresh: true, skipRender: true });
           }
         } else if (coordInfo.type === 'utm') {
           state.coordMode = 'utm';
@@ -4914,7 +6083,7 @@ hemisphere: "south", // 'south' | 'north'
               ? utmToLatLngWithCode(rec.x, rec.y, projectionCode)
               : utmToLatLngWithZone(rec.x, rec.y, state.utmZone, state.hemisphere);
             if (!ll) continue;
-            addEntry({ lat: ll.lat, lng: ll.lng }, rec.isCentroid, rec.id, { dataXY: { x: rec.x, y: rec.y }, skipRefresh: true });
+            addEntry({ lat: ll.lat, lng: ll.lng }, rec.isCentroid, rec.id, { dataXY: { x: rec.x, y: rec.y }, skipRefresh: true, skipRender: true });
           }
         } else {
           fallbackNotice = true;
@@ -4940,16 +6109,16 @@ hemisphere: "south", // 'south' | 'north'
             }
             processedCoords.set(coordKey, rec.id);
             const latlng = dataXYToLatLng(rec.x, rec.y);
-            addEntry(latlng, rec.isCentroid, rec.id, { dataXY: { x: rec.x, y: rec.y }, skipRefresh: true });
+            addEntry(latlng, rec.isCentroid, rec.id, { dataXY: { x: rec.x, y: rec.y }, skipRefresh: true, skipRender: true });
           }
         }
-        let group = L.featureGroup(state.markers.map(m=>m.marker));
-        map.fitBounds(group.getBounds().pad(0.25));
+        let bounds = getEntriesBounds(state.markers);
+        if (bounds) map.fitBounds(bounds.pad(0.25));
         if (state.coordMode === 'local') {
           const recentered = recenterLocalNetwork();
           if (recentered) {
-            group = L.featureGroup(state.markers.map(m=>m.marker));
-            map.fitBounds(group.getBounds().pad(0.25));
+            bounds = getEntriesBounds(state.markers);
+            if (bounds) map.fitBounds(bounds.pad(0.25));
           }
         }
         if (fallbackNotice) {
@@ -4972,6 +6141,7 @@ hemisphere: "south", // 'south' | 'north'
       rebuildT2Layer();
       rebuildT1Layer();
       rebuildT6Layer();
+      scheduleNodeRender(true);
       historySuspend = false;
     }
 
@@ -5003,6 +6173,7 @@ hemisphere: "south", // 'south' | 'north'
       let currentB = null;
       let currentStage = null; // acumular continuaciones de etapa
       const importedBs = new Set();
+      state.imported11111Order = [];
       function flushStage(){
         if (currentB!=null && currentStage){
           const d = state.t1.get(currentB) || { arcs:[], stages:[] };
@@ -5044,6 +6215,7 @@ hemisphere: "south", // 'south' | 'north'
           if (!d.arcs) d.arcs=[]; if (!d.stages) d.stages=[];
           state.t1.set(B, d);
           importedBs.add(B);
+          if (!state.imported11111Order.includes(B)) state.imported11111Order.push(B);
           continue;
         }
         // Tipo 2: arco A->B
@@ -5150,70 +6322,15 @@ hemisphere: "south", // 'south' | 'north'
       const lines = text.split(/\r?\n/);
       const blocks = [];
       let currentBlock = null;
-      function inferT6RouteFormatFromLines(blockLines){
-        const meaningfulLines = (blockLines || []).filter(line => {
-          const t = String(line || '').trim();
-          return t && !t.startsWith('*');
-        });
-        if (!meaningfulLines.length) return 'classic';
-        for (const sample of meaningfulLines.slice(0, 6)) {
-          const body = sample.length > 15 ? sample.slice(15).trim() : '';
-          const nodeTokens = body ? body.split(/\s+/).filter(Boolean) : [];
-          const routeName = sliceVal(sample, 2, 5).trim();
-          if (/^\d{1,4}$/.test(routeName) && nodeTokens.some(token => /^\d{6,}$/.test(token))) return 'compact';
-          if (nodeTokens.some(token => /^\d{6,}$/.test(token))) return 'compact';
-        }
-        return 'classic';
-      }
-      function inferT6NodeFieldWidth(blockLines, headerRaw){
+      function inferT6NodeFieldWidth(headerRaw){
+        if (state.format.dutch) return 10;
         const trimmed = String(headerRaw || '').trim().toUpperCase();
         if (trimmed === '666666') return 10;
-        return inferT6RouteFormatFromLines(blockLines) === 'compact' ? 10 : 5;
+        return 5;
       }
 
       // === VALIDATION LOGIC ===
       
-      function calculateArcAngle(nodeB, nodeA) {
-          // Calculate angle from B to A (incoming arc view? No, standard is outgoing for sorting usually, 
-          // but here we validate the sequence of INCOMING arcs around B in the file?)
-          // SATURN Card 1 lists INCOMING arcs to node B.
-          // Standard ordering is usually Counter-Clockwise (CCW) relative to North or East.
-          
-          const entryB = findMarkerById(nodeB);
-          const entryA = findMarkerById(nodeA);
-          
-          if (!entryB || !entryA) return null;
-          
-          // Use dataXY for calculation if available, else LatLng
-          const posB = ensureEntryXY(entryB) || entryB.marker.getLatLng();
-          const posA = ensureEntryXY(entryA) || entryA.marker.getLatLng();
-          
-          // Vector B->A (The arc is A->B, but for angular sorting around B, we look at the vector B->A)
-          // Wait. SATURN convention: "The links entering a node must be specified in counter-clockwise order".
-          // So we look at the angle of the link A->B as seen from B? 
-          // Usually this means the angle of the vector B->A (pointing to where the link comes FROM).
-          
-          let dx, dy;
-          if (posB.x !== undefined) { // Cartesian
-               dx = posA.x - posB.x;
-               dy = posA.y - posB.y;
-          } else { // LatLng (approximate local projection)
-               // Simple equirectangular approx for angle is sufficient for ordering
-               dx = posA.lng - posB.lng;
-               dy = posA.lat - posB.lat;
-          }
-          
-          // atan2(y, x) gives angle in radians from -PI to PI
-          // 0 is East, PI/2 is North.
-          // CCW increase.
-          let angle = Math.atan2(dy, dx);
-          
-          // Normalize to 0-2PI for easier sorting logic
-          if (angle < 0) angle += 2 * Math.PI;
-          
-          return angle;
-      }
-
       function checkAngularOrder(nodeB) {
           const d = state.t1.get(nodeB);
           if (!d || !d.arcs || d.arcs.length < 2) return { valid: true }; // 0 or 1 arc is always ordered
@@ -5224,7 +6341,7 @@ hemisphere: "south", // 'south' | 'north'
           
           for (let i = 0; i < arcs.length; i++) {
               const nodeA = arcs[i].nodeA;
-              const angle = calculateArcAngle(nodeB, nodeA);
+              const angle = calculateIncomingArcAngleNorthCCW(nodeB, nodeA);
               if (angle === null) return { valid: true, warning: "Missing coordinates for neighbor" }; // Cannot validate
               arcAngles.push({ index: i, angle: angle, nodeA: nodeA });
           }
@@ -5234,8 +6351,7 @@ hemisphere: "south", // 'south' | 'north'
           // Or simpler: compute the required 'next' index in a sorted list.
           
           // 1. Sort arcs by angle (this is the ground truth CCW order)
-          // We sort by angle ascending (0 -> 2PI). 
-          // Since atan2 0 is East and increases CCW (Towards North), sorting by angle gives CCW order starting from East.
+          // El angulo esta definido desde el norte y crece en sentido antihorario.
           const sorted = [...arcAngles].sort((a, b) => a.angle - b.angle);
           
           // 2. Map original index to sorted position
@@ -5336,9 +6452,11 @@ hemisphere: "south", // 'south' | 'north'
                                   setActiveB(item.id);
                                   // Find and center
                                   const entry = findMarkerById(item.id);
-                                  if (entry && entry.marker) {
-                                      map.setView(entry.marker.getLatLng(), 18);
-                                      entry.marker.openPopup();
+                                  if (entry) {
+                                      const ll = getEntryLatLng(entry);
+                                      if (ll) map.setView(ll, 18);
+                                      scheduleNodeRender(true);
+                                      if (entry.marker && entry.marker.openPopup) entry.marker.openPopup();
                                   }
                               };
                               listDiv.appendChild(div);
@@ -5375,8 +6493,7 @@ hemisphere: "south", // 'south' | 'north'
               headerRaw: t,
               label: t.replace(/^66666+/, '').trim(),
               lines: [],
-              routeFormat: 'classic',
-              nodeFieldWidth: 5,
+              nodeFieldWidth: inferT6NodeFieldWidth(t),
               terminatorRaw: '99999'
             };
             continue; 
@@ -5385,8 +6502,6 @@ hemisphere: "south", // 'south' | 'north'
             // Check for end of block
             const normalized = normalizeCardCode(t);
             if (t === '99999' || t === '999999' || (normalized && normalized !== '66666')) {
-                currentBlock.routeFormat = inferT6RouteFormatFromLines(currentBlock.lines);
-                currentBlock.nodeFieldWidth = inferT6NodeFieldWidth(currentBlock.lines, currentBlock.headerRaw);
                 currentBlock.terminatorRaw = '99999';
                 if (currentBlock.lines.length > 0) blocks.push(currentBlock);
                 currentBlock = null;
@@ -5395,11 +6510,7 @@ hemisphere: "south", // 'south' | 'north'
             currentBlock.lines.push(raw);
         }
       }
-      if (currentBlock && currentBlock.lines.length > 0) {
-        currentBlock.routeFormat = inferT6RouteFormatFromLines(currentBlock.lines);
-        currentBlock.nodeFieldWidth = inferT6NodeFieldWidth(currentBlock.lines, currentBlock.headerRaw);
-        blocks.push(currentBlock);
-      }
+      if (currentBlock && currentBlock.lines.length > 0) blocks.push(currentBlock);
       return { blocks, foundExternal };
     }
 
@@ -5492,7 +6603,6 @@ hemisphere: "south", // 'south' | 'north'
            headerRaw: block.headerRaw || '66666',
            terminatorRaw: block.terminatorRaw || '99999',
            nodeFieldWidth: block.nodeFieldWidth || 5,
-           routeFormat: block.routeFormat || ((block.nodeFieldWidth || 5) === 10 ? 'compact' : 'classic'),
            mode: currentMode
          });
          if (block.label && !state.t6.modeNames[currentMode]) {
@@ -5527,8 +6637,7 @@ hemisphere: "south", // 'south' | 'north'
                 blockLabel: block.label || '',
                 headerRaw: block.headerRaw || '66666',
                 terminatorRaw: block.terminatorRaw || '99999',
-                nodeFieldWidth: block.nodeFieldWidth || 5,
-                routeFormat: block.routeFormat || ((block.nodeFieldWidth || 5) === 10 ? 'compact' : 'classic')
+                nodeFieldWidth: block.nodeFieldWidth || 5
               };
             }
 
@@ -5566,16 +6675,6 @@ hemisphere: "south", // 'south' | 'north'
       let currentMode = state.t6.routes.length > 0 ? 
         Math.max(...state.t6.routes.map(r => r.mode || 1)) + 1 : 1;
       let routesAdded = 0;
-      const sampleLines = lines.filter(line => {
-        const t = String(line || '').trim();
-        return t && !t.startsWith('*') && !/^\d{5}/.test(t);
-      }).slice(0, 6);
-      const externalRouteFormat = sampleLines.some(line => {
-        const body = line.length > 15 ? line.slice(15).trim() : '';
-        const tokens = body ? body.split(/\s+/).filter(Boolean) : [];
-        return tokens.some(token => /^\d{6,}$/.test(token));
-      }) ? 'compact' : 'classic';
-      const externalNodeFieldWidth = externalRouteFormat === 'compact' ? 10 : 5;
       const blockLabel = state.t6.modeNames[currentMode] || `Modo ${currentMode}`;
       const blockKey = `external:${currentMode}`;
       if (!state.t6.blockMeta.some(meta => meta && meta.key === blockKey)) {
@@ -5584,8 +6683,7 @@ hemisphere: "south", // 'south' | 'north'
           label: blockLabel,
           headerRaw: `66666 ${blockLabel}`,
           terminatorRaw: '99999',
-          nodeFieldWidth: externalNodeFieldWidth,
-          routeFormat: externalRouteFormat,
+          nodeFieldWidth: 5,
           mode: currentMode
         });
       }
@@ -5631,19 +6729,17 @@ hemisphere: "south", // 'south' | 'north'
             blockLabel,
             headerRaw: `66666 ${blockLabel}`,
             terminatorRaw: '99999',
-            nodeFieldWidth: externalNodeFieldWidth,
-            routeFormat: externalRouteFormat
+            nodeFieldWidth: 5
           };
         }
 
         if (!currentRoute) continue;
 
-        // Collect node IDs from columns 16+ (5-char or 10-char fields)
-        const width = externalNodeFieldWidth;
+        // Collect node IDs from columns 16+ (5-char fields)
         const maxCol = Math.min(80, line.length);
-        for (let start = 16; start <= maxCol - (width - 1); start += width) {
+        for (let start = 16; start <= maxCol - 4; start += 5) {
           if (Number.isFinite(currentRoute.declaredCount) && currentRoute.nodes.length >= currentRoute.declaredCount) break;
-          const val = sliceVal(line, start, start + width - 1);
+          const val = sliceVal(line, start, start + 4);
           const nodeId = parseIntOrNull(val);
           if (nodeId != null) {
             currentRoute.nodes.push(nodeId);
@@ -5667,6 +6763,7 @@ hemisphere: "south", // 'south' | 'north'
     function initWhenReady(){
       map = window[MAP_VAR_NAME];
       if (!map) { setTimeout(initWhenReady, 50); return; }
+      map.on('zoomend moveend', function(){ scheduleNodeRender(); });
 
       renderNodeLegend();
       // Inicializar UI
@@ -5680,6 +6777,51 @@ hemisphere: "south", // 'south' | 'north'
         state.hemisphere = e.target.value;
         refreshSummaryStats();
       });
+
+      // Conversión Buffer -> Inner
+      const btnToggle = document.getElementById('btnToggleSelection');
+      if (btnToggle) {
+        btnToggle.addEventListener('click', function(){
+          state.selectionMode = !state.selectionMode;
+          if (state.selectionMode) {
+            map.getContainer().style.cursor = 'crosshair';
+            alert('Modo Selección Activado. Haz clic en los nodos que deseas convertir a 11111.');
+          } else {
+            map.getContainer().style.cursor = '';
+          }
+          updateSelectionUI();
+        });
+      }
+      const btnRun = document.getElementById('btnRunConversion');
+      if (btnRun) {
+        btnRun.addEventListener('click', batchConvertToSimulation);
+      }
+
+      const triggerImport = () => {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput) fileInput.click();
+      };
+      const topbarImportBtn = document.getElementById('topbarImportBtn');
+      if (topbarImportBtn) topbarImportBtn.addEventListener('click', triggerImport);
+      const emptyImportBtn = document.getElementById('emptyImportBtn');
+      if (emptyImportBtn) emptyImportBtn.addEventListener('click', triggerImport);
+      const topbarValidateBtn = document.getElementById('topbarValidateBtn');
+      if (topbarValidateBtn) topbarValidateBtn.addEventListener('click', function(){
+        setActiveModule('validation');
+        const btn = document.getElementById('btnValidateOrder');
+        if (btn) btn.click();
+      });
+      const topbarExportBtn = document.getElementById('topbarExportBtn');
+      if (topbarExportBtn) topbarExportBtn.addEventListener('click', function(){
+        const btn = document.getElementById('btnExport');
+        if (btn) btn.click();
+      });
+      document.querySelectorAll('[data-module-target]').forEach(btn => {
+        btn.addEventListener('click', function(){
+          setActiveModule(this.dataset.moduleTarget || 'overview');
+        });
+      });
+
       document.getElementById('btnExport').addEventListener('click', function(){
         if (state.t1 && state.t1.size) saveT1Fields();
         exportDat();
@@ -5688,8 +6830,14 @@ hemisphere: "south", // 'south' | 'north'
       if (btn111) btn111.addEventListener('click', export55555Only);
       document.getElementById('fileInput').addEventListener('change', function(){
         const f = this.files[0]; if (!f) return;
+        state.sourceLabel = f.name || 'Archivo importado';
         const reader = new FileReader();
-        reader.onload = function(){ importDat(String(reader.result||'')); };
+        reader.onload = function(){
+          importDat(String(reader.result||''));
+          resetGithubSession();
+          setActiveModule('overview');
+          refreshSummaryStats();
+        };
         reader.readAsText(f);
       });
       const selB = document.getElementById('nodeBSelect');
@@ -5766,12 +6914,16 @@ hemisphere: "south", // 'south' | 'north'
       });
       // Inicializar listas basadas en nodos ya agregados
       refreshNodeBList();
+      setActiveModule('overview');
+      refreshSummaryStats();
+      scheduleNodeRender(true);
 
       // Inicializar visibilidad de secciA3n T3 segAon estado actual del select
       saveT1Fields();
       rebuildT1Layer();
       clearT3ArcForm();
       refreshT3ArcList();
+      initGithubUI();
 
       // Click en el mapa para agregar
       map.on('click', function(ev){
@@ -5790,6 +6942,291 @@ hemisphere: "south", // 'south' | 'north'
         const type = prompt('Tipo: N para Nodo, C para Centroide', 'N');
         const isCentroid = (String(type||'').trim().toUpperCase() === 'C');
         addEntry(latlng, isCentroid, id);
+      });
+    }
+
+    let currentGhFileSha = null;
+    let currentGhFileName = null;
+    let currentGhFilePath = null;
+    let currentGhBranch = 'main';
+    let githubUiInitialized = false;
+
+    function ghInputValue(id) {
+      const el = document.getElementById(id);
+      return el ? String(el.value || '').trim() : '';
+    }
+
+    function ghNormalizePath(path) {
+      return String(path || '').trim().replace(/^\/+|\/+$/g, '');
+    }
+
+    function ghEncodePath(path) {
+      return ghNormalizePath(path).split('/').filter(Boolean).map(encodeURIComponent).join('/');
+    }
+
+    function ghContentsUrl(owner, repo, path, branch) {
+      const encodedOwner = encodeURIComponent(owner);
+      const encodedRepo = encodeURIComponent(repo);
+      const encodedPath = ghEncodePath(path);
+      const ref = encodeURIComponent(branch || 'main');
+      const base = `https://api.github.com/repos/${encodedOwner}/${encodedRepo}/contents`;
+      return `${base}${encodedPath ? '/' + encodedPath : ''}?ref=${ref}`;
+    }
+
+    function ghContentsWriteUrl(owner, repo, path) {
+      const encodedOwner = encodeURIComponent(owner);
+      const encodedRepo = encodeURIComponent(repo);
+      const encodedPath = ghEncodePath(path);
+      return `https://api.github.com/repos/${encodedOwner}/${encodedRepo}/contents/${encodedPath}`;
+    }
+
+    function ghHeaders(token, includeContentType) {
+      const headers = {
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      if (includeContentType) headers['Content-Type'] = 'application/json';
+      return headers;
+    }
+
+    function ghRawHeaders(token) {
+      const headers = {
+        'Accept': 'application/vnd.github.raw+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      return headers;
+    }
+
+    function ghSetStatus(message, isError) {
+      const statusLabel = document.getElementById('ghStatus');
+      if (!statusLabel) return;
+      statusLabel.textContent = message || '';
+      statusLabel.style.color = isError ? 'var(--danger)' : 'var(--success)';
+    }
+
+    async function ghDecodeBase64(content) {
+      const clean = String(content || '').replace(/\s/g, '');
+      const binary = atob(clean);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes]);
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = () => reject(new Error('Error leyendo el archivo descargado desde GitHub.'));
+        reader.readAsText(blob);
+      });
+    }
+
+    async function ghDownloadFileText(owner, repo, filePath, branch, token, data) {
+      if (data && data.content && data.encoding !== 'none') {
+        return await ghDecodeBase64(data.content);
+      }
+
+      const rawResponse = await fetch(ghContentsUrl(owner, repo, filePath, branch), {
+        headers: ghRawHeaders(token)
+      });
+      if (rawResponse.ok) {
+        const rawText = await rawResponse.text();
+        if (rawText && !/^\s*\{\s*"name"\s*:/i.test(rawText)) return rawText;
+      }
+
+      if (data && data.download_url) {
+        const downloadResponse = await fetch(data.download_url);
+        if (downloadResponse.ok) return await downloadResponse.text();
+      }
+
+      const status = rawResponse ? rawResponse.status : 'desconocido';
+      throw new Error(`No se pudo descargar el contenido del archivo desde GitHub. HTTP ${status}.`);
+    }
+
+    function ghEncodeBase64(text) {
+      const bytes = new TextEncoder().encode(text);
+      let binary = '';
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+      }
+      return btoa(binary);
+    }
+
+    function resetGithubSession() {
+      currentGhFileSha = null;
+      currentGhFileName = null;
+      currentGhFilePath = null;
+      const btnSave = document.getElementById('btnGhSaveFile');
+      if (btnSave) btnSave.style.display = 'none';
+      ghSetStatus('', false);
+    }
+
+    function initGithubUI() {
+      if (githubUiInitialized) return;
+      const btnConnect = document.getElementById('btnGhConnect');
+      const btnLoad = document.getElementById('btnGhLoadFile');
+      const btnSave = document.getElementById('btnGhSaveFile');
+      const fileSelect = document.getElementById('ghFileSelect');
+      const listContainer = document.getElementById('ghFileListContainer');
+      if (!btnConnect || !btnLoad || !btnSave || !fileSelect || !listContainer) return;
+      githubUiInitialized = true;
+
+      btnConnect.addEventListener('click', async () => {
+        const owner = ghInputValue('ghOwner');
+        const repo = ghInputValue('ghRepo');
+        const token = ghInputValue('ghToken');
+        const branch = ghInputValue('ghBranch') || 'main';
+        const path = ghNormalizePath(ghInputValue('ghPath'));
+
+        if (!owner || !repo) {
+          alert('Debes ingresar usuario/organizaci\u00f3n y repositorio.');
+          return;
+        }
+
+        btnConnect.textContent = 'Cargando...';
+        btnConnect.disabled = true;
+        ghSetStatus('', false);
+
+        try {
+          const response = await fetch(ghContentsUrl(owner, repo, path, branch), {
+            headers: ghHeaders(token, false)
+          });
+          if (!response.ok) throw new Error(`GitHub respondio HTTP ${response.status}.`);
+
+          const files = await response.json();
+          if (!Array.isArray(files)) throw new Error('La ruta indicada no es una carpeta.');
+
+          const datFiles = files.filter(f => (
+            f && f.type === 'file' && /\.(dat|txt)$/i.test(String(f.name || ''))
+          ));
+
+          fileSelect.innerHTML = '';
+          if (!datFiles.length) {
+            const opt = document.createElement('option');
+            opt.textContent = 'No hay archivos .dat o .txt';
+            opt.value = '';
+            fileSelect.appendChild(opt);
+            btnLoad.disabled = true;
+            ghSetStatus('Repositorio conectado, sin redes DAT/TXT en esa carpeta.', true);
+          } else {
+            datFiles.forEach(f => {
+              const opt = document.createElement('option');
+              opt.value = f.path;
+              opt.textContent = f.path;
+              opt.dataset.sha = f.sha || '';
+              fileSelect.appendChild(opt);
+            });
+            btnLoad.disabled = false;
+            ghSetStatus(`Se encontraron ${datFiles.length} archivo(s).`, false);
+          }
+
+          listContainer.style.display = 'block';
+          btnSave.style.display = 'none';
+          currentGhFileSha = null;
+          currentGhFileName = null;
+          currentGhFilePath = null;
+          currentGhBranch = branch;
+        } catch (err) {
+          listContainer.style.display = 'none';
+          resetGithubSession();
+          alert('Error al conectar con GitHub: ' + (err.message || err));
+        } finally {
+          btnConnect.textContent = 'Conectar y listar archivos';
+          btnConnect.disabled = false;
+        }
+      });
+
+      btnLoad.addEventListener('click', async () => {
+        const filePath = fileSelect.value;
+        if (!filePath) return;
+
+        const owner = ghInputValue('ghOwner');
+        const repo = ghInputValue('ghRepo');
+        const token = ghInputValue('ghToken');
+        const branch = ghInputValue('ghBranch') || currentGhBranch || 'main';
+
+        btnLoad.textContent = 'Cargando...';
+        btnLoad.disabled = true;
+        ghSetStatus('', false);
+
+        try {
+          const response = await fetch(ghContentsUrl(owner, repo, filePath, branch), {
+            headers: ghHeaders(token, false)
+          });
+          if (!response.ok) throw new Error(`GitHub respondio HTTP ${response.status}.`);
+
+          const data = await response.json();
+          const text = await ghDownloadFileText(owner, repo, filePath, branch, token, data);
+          if (!text || !text.trim()) throw new Error('GitHub devolvio el archivo sin contenido.');
+          if (!/^\s*55555\s*$/m.test(text)) {
+            throw new Error('El archivo descargado desde GitHub no contiene tarjeta 55555. Revisa que no se haya descargado metadata JSON en vez del DAT.');
+          }
+          state.sourceLabel = data.name || filePath;
+          importDat(text);
+          setActiveModule('overview');
+
+          currentGhFileSha = data.sha;
+          currentGhFileName = data.name || filePath.split('/').pop();
+          currentGhFilePath = data.path || filePath;
+          currentGhBranch = branch;
+          btnSave.style.display = 'inline-flex';
+          ghSetStatus(`Editando desde GitHub: ${currentGhFilePath}`, false);
+        } catch (err) {
+          alert('Error al descargar desde GitHub: ' + (err.message || err));
+        } finally {
+          btnLoad.textContent = 'Cargar red';
+          btnLoad.disabled = false;
+        }
+      });
+
+      btnSave.addEventListener('click', async () => {
+        const owner = ghInputValue('ghOwner');
+        const repo = ghInputValue('ghRepo');
+        const token = ghInputValue('ghToken');
+        const branch = ghInputValue('ghBranch') || currentGhBranch || 'main';
+
+        if (!owner || !repo || !currentGhFilePath || !currentGhFileSha) {
+          alert('Primero carga un archivo desde GitHub.');
+          return;
+        }
+        if (!token) {
+          alert('Para guardar necesitas un token personal de GitHub con permiso de escritura.');
+          return;
+        }
+
+        btnSave.textContent = 'Guardando...';
+        btnSave.disabled = true;
+        ghSetStatus('', false);
+
+        try {
+          const textData = generateSaturnDatText();
+          const response = await fetch(ghContentsWriteUrl(owner, repo, currentGhFilePath), {
+            method: 'PUT',
+            headers: ghHeaders(token, true),
+            body: JSON.stringify({
+              message: `Actualizar ${currentGhFileName || currentGhFilePath} desde SATURN Editor`,
+              content: ghEncodeBase64(textData),
+              sha: currentGhFileSha,
+              branch
+            })
+          });
+
+          if (response.status === 409) {
+            throw new Error('Conflicto de version: otra persona cambio el archivo. Vuelve a cargarlo antes de guardar.');
+          }
+          if (!response.ok) throw new Error(`GitHub respondio HTTP ${response.status}.`);
+
+          const result = await response.json();
+          currentGhFileSha = result && result.content ? result.content.sha : currentGhFileSha;
+          currentGhBranch = branch;
+          ghSetStatus(`Guardado en GitHub: ${currentGhFilePath}`, false);
+        } catch (err) {
+          alert('Error al guardar en GitHub: ' + (err.message || err));
+          ghSetStatus('No se guardaron los cambios.', true);
+        } finally {
+          btnSave.textContent = 'Guardar en GitHub';
+          btnSave.disabled = false;
+        }
       });
     }
 
